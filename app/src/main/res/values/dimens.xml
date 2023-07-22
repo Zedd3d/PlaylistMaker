@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- text size-->
+    <dimen name="program_name_text_size">22sp</dimen>
+    <dimen name="settings_item_text_size">19sp</dimen>
+    <dimen name="bigbtn_text_size">26sp</dimen>
+
+    <!-- padding size-->
+    <dimen name="padding_small">4dp</dimen>
+    <dimen name="icon_padding">8dp</dimen>
+    <dimen name="default_padding_title">12dp</dimen>
+    <dimen name="bigbtn_default_padding">16dp</dimen>
+    <dimen name="padding_18dp">18dp</dimen>
+    <dimen name="padding_19dp">19dp</dimen>
+    <dimen name="icon_size">24dp</dimen>
+
+</resources>

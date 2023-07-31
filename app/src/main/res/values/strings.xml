@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Playlist Maker</string>
+    <string name="btntxt_search">Поиск</string>
+    <string name="program_name">Playlist maker</string>
+    <string name="btntxt_mediatec">Медиатека</string>
+    <string name="btntxt_settings">Настройки</string>
+    <string name="bigbtn_font_family">sans-serif</string>
+    <string name="txt_black_theme">Темная тема</string>
+    <string name="txt_share_app">Поделиться приложением</string>
+    <string name="txt_write_support">Написать в поддержку</string>
+    <string name="txt_user_agreement">Пользовательское соглашение</string>
+    <string name="btntxt_back">назад</string>
 </resources>

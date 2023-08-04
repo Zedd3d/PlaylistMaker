@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    android:background="@color/white_pm"
+    android:background="?colorPrimary"
     android:orientation="vertical">
 
 
@@ -16,140 +15,85 @@
 
         <ImageButton
             android:id="@+id/imgBtnBack"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="7"
-            android:contentDescription="@string/btntxt_back"
-            app:srcCompat="@drawable/ic_arrow_back"
-            app:iconTint="@color/black_pm"
-            app:iconSize="@dimen/icon_size"
-            app:backgroundTint="@color/white_pm"/>
+            style="@style/backButtonTitle" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingBottom="1dp"
+            style="@style/TitleTextStyle"
             android:text="@string/btntxt_settings"
-            android:textSize="@dimen/bigbtn_text_size"
             />
-
-
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="12dp"
-
+        style="@style/MainContentListStyle"
         >
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:paddingTop="@dimen/padding_19dp"
-            android:paddingLeft="@dimen/padding_small"
-            android:paddingBottom="@dimen/padding_18dp"
-            >
+
+            style="@style/SettingsListStyleLL">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="10"
+                style="@style/SettingsTextStyle"
                 android:text="@string/txt_black_theme"
-                android:textColor="@color/black_pm"
-                android:textSize="@dimen/settings_item_text_size"
                 />
 
             <Switch
                 android:id="@+id/swBlackTheme"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                style="@style/SettingsImgButtonStyle"
+                android:checked="true"
+                android:onClick="onClick"
                 android:rotation="0" />
-
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:paddingTop="@dimen/padding_19dp"
-            android:paddingLeft="@dimen/padding_small"
-            android:paddingBottom="@dimen/padding_18dp">
+            android:id="@+id/llShare"
+            style="@style/SettingsListStyleLL"
+            android:clickable="true"
+            android:onClick="onClick">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="10"
-                android:text="@string/txt_share_app"
-                android:textColor="@color/black_pm"
-                android:textSize="@dimen/settings_item_text_size"/>
+                style="@style/SettingsTextStyle"
+                android:text="@string/txt_share_app" />
 
             <ImageView
-                android:id="@+id/imgViewShare"
-                android:layout_width="@dimen/icon_size"
-                android:layout_height="@dimen/icon_size"
-                android:layout_weight="1"
-                app:tint = "@color/gray_pm"
+                style="@style/SettingsImgButtonStyle"
                 app:srcCompat="@drawable/ic_share" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:paddingTop="@dimen/padding_19dp"
-            android:paddingBottom="@dimen/padding_18dp">
+            android:id="@+id/llSupport"
+            android:clickable="true"
+            android:onClick="onClick"
+            style="@style/SettingsListStyleLL">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="10"
-                android:text="@string/txt_write_support"
-                android:textColor="@color/black_pm"
-                android:textSize="@dimen/settings_item_text_size"/>
+                style="@style/SettingsTextStyle"
+                android:text="@string/txt_write_support"/>
 
             <ImageView
-                android:id="@+id/imgViewSupport"
-                android:layout_width="@dimen/icon_size"
-                android:layout_height="@dimen/icon_size"
-                android:layout_weight="1"
-                app:tint = "@color/gray_pm"
+
+                style="@style/SettingsImgButtonStyle"
+
+                android:layout_height="23dp"
                 app:srcCompat="@drawable/ic_support" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:paddingTop="@dimen/padding_19dp"
-            android:paddingBottom="@dimen/padding_18dp">
+            android:id="@+id/llTerms"
+            android:clickable="true"
+            android:onClick="onClick"
+            style="@style/SettingsListStyleLL">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="10"
+                style="@style/SettingsTextStyle"
                 android:text="@string/txt_user_agreement"
-                android:textColor="@color/black_pm"
-                android:textSize="@dimen/settings_item_text_size"/>
+                />
 
             <ImageView
-                android:id="@+id/imgViewTerms"
-                android:layout_width="@dimen/icon_size"
-                android:layout_height="@dimen/icon_size"
-                android:layout_weight="1"
-                app:tint = "@color/gray_pm"
+
+                style="@style/SettingsImgButtonStyle"
                 app:srcCompat="@drawable/ic_arrow_forward" />
         </LinearLayout>
     </LinearLayout>

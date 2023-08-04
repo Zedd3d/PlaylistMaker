@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    android:background="@color/blue_pm"
+    android:background="?colorSecondary"
     android:orientation="vertical">
 
 
@@ -14,11 +13,11 @@
         android:orientation="horizontal"
 
         android:paddingTop="10dp"
-        android:paddingLeft="@dimen/default_padding_title"
+        android:paddingStart="@dimen/default_padding_title"
         android:paddingBottom="@dimen/default_padding_title">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/mainTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -33,66 +32,30 @@
         android:orientation="vertical"
         android:layout_gravity="center"
         android:paddingTop="@dimen/default_padding_title"
-        android:paddingLeft="@dimen/bigbtn_default_padding"
-        android:paddingRight="@dimen/bigbtn_default_padding"
+        android:paddingStart="@dimen/bigbtn_default_padding"
+        android:paddingEnd="@dimen/bigbtn_default_padding"
         android:paddingBottom="28dp">
 
         <Button
             android:id="@+id/btn_search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/bigbtn_default_padding"
-            android:layout_weight="1"
-            android:background="@drawable/btn_corners"
-            android:fontFamily="@string/bigbtn_font_family"
+            style="@style/MainButtonStyle"
             android:text="@string/btntxt_search"
-            android:textAllCaps="false"
-            android:textColor="@color/black_pm"
-            android:textSize="@dimen/bigbtn_text_size"
-            app:backgroundTint="@color/white_pm"
             app:icon="@drawable/ic_search"
-            app:iconGravity="textStart"
-            app:iconPadding="@dimen/icon_padding"
-            app:iconTint="@color/black_pm" />
+             />
 
         <Button
             android:id="@+id/btn_mediatec"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/bigbtn_default_padding"
-            android:layout_weight="1"
-            android:background="@drawable/btn_corners"
+            style="@style/MainButtonStyle"
             android:text="@string/btntxt_mediatec"
-            android:textColor="@color/black_pm"
-            android:textSize="@dimen/bigbtn_text_size"
-            android:textAllCaps="false"
-            android:fontFamily="@string/bigbtn_font_family"
-            app:backgroundTint="@color/white_pm"
             app:icon="@drawable/ic_library"
-            app:iconGravity="textStart"
-            app:iconPadding="@dimen/icon_padding"
-            app:iconTint="@color/black_pm"
-            app:iconSize="@dimen/icon_size"/>
+            />
 
         <Button
             android:id="@+id/btn_settings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/bigbtn_default_padding"
-            android:layout_weight="1"
-            android:background="@drawable/btn_corners"
+            style="@style/MainButtonStyle"
             android:text="@string/btntxt_settings"
-            android:textColor="@color/black_pm"
-            android:textSize="@dimen/bigbtn_text_size"
-            android:textAllCaps="false"
-            android:fontFamily="@string/bigbtn_font_family"
-            app:backgroundTint="@color/white_pm"
             app:icon="@drawable/ic_settings"
-            app:iconGravity="textStart"
-            app:iconPadding="@dimen/icon_padding"
-            app:iconTint="@color/black_pm"
-            app:iconSize="@dimen/icon_size"/>
-
+            />
 
     </LinearLayout>
 

@@ -14,13 +14,16 @@ import android.widget.ImageButton
 import android.widget.ImageView
 
 class SearchActivity : AppCompatActivity() {
-    companion object {
+    private companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
     }
+
+    lateinit var vTextSearch:EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-        val vTextSearch = findViewById<EditText>(R.id.vTextSearch)
+        vTextSearch = findViewById<EditText>(R.id.vTextSearch)
         val clearButton = findViewById<ImageView>(R.id.btnSearchClear)
         clearButton.setOnClickListener{clearSearchText(clearButton,vTextSearch)}
         val btnBack = findViewById<ImageButton>(R.id.imgBtnBack)
@@ -44,12 +47,12 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_TEXT,findViewById<EditText>(R.id.vTextSearch).text.toString())
+        outState.putString(SEARCH_TEXT,vTextSearch.text.toString())
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        findViewById<EditText>(R.id.vTextSearch).setText(savedInstanceState.getString(SEARCH_TEXT))
+        vTextSearch.setText(savedInstanceState.getString(SEARCH_TEXT))
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
@@ -60,7 +63,7 @@ class SearchActivity : AppCompatActivity() {
         }
     }
     private fun clearSearchText(btnClose: ImageView,editField: EditText) {
-        editField.setText("")
+        editField.text.clear()
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(`editField`.windowToken, 0)
         btnClose.visibility = View.GONE

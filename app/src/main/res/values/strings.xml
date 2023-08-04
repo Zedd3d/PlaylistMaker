@@ -10,4 +10,12 @@
     <string name="txt_write_support">Написать в поддержку</string>
     <string name="txt_user_agreement">Пользовательское соглашение</string>
     <string name="btntxt_back">назад</string>
+    <string name="thanks_template_body">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="switch_to_dark_theme">Переключение на Темную тему</string>
+    <string name="thanks_template_subj">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="MAIL_TO" translatable="false">mailto:</string>
+    <string name="DEFAULT_EMAIL" translatable="false">yariyan@yandex.ru</string>
+    <string name="YP_LINK_AD" translatable="false">https://practicum.yandex.ru/android-developer/</string>
+    <string name="YP_LINK_OFFER" translatable="false">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="TEXT_PLAIN" translatable="false">text/plain</string>
 </resources>

@@ -6,12 +6,21 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.Switch
 import android.widget.Toast
 
 class SettingsActivity : AppCompatActivity(), View.OnClickListener{
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+
+        findViewById<LinearLayout>(R.id.llShare).setOnClickListener(this)
+        findViewById<LinearLayout>(R.id.llSupport).setOnClickListener(this)
+        findViewById<LinearLayout>(R.id.llTerms).setOnClickListener(this)
+        findViewById<Switch>(R.id.swBlackTheme).setOnClickListener(this)
+
         val btnBack = findViewById<ImageButton>(R.id.imgBtnBack)
         btnBack.setOnClickListener{
             finish()
@@ -21,34 +30,35 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener{
     override fun onClick(v: View?) {
         if (v != null) {
             when (v.id ) {
-                R.id.swBlackTheme -> Toast.makeText(this,"Переключение на Темную тему",Toast.LENGTH_SHORT).show()
+                R.id.swBlackTheme -> Toast.makeText(this,resources.getText(R.string.switch_to_dark_theme),Toast.LENGTH_SHORT).show()
                 R.id.llShare -> shareApp()
                 R.id.llSupport -> mailToSupport()
                 R.id.llTerms -> showTerms()
-                else -> println("Другое")
+                //else -> println("Другое")
             }
         }
     }
 
     private fun showTerms() {
-        val url = Uri.parse("https://yandex.ru/legal/practicum_offer/")
+        val url = Uri.parse(resources.getString(R.string.YP_LINK_OFFER))
         val intent = Intent(Intent.ACTION_VIEW, url)
         startActivity(intent)
     }
 
     private fun mailToSupport() {
-        val message = "Спасибо разработчикам и разработчицам за крутое приложение!"
-        val shareIntent = Intent(Intent.ACTION_SENDTO)
-        shareIntent.data = Uri.parse("mailto:")
-        shareIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("yariyan@yandex.ru"))
-        shareIntent.putExtra(Intent.EXTRA_TEXT, message)
-        startActivity(shareIntent)
+        Intent(Intent.ACTION_SENDTO).apply {
+            data = Uri.parse(resources.getString(R.string.MAIL_TO))
+            putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.thanks_template_subj))
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(resources.getString(R.string.DEFAULT_EMAIL)))
+            putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.thanks_template_body))
+            startActivity(this)
+        }
     }
 
     private fun shareApp() {
         val sendIntent: Intent = Intent(Intent.ACTION_SEND)
-        sendIntent.putExtra(Intent.EXTRA_TEXT,"https://practicum.yandex.ru/android-developer/")
-        sendIntent.type = "text/plain"
+        sendIntent.putExtra(Intent.EXTRA_TEXT,resources.getString(R.string.YP_LINK_AD))
+        sendIntent.type = resources.getString(R.string.TEXT_PLAIN)
 
         val shareIntent = Intent.createChooser(sendIntent, null)
         startActivity(shareIntent)

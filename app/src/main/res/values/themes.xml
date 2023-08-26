@@ -6,7 +6,6 @@
         <item name="colorSecondary">@color/blue_pm</item>
         <item name="colorTertiary">@color/black_pm</item>
         <item name="android:textColor">@color/black_pm</item>
-        <item name="tint">@color/gray_pm</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
     </style>
 </resources>

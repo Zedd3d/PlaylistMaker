@@ -7,4 +7,5 @@
     <color name="blue_pm">#3772E7</color>
     <color name="gray_pm">#AEAFB4</color>
     <color name="lightgray_pm">#E6E8EB</color>
+    <color name="grayDay_whiteNight">#AEAFB4</color>
 </resources>

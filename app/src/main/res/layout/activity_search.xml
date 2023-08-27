@@ -24,37 +24,43 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        style="@style/MainContentListStyle"
-        >
+    <LinearLayout style="@style/MainContentListStyle">
 
 
         <FrameLayout
             android:id="@+id/llShare"
-            style="@style/SettingsListStyleLL">
+            style="@style/SettingsListStyleLL"
+            android:paddingStart="@dimen/default_padding_start"
+            android:paddingEnd="@dimen/default_padding_end">
 
 
             <EditText
                 android:id="@+id/vTextSearch"
                 style="@style/EditTextMainStyleDayNight"
+                android:paddingStart="16dp"
                 android:hint="@string/btntxt_search"
-                 />
+
+            />
 
             <ImageView
                 android:id="@+id/btnSearchClear"
                 style="@style/EditTextMainStyleDayNight"
-                android:visibility="gone"
-                android:clickable="true"
-                app:srcCompat="@drawable/ic_close"
-                android:layout_height="match_parent"
                 android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="end"
-                android:paddingEnd="10dp"/>
-
+                android:clickable="true"
+                android:paddingEnd="10dp"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_close" />
 
 
         </FrameLayout>
 
-
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerTracks"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
+
+
 </LinearLayout>

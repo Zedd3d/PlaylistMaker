@@ -8,7 +8,6 @@
         <item name="colorTertiary">@color/white_pm</item>
         <item name="color">@color/white_pm</item>
         <item name="android:textColor">@color/white_pm</item>
-        <item name="tint">@color/white_pm</item>
         <item name="android:thumbTint">@color/blue_pm</item>
         <item name="android:trackTint">@color/blue_pm</item>
         <item name="iconTint">@color/black_pm</item>

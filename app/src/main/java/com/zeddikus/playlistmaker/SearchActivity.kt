@@ -2,86 +2,160 @@ package com.zeddikus.playlistmaker
 
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
+import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.TypedValue
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.ImageView.ScaleType
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
-
-
 
     private companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
     }
 
-    lateinit var vTextSearch:EditText
-    lateinit var trackList_Data:ArrayList<Track>
+    lateinit var vTextSearch: EditText
+    lateinit var recyclerTracks : RecyclerView
+    lateinit var vTroublePlaceholder : LinearLayout
+    lateinit var vTroublePlaceholderText : TextView
+    lateinit var vTroublePlaceholderButton : Button
+    lateinit var clearButton : ImageView
+    lateinit var placeholderTroubleCenterImage : ImageView
+    lateinit var progressBarSearch : ProgressBar
     lateinit var adapter: TracksAdapter
+
+    private val itunesBaseUrl = "https://itunes.apple.com"
+
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(itunesBaseUrl)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    private val itunesService = retrofit.create(ItunesAPI::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+
         vTextSearch = findViewById<EditText>(R.id.vTextSearch)
-        fillTrackList()
-        val clearButton = findViewById<ImageView>(R.id.btnSearchClear)
-        clearButton.setOnClickListener{clearSearchText(clearButton,vTextSearch)}
+        recyclerTracks = findViewById<RecyclerView>(R.id.recyclerTracks)
+        vTroublePlaceholder = findViewById<LinearLayout>(R.id.placeholderTrouble)
+        vTroublePlaceholderText = findViewById<TextView>(R.id.placeholderTroubleText)
+        vTroublePlaceholderButton = findViewById<Button>(R.id.placeholderTroubleButton)
+        placeholderTroubleCenterImage = findViewById<ImageView>(R.id.placeholderTroubleCenterImage)
+        clearButton = findViewById<ImageView>(R.id.btnSearchClear)
+        progressBarSearch = findViewById<ProgressBar>(R.id.progressBarSearchTracks)
         val btnBack = findViewById<ImageButton>(R.id.imgBtnBack)
+
+
+        clearButton.setOnClickListener{clearSearchText(clearButton,vTextSearch)}
         btnBack.setOnClickListener{finish()}
+        vTroublePlaceholderButton.setOnClickListener{search()}
 
-
-
-        val recyclerTracks = findViewById<RecyclerView>(R.id.recyclerTracks)
         recyclerTracks.layoutManager = LinearLayoutManager(this)
-
-        adapter = TracksAdapter(trackList_Data.filter { true })
-
+        adapter = TracksAdapter(listOf<Track>())
         recyclerTracks.adapter = adapter
 
         val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // empty
-            }
-
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                clearButton.visibility = clearButtonVisibility(s)
-            }
+                checkClearButtonVisibility(s)}
+            override fun afterTextChanged(s: Editable?) {}
+        }
 
-            override fun afterTextChanged(s: Editable?) {
-                setFilter(vTextSearch.text.toString())
-                adapter.notifyDataSetChanged()
+        vTextSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+
+                search()
+                true
             }
+            false
         }
 
         vTextSearch.addTextChangedListener(simpleTextWatcher)
-
+        showListState(TrackListState.GONE)
+        updateViewParameters()
     }
 
-    fun setFilter(filter:String) {
+    private fun search(){
+        showListState(TrackListState.SEARCH_IN_PROGRESS)
+        val filter = vTextSearch.text.toString()
+        if (filter.isNotEmpty()) {
+            itunesService.findTracks(filter).enqueue(object : Callback<TracksResponse> {
+                override fun onResponse(
+                    call: Call<TracksResponse>,
+                    response: Response<TracksResponse>
+                ) {
+                    if (response.code() == 200) {
+                        if (response.body()?.results?.isNotEmpty() == true) {
+                            showListState(TrackListState.OK)
+                            adapter.setNewList(response.body()?.results!!.toList())
 
-        if (filter == ""){
-            adapter.setNewList(trackList_Data.filter {false})
-        } else {
-            val pattern = filter.lowercase().toRegex()
-            adapter.setNewList(trackList_Data.filter { pattern.containsMatchIn(it.trackName.lowercase()) or pattern.containsMatchIn(it.artistName.lowercase()) } )
+                        } else {showListState(TrackListState.ERROR_EMPTY)}
+                    } else {
+                        showListState(TrackListState.ERROR_NETWORK)
+                    }
+                }
+
+                override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
+                    showListState(TrackListState.ERROR_NETWORK)
+                }
+            })
+        }else{
+            showListState(TrackListState.GONE)
         }
     }
 
+    private fun showListState(state: TrackListState) {
 
+        vTroublePlaceholder.visibility = state.getPlaceholderVisible()
+        recyclerTracks.visibility = state.getTrackListVisible()
+        progressBarSearch.visibility = state.getProgressBarVisible()
+        vTroublePlaceholderButton.visibility = state.getUpdateButtonVisible()
 
+        if (state == TrackListState.ERROR_NETWORK){
+            Glide.with(this).load(R.drawable.ic_network_trouble).dontTransform().into(placeholderTroubleCenterImage)
+            vTroublePlaceholderText.setText(resources.getText(R.string.error_network_trouble))
+        } else if (state == TrackListState.ERROR_EMPTY){
+            Glide.with(this).load(R.drawable.ic_sad_smile).dontTransform().into(placeholderTroubleCenterImage)
+            vTroublePlaceholderText.setText(resources.getText(R.string.error_track_list_is_empty))
+        }
+
+        if (recyclerTracks.visibility == View.GONE){
+            adapter.clearList()
+        }
+    }
+
+    fun isPortraitOrientation(): Boolean {
+        return resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+    }
+
+    fun updateViewParameters() {
+        val params: LinearLayout.LayoutParams =
+            vTroublePlaceholder.layoutParams as LinearLayout.LayoutParams
+        params.setMargins(0, General.dpToPx((if (isPortraitOrientation()) 102f else 0f), this),0,0)
+        vTroublePlaceholder.setLayoutParams(params)
+    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -91,66 +165,25 @@ class SearchActivity : AppCompatActivity() {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         vTextSearch.setText(savedInstanceState.getString(SEARCH_TEXT))
+        updateViewParameters()
     }
 
-    private fun clearButtonVisibility(s: CharSequence?): Int {
-        return if (s.isNullOrEmpty()) {
-            View.GONE
-        } else {
-            View.VISIBLE
+    private fun checkClearButtonVisibility(s: CharSequence?) {
+        if (s.isNullOrEmpty()) {
+            clearButton.visibility = View.GONE
+            showListState(TrackListState.GONE)
+        }else {
+            clearButton.visibility =  View.VISIBLE
         }
     }
+
     private fun clearSearchText(btnClose: ImageView,editField: EditText) {
         editField.text.clear()
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(editField.windowToken, 0)
         btnClose.visibility = View.GONE
-
+        search()
     }
-
-    private fun fillTrackList() {
-
-        trackList_Data = ArrayList<Track>()
-        trackList_Data.add(Track(
-            "Smells Like Teen Spirit",
-            "Nirvana",
-            "5:01",
-            "https://is5-ssl.mzstatic.com/image/thumb/Music115/v4/7b/58/c2/7b58c21a-2b51-2bb2-e59a-9bb9b96ad8c3/00602567924166.rgb.jpg/100x100bb.jpg"
-        ))
-        trackList_Data.add(Track(
-            "Billie Jean",
-            "Michael Jackson",
-            "4:35",
-            "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/3d/9d/38/3d9d3811-71f0-3a0e-1ada-3004e56ff852/827969428726.jpg/100x100bb.jpg"
-        ))
-        trackList_Data.add(Track(
-            "Stayin ' Alive",
-            "Bee Gees",
-            "4:10",
-            "https://is4-ssl.mzstatic.com/image/thumb/Music115/v4/1f/80/1f/1f801fc1-8c0f-ea3e-d3e5-387c6619619e/16UMGIM86640.rgb.jpg/100x100bb.jpg"
-        ))
-        trackList_Data.add(Track(
-            "Whole Lotta Love",
-            "Led Zeppelin",
-            "5:33",
-            "https://is2-ssl.mzstatic.com/image/thumb/Music62/v4/7e/17/e3/7e17e33f-2efa-2a36-e916-7f808576cf6b/mzm.fyigqcbs.jpg/100x100bb.jpg"
-        ))
-        trackList_Data.add(Track(
-            "Sweet Child O 'Mine",
-            "Guns N' Roses",
-            "5:03",
-            "https ://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg"
-        ))
-
-        trackList_Data.add(Track(
-            "Тестовое очень длинное название трека, прям очень длинное для тестов, если недостаточно длинное, то ещё пара слов",
-            "Длинное имя исполнителя, прям очень длинное для тестов, если недостаточно длинное, то ещё пара слов",
-            "5:03",
-            "https://cdn-icons-png.flaticon.com/512/83/83326.png"
-        ))
-
-    }
-
 }
 
 

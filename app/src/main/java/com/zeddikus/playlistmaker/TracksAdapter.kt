@@ -1,10 +1,7 @@
 package com.zeddikus.playlistmaker
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
 class TracksAdapter(
@@ -12,10 +9,8 @@ class TracksAdapter(
 ) : RecyclerView.Adapter<TracksViewHolder> () {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.track_element, parent, false)
-        view.setOnClickListener {
-            Toast.makeText(it.context,"Играет ${it.findViewById<TextView>(R.id.trackNameInSearch).text}",Toast.LENGTH_SHORT).show()
-        }
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.track_element, parent, false)
         return TracksViewHolder(view)
     }
 
@@ -29,6 +24,16 @@ class TracksAdapter(
 
     fun setNewList(newList: List<Track>) {
         tracks = newList
+        notifyDataSetChanged()
+    }
+
+    fun getItem(pos: Int): Track {
+        return tracks.get(pos)
+    }
+
+    fun clearList(){
+        tracks = emptyList<Track>()
+        notifyDataSetChanged()
     }
 
 }

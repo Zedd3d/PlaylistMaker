@@ -2,6 +2,7 @@ package com.zeddikus.playlistmaker
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
 class TracksAdapter(
@@ -11,6 +12,14 @@ class TracksAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.track_element, parent, false)
+        view.setOnClickListener{
+            var track = (it.context as SearchActivity)
+                .adapter.getItem(
+                    (it.context as SearchActivity).recyclerTracks.getChildAdapterPosition(it)
+                )
+            Toast.makeText(it.context,"Играет '${track.trackName}'\nАртист '${track.artistName}'",
+                Toast.LENGTH_SHORT).show()
+        }
         return TracksViewHolder(view)
     }
 

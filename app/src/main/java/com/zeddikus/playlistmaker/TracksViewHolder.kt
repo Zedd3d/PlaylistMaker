@@ -24,16 +24,7 @@ class TracksViewHolder(parentView: View) : RecyclerView.ViewHolder(parentView) {
         artistName = parentView.findViewById(R.id.artistNameInSearch)
         trackTime = parentView.findViewById(R.id.trackTimeInSearch)
 
-        parentView.setOnClickListener{
-            var track = (it.context as SearchActivity)
-                .adapter.getItem(
-                            (it.context as SearchActivity).recyclerTracks.getChildAdapterPosition(it)
-                )
-            (parentView.context as SearchActivity).adapter.getItem((it.context as SearchActivity).recyclerTracks.getChildAdapterPosition(it))
-            Toast.makeText(it.context,"Играет '${track.trackName}'\nАртист '${track.artistName}'",
-                    Toast.LENGTH_SHORT).show()
 
-        }
     }
 
     fun bind(track: Track) {

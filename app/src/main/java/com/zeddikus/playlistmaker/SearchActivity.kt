@@ -2,6 +2,7 @@ package com.zeddikus.playlistmaker
 
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
@@ -13,11 +14,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.ImageView.ScaleType
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,14 +34,21 @@ class SearchActivity : AppCompatActivity() {
     }
 
     lateinit var vTextSearch: EditText
-    lateinit var recyclerTracks : RecyclerView
-    lateinit var vTroublePlaceholder : LinearLayout
-    lateinit var vTroublePlaceholderText : TextView
-    lateinit var vTroublePlaceholderButton : Button
-    lateinit var clearButton : ImageView
-    lateinit var placeholderTroubleCenterImage : ImageView
-    lateinit var progressBarSearch : ProgressBar
+    lateinit var recyclerTracks: RecyclerView
+    lateinit var recyclerHistory: RecyclerView
+    lateinit var linearHistory: LinearLayout
+    lateinit var vTroublePlaceholder: LinearLayout
+    lateinit var vTroublePlaceholderText: TextView
+    lateinit var vTroublePlaceholderButton: Button
+    lateinit var clearButton: ImageView
+    lateinit var placeholderTroubleCenterImage: ImageView
+    lateinit var progressBarSearch: ProgressBar
     lateinit var adapter: TracksAdapter
+    lateinit var historyAdapter: TracksAdapter
+    lateinit var clearHistoryButton: Button
+    lateinit var searchHistoryHandler: SearchHistoryHandler
+    lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
+    var lastState = TrackListState.GONE
 
     private val itunesBaseUrl = "https://itunes.apple.com"
 
@@ -57,44 +63,85 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        lateinitInitalize()
+
+        val App = (applicationContext as App)
+        searchHistoryHandler = SearchHistoryHandler(App)
+
+        val btnBack = findViewById<ImageButton>(R.id.imgBtnBack)
+        btnBack.setOnClickListener { finish() }
+        clearButton.setOnClickListener { clearSearchText(clearButton, vTextSearch) }
+        clearHistoryButton.setOnClickListener {
+            searchHistoryHandler.clearHistory()
+            showHistory()
+        }
+        vTroublePlaceholderButton.setOnClickListener { search() }
+
+        recyclerTracks.layoutManager = LinearLayoutManager(this)
+        adapter = TracksAdapter(listOf<Track>(),searchHistoryHandler)
+
+        recyclerTracks.adapter = adapter
+
+        val simpleTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                checkClearButtonVisibility(s)
+                if (vTextSearch.hasFocus() && s?.isEmpty() == true) {
+                    showHistory()
+                } else {
+                    showListState(lastState)
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        }
+
+        vTextSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                search()
+                true
+            }
+            false
+        }
+        vTextSearch.addTextChangedListener(simpleTextWatcher)
+
+        recyclerHistory.layoutManager = LinearLayoutManager(this)
+        historyAdapter = TracksAdapter(listOf<Track>(),null)
+        recyclerHistory.adapter = historyAdapter
+        historyAdapter.setNewList(searchHistoryHandler.getHistory())
+
+        listener = SharedPreferences.OnSharedPreferenceChangeListener() { sharedPreferences, key ->
+                if (key == searchHistoryHandler.SP_SEARCH_HISTORY) {
+                    historyAdapter.setNewList(searchHistoryHandler.getHistory())
+                }
+            }
+        searchHistoryHandler.sharedPref.registerOnSharedPreferenceChangeListener(listener)
+
+        showHistory()
+        updateViewParameters()
+    }
+
+    fun lateinitInitalize(){
+        clearHistoryButton = findViewById<Button>(R.id.clearHistoryButton)
         vTextSearch = findViewById<EditText>(R.id.vTextSearch)
         recyclerTracks = findViewById<RecyclerView>(R.id.recyclerTracks)
+        linearHistory = findViewById<LinearLayout>(R.id.linearTracksHistory)
+        recyclerHistory = findViewById<RecyclerView>(R.id.recyclerTracksHistory)
         vTroublePlaceholder = findViewById<LinearLayout>(R.id.placeholderTrouble)
         vTroublePlaceholderText = findViewById<TextView>(R.id.placeholderTroubleText)
         vTroublePlaceholderButton = findViewById<Button>(R.id.placeholderTroubleButton)
         placeholderTroubleCenterImage = findViewById<ImageView>(R.id.placeholderTroubleCenterImage)
         clearButton = findViewById<ImageView>(R.id.btnSearchClear)
         progressBarSearch = findViewById<ProgressBar>(R.id.progressBarSearchTracks)
-        val btnBack = findViewById<ImageButton>(R.id.imgBtnBack)
 
 
-        clearButton.setOnClickListener{clearSearchText(clearButton,vTextSearch)}
-        btnBack.setOnClickListener{finish()}
-        vTroublePlaceholderButton.setOnClickListener{search()}
-
-        recyclerTracks.layoutManager = LinearLayoutManager(this)
-        adapter = TracksAdapter(listOf<Track>())
-        recyclerTracks.adapter = adapter
-
-        val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                checkClearButtonVisibility(s)}
-            override fun afterTextChanged(s: Editable?) {}
+    }
+    private fun showHistory() {
+        historyAdapter.setNewList(searchHistoryHandler.getHistory())
+        if (historyAdapter.itemCount>0){
+            showListState(TrackListState.SHOW_HISTORY)
+        } else {
+            showListState(TrackListState.GONE)
         }
-
-        vTextSearch.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-
-                search()
-                true
-            }
-            false
-        }
-
-        vTextSearch.addTextChangedListener(simpleTextWatcher)
-        showListState(TrackListState.GONE)
-        updateViewParameters()
     }
 
     private fun search(){
@@ -109,6 +156,7 @@ class SearchActivity : AppCompatActivity() {
                     if (response.code() == 200) {
                         if (response.body()?.results?.isNotEmpty() == true) {
                             showListState(TrackListState.OK)
+
                             adapter.setNewList(response.body()?.results!!.toList())
 
                         } else {showListState(TrackListState.ERROR_EMPTY)}
@@ -122,16 +170,37 @@ class SearchActivity : AppCompatActivity() {
                 }
             })
         }else{
-            showListState(TrackListState.GONE)
+            showHistory()
         }
     }
 
     private fun showListState(state: TrackListState) {
 
-        vTroublePlaceholder.visibility = state.getPlaceholderVisible()
-        recyclerTracks.visibility = state.getTrackListVisible()
-        progressBarSearch.visibility = state.getProgressBarVisible()
-        vTroublePlaceholderButton.visibility = state.getUpdateButtonVisible()
+        lastState = if (state == TrackListState.SHOW_HISTORY || state == TrackListState.SEARCH_IN_PROGRESS ) lastState else state
+
+        vTroublePlaceholder.visibility = when (state) {
+            TrackListState.ERROR_NETWORK -> View.VISIBLE
+            TrackListState.ERROR_EMPTY -> View.VISIBLE
+            else -> View.GONE
+        }
+        recyclerTracks.visibility = when (state) {
+            TrackListState.OK -> View.VISIBLE
+            else -> {View.GONE}
+        }
+
+        linearHistory.visibility = when (state) {
+            TrackListState.SHOW_HISTORY ->  View.VISIBLE
+            else -> {View.GONE}
+        }
+
+        progressBarSearch.visibility = when (state) {
+            TrackListState.SEARCH_IN_PROGRESS -> View.VISIBLE
+            else -> View.GONE
+        }
+        vTroublePlaceholderButton.visibility = when (state) {
+            TrackListState.ERROR_NETWORK -> View.VISIBLE
+            else -> View.GONE
+        }
 
         if (state == TrackListState.ERROR_NETWORK){
             Glide.with(this).load(R.drawable.ic_network_trouble).dontTransform().into(placeholderTroubleCenterImage)
@@ -141,7 +210,7 @@ class SearchActivity : AppCompatActivity() {
             vTroublePlaceholderText.setText(resources.getText(R.string.error_track_list_is_empty))
         }
 
-        if (recyclerTracks.visibility == View.GONE){
+        if (recyclerTracks.visibility == View.GONE && !(state == TrackListState.SHOW_HISTORY) ){
             adapter.clearList()
         }
     }
@@ -171,7 +240,7 @@ class SearchActivity : AppCompatActivity() {
     private fun checkClearButtonVisibility(s: CharSequence?) {
         if (s.isNullOrEmpty()) {
             clearButton.visibility = View.GONE
-            showListState(TrackListState.GONE)
+            showHistory()
         }else {
             clearButton.visibility =  View.VISIBLE
         }

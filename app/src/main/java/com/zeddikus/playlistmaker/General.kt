@@ -1,6 +1,7 @@
 package com.zeddikus.playlistmaker
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.TypedValue
 
 object General {
@@ -11,4 +12,5 @@ object General {
             dp,
             context.resources.displayMetrics).toInt()
     }
+
 }

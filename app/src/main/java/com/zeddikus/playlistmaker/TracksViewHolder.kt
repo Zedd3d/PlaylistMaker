@@ -18,13 +18,10 @@ class TracksViewHolder(parentView: View) : RecyclerView.ViewHolder(parentView) {
     private val trackTime: TextView
 
     init {
-        
         artwork = parentView.findViewById(R.id.imgArtworkInSearch)
         trackName = parentView.findViewById(R.id.trackNameInSearch)
         artistName = parentView.findViewById(R.id.artistNameInSearch)
         trackTime = parentView.findViewById(R.id.trackTimeInSearch)
-
-
     }
 
     fun bind(track: Track) {
@@ -37,7 +34,7 @@ class TracksViewHolder(parentView: View) : RecyclerView.ViewHolder(parentView) {
         trackName.text = track.trackName.trim()
         trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTime)
         artistName.text= track.artistName.trim()
-        artistName.updateLayoutParams { width = 0 }
+        artistName.updateLayoutParams {}
     }
 
 

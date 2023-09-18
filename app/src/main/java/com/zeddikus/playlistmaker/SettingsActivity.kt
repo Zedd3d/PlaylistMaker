@@ -19,7 +19,13 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener{
         findViewById<LinearLayout>(R.id.llShare).setOnClickListener(this)
         findViewById<LinearLayout>(R.id.llSupport).setOnClickListener(this)
         findViewById<LinearLayout>(R.id.llTerms).setOnClickListener(this)
-        findViewById<Switch>(R.id.swBlackTheme).setOnClickListener(this)
+        val switchTheme = findViewById<Switch>(R.id.swBlackTheme)
+
+        switchTheme.isChecked = (applicationContext as App).darkTheme
+
+        switchTheme.setOnClickListener{
+            (applicationContext as App).saveSwitchDarkTheme((it as Switch).isChecked)
+        }
 
         val btnBack = findViewById<ImageButton>(R.id.imgBtnBack)
         btnBack.setOnClickListener{

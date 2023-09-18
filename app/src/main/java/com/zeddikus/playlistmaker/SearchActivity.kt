@@ -65,8 +65,8 @@ class SearchActivity : AppCompatActivity() {
 
         lateinitInitalize()
 
-        val App = (applicationContext as App)
-        searchHistoryHandler = SearchHistoryHandler(App)
+        val app = (applicationContext as App)
+        searchHistoryHandler = SearchHistoryHandler(app)
 
         val btnBack = findViewById<ImageButton>(R.id.imgBtnBack)
         btnBack.setOnClickListener { finish() }

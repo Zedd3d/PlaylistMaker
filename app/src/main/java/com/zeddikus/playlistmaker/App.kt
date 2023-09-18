@@ -2,11 +2,7 @@ package com.zeddikus.playlistmaker
 
 import android.app.Application
 import android.content.SharedPreferences
-import android.content.res.Configuration
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 
 class App : Application() {
     var darkTheme = false

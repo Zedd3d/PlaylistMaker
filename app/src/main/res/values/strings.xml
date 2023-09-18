@@ -18,9 +18,4 @@
     <string name="YP_LINK_AD" translatable="false">https://practicum.yandex.ru/android-developer/</string>
     <string name="YP_LINK_OFFER" translatable="false">https://yandex.ru/legal/practicum_offer/</string>
     <string name="TEXT_PLAIN" translatable="false">text/plain</string>
-    <string name="error_track_list_is_empty">Ничего не нашлось</string>
-    <string name="error_network_trouble">Проблемы со связью \n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
-    <string name="update">Обновить</string>
-    <string name="search_history_title">Вы искали</string>
-    <string name="clear_button_text">Очистить историю</string>
 </resources>

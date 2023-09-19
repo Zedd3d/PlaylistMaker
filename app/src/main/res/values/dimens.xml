@@ -2,7 +2,7 @@
 <resources>
     <!-- text size-->
     <dimen name="program_name_text_size">22sp</dimen>
-    <dimen name="settings_item_text_size">19sp</dimen>
+    <dimen name="settings_item_text_size">16sp</dimen>
     <dimen name="bigbtn_text_size">26sp</dimen>
     <dimen name="searchlist_small_text">11sp</dimen>
     <dimen name="searchlist_large_text">16sp</dimen>

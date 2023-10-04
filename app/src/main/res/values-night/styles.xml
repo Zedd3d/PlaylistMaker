@@ -22,4 +22,9 @@
         <item name="android:backgroundTint">@color/white_pm</item>
         <item name="tint">@color/black_pm</item>
     </style>
+
+    <style name="roundButtonsPlayList">
+        <item name="android:background">?colorPrimary</item>
+        <item name="tint">?colorTertiary</item>
+    </style>
 </resources>

@@ -17,7 +17,9 @@
 
         <ImageButton
             android:id="@+id/imgBtnBack"
-            style="@style/backButtonTitle" />
+            style="@style/backButtonTitle"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"/>
 
         <TextView
             style="@style/TitleTextStyle"
@@ -75,7 +77,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical"
-            android:visibility="gone"
             android:gravity="center">
 
             <FrameLayout
@@ -146,6 +147,7 @@
             android:id="@+id/linearTracksHistory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"

@@ -2,8 +2,10 @@ package com.zeddikus.playlistmaker
 
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -21,11 +23,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 
 class SearchActivity : AppCompatActivity() {
 
@@ -147,8 +151,10 @@ class SearchActivity : AppCompatActivity() {
     private fun search(){
         showListState(TrackListState.SEARCH_IN_PROGRESS)
         val filter = vTextSearch.text.toString()
+        val config = Resources.getSystem().configuration
+        val locale: String = config.locales.get(0)?.language ?: "en_EN"
         if (filter.isNotEmpty()) {
-            itunesService.findTracks(filter).enqueue(object : Callback<TracksResponse> {
+            itunesService.findTracks(filter, locale).enqueue(object : Callback<TracksResponse> {
                 override fun onResponse(
                     call: Call<TracksResponse>,
                     response: Response<TracksResponse>
@@ -156,8 +162,7 @@ class SearchActivity : AppCompatActivity() {
                     if (response.code() == 200) {
                         if (response.body()?.results?.isNotEmpty() == true) {
                             showListState(TrackListState.OK)
-
-                            adapter.setNewList(response.body()?.results!!.toList())
+                            adapter.setNewList(response.body()?.results ?:mutableListOf<Track>() .toList())
 
                         } else {showListState(TrackListState.ERROR_EMPTY)}
                     } else {
@@ -252,6 +257,12 @@ class SearchActivity : AppCompatActivity() {
         inputMethodManager?.hideSoftInputFromWindow(editField.windowToken, 0)
         btnClose.visibility = View.GONE
         search()
+    }
+
+    fun showPlayer(track: Track) {
+        val intent = Intent(this,PlayerActivity::class.java)
+        intent.putExtra("Track",Gson().toJson(track))
+        startActivity(intent)
     }
 }
 

@@ -1,7 +1,5 @@
 package com.zeddikus.playlistmaker
 
-import android.view.View
-
 enum class TrackListState {
     GONE,
     ERROR_NETWORK,
@@ -9,6 +7,4 @@ enum class TrackListState {
     OK,
     SHOW_HISTORY,
     SEARCH_IN_PROGRESS;
-
-
 }

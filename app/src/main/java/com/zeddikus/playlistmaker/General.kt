@@ -1,7 +1,6 @@
 package com.zeddikus.playlistmaker
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.util.TypedValue
 
 object General {
@@ -11,6 +10,10 @@ object General {
             TypedValue.COMPLEX_UNIT_DIP,
             dp,
             context.resources.displayMetrics).toInt()
+    }
+
+    fun convertURLtoBigSizeCover(artworkUrl100: String): String {
+        return artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
     }
 
 }

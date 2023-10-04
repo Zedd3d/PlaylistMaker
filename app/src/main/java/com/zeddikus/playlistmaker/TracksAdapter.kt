@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
 
 class TracksAdapter(
     private var tracks: List<Track>,
@@ -15,15 +14,20 @@ class TracksAdapter(
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.track_element, parent, false)
         view.setOnClickListener{
-            var track = this.getItem(
-                    if (searchHistoryHandler==null)
-                        (it.context as SearchActivity).recyclerHistory.getChildAdapterPosition(it)
+            if (it.context is SearchActivity) {
+                val searchActivity = (it.context as SearchActivity)
+                var track = this.getItem(
+                    if (searchHistoryHandler == null)
+                        searchActivity.recyclerHistory.getChildAdapterPosition(it)
                     else
-                        (it.context as SearchActivity).recyclerTracks.getChildAdapterPosition(it)
+                        searchActivity.recyclerTracks.getChildAdapterPosition(it)
                 )
-            Toast.makeText(it.context,"Играет '${track.trackName}'\nАртист '${track.artistName}'",
-                Toast.LENGTH_SHORT).show()
-            searchHistoryHandler?.addTrackToHistory(track)
+
+                searchHistoryHandler?.addTrackToHistory(track)
+                searchActivity.showPlayer(track)
+            } else {
+                Toast.makeText(it.context,"Передан неподходящий контекст",Toast.LENGTH_SHORT)
+            }
         }
         return TracksViewHolder(view)
     }

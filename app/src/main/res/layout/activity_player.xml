@@ -23,10 +23,12 @@
         android:layout_height="0dp"
         android:layout_marginTop="28dp"
         android:scaleType="centerInside"
+        app:layout_constraintBottom_toTopOf="@+id/titleText"
         app:layout_constraintDimensionRatio="h,1:1"
         app:layout_constraintEnd_toEndOf="@id/guideline2"
         app:layout_constraintStart_toStartOf="@id/guideline1"
-        app:layout_constraintTop_toBottomOf="@id/backButton"
+        app:layout_constraintTop_toBottomOf="@+id/backButton"
+        app:layout_constraintVertical_bias="0.5"
         app:layout_constraintVertical_weight="1"
         app:srcCompat="@drawable/placeholder_track_artwork_big" />
 
@@ -52,8 +54,10 @@
         android:fontFamily="@font/ys_display_medium"
         android:text=""
         android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@+id/bandText"
         app:layout_constraintStart_toStartOf="@id/guideline1"
-        app:layout_constraintTop_toBottomOf="@id/coverImage"
+        app:layout_constraintTop_toBottomOf="@+id/coverImage"
+        app:layout_constraintVertical_bias="0.5"
         tools:text="Yesterday (Remastered 2009)" />
 
     <TextView
@@ -64,16 +68,18 @@
         android:fontFamily="@font/ys_display_medium"
         android:text=""
         android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/addToPlaylistButton"
         app:layout_constraintStart_toStartOf="@id/guideline1"
-        app:layout_constraintTop_toBottomOf="@id/titleText"
+        app:layout_constraintTop_toBottomOf="@+id/titleText"
+        app:layout_constraintVertical_bias="0.5"
         tools:text="The Beatles" />
 
     <ImageButton
         android:id="@+id/addToPlaylistButton"
+        style="@style/roundButtonsPlayList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="54dp"
-        style="@style/roundButtonsPlayList"
         app:layout_constraintEnd_toStartOf="@id/playButton"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="@id/guideline1"
@@ -85,18 +91,61 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?colorPrimary"
-        app:tint = "?colorTertiary"
         app:layout_constraintBottom_toBottomOf="@+id/addToPlaylistButton"
         app:layout_constraintEnd_toStartOf="@id/addToFavorites"
         app:layout_constraintStart_toEndOf="@id/addToPlaylistButton"
         app:layout_constraintTop_toTopOf="@+id/addToPlaylistButton"
-        app:srcCompat="@drawable/ic_play" />
+        app:srcCompat="@drawable/ic_play"
+        app:tint="?colorTertiary" />
+
+    <ProgressBar
+        android:layout_width="@dimen/size_player_progressbar"
+        android:layout_height="@dimen/size_player_progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:rotation="-90"
+        android:progress="1"
+        android:max="1"
+        android:progressDrawable="@drawable/custom_track_progress_bar_background"
+
+        app:layout_constraintBottom_toBottomOf="@+id/playButton"
+        app:layout_constraintEnd_toEndOf="@+id/playButton"
+        app:layout_constraintStart_toStartOf="@+id/playButton"
+        app:layout_constraintTop_toTopOf="@+id/playButton" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="@dimen/size_player_progressbar"
+        android:layout_height="@dimen/size_player_progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:rotation="-90"
+        tools:progress="3"
+        tools:max="10"
+        android:progressDrawable="@drawable/custom_track_progress_bar"
+
+        app:layout_constraintBottom_toBottomOf="@+id/playButton"
+        app:layout_constraintEnd_toEndOf="@+id/playButton"
+        app:layout_constraintStart_toStartOf="@+id/playButton"
+        app:layout_constraintTop_toTopOf="@+id/playButton" />
+
+    <ProgressBar
+        android:id="@+id/progressBarOnPrepare"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="@dimen/size_player_progressbar"
+        android:layout_height="@dimen/size_player_progressbar"
+        android:indeterminateTint="?colorTertiary"
+        tools:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/playButton"
+        app:layout_constraintEnd_toEndOf="@+id/playButton"
+        app:layout_constraintStart_toStartOf="@+id/playButton"
+        app:layout_constraintTop_toTopOf="@+id/playButton" />
+
+
 
     <ImageButton
         android:id="@+id/addToFavorites"
+        style="@style/roundButtonsPlayList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/roundButtonsPlayList"
         app:layout_constraintBottom_toBottomOf="@id/playButton"
         app:layout_constraintEnd_toStartOf="@id/guideline2"
         app:layout_constraintStart_toEndOf="@id/playButton"
@@ -105,11 +154,11 @@
 
     <TextView
         android:id="@+id/titleTrackTime"
+        style="@style/PlayerCoverTrackTitlesValues"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/PlayerCoverTrackTitlesValues"
-        android:text="@string/duration"
         android:layout_marginTop="24dp"
+        android:text="@string/duration"
         app:layout_constraintBottom_toTopOf="@id/titleAlbumName"
         app:layout_constraintEnd_toStartOf="@id/trackTime"
         app:layout_constraintStart_toStartOf="@id/guideline1"
@@ -128,9 +177,9 @@
 
     <TextView
         android:id="@+id/titleAlbumName"
+        style="@style/PlayerCoverTrackTitlesValues"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/PlayerCoverTrackTitlesValues"
         android:text="@string/album"
         app:layout_constraintBottom_toTopOf="@+id/titleYearValue"
         app:layout_constraintEnd_toStartOf="@id/albumName"
@@ -141,11 +190,11 @@
     <TextView
         android:id="@+id/albumName"
         style="@style/PlayerCoverTrackValues"
-        android:singleLine="true"
         android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"
         android:focusable="false"
+        android:marqueeRepeatLimit="marquee_forever"
         android:scrollHorizontally="true"
+        android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="@id/titleAlbumName"
         app:layout_constraintEnd_toStartOf="@id/guideline2"
         app:layout_constraintStart_toEndOf="@id/titleAlbumName"
@@ -155,9 +204,9 @@
 
     <TextView
         android:id="@+id/titleYearValue"
+        style="@style/PlayerCoverTrackTitlesValues"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/PlayerCoverTrackTitlesValues"
         android:text="@string/year"
         app:layout_constraintBottom_toTopOf="@+id/titleGenreValue"
         app:layout_constraintEnd_toStartOf="@id/yearValue"
@@ -176,9 +225,9 @@
 
     <TextView
         android:id="@+id/titleGenreValue"
+        style="@style/PlayerCoverTrackTitlesValues"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/PlayerCoverTrackTitlesValues"
         android:text="@string/genre"
         app:layout_constraintBottom_toTopOf="@+id/titleCountryValue"
         app:layout_constraintEnd_toStartOf="@id/genreValue"
@@ -197,11 +246,11 @@
 
     <TextView
         android:id="@+id/titleCountryValue"
+        style="@style/PlayerCoverTrackTitlesValues"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/PlayerCoverTrackTitlesValues"
-        android:text="@string/country"
         android:layout_marginBottom="20dp"
+        android:text="@string/country"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/countryValue"
         app:layout_constraintStart_toStartOf="@id/guideline1"
@@ -222,10 +271,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text=""
-        tools:text = "0:23"
+        android:text="00:00"
         app:layout_constraintEnd_toStartOf="@id/guideline2"
         app:layout_constraintStart_toStartOf="@id/guideline1"
-        app:layout_constraintTop_toBottomOf="@id/playButton" />
+        app:layout_constraintTop_toBottomOf="@id/playButton"
+        tools:text="0:23" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

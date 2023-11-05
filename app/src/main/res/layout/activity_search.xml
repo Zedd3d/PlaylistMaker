@@ -67,8 +67,8 @@
             android:id="@+id/progressBarSearchTracks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:indeterminateTint="?colorTertiary"
+            android:paddingTop="55dp"
+            android:indeterminateTint="@color/blue_pm"
             />
 
         <LinearLayout
@@ -77,6 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical"
+            android:visibility="gone"
             android:gravity="center">
 
             <FrameLayout

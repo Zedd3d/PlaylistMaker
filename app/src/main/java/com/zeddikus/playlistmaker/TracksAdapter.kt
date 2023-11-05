@@ -16,17 +16,17 @@ class TracksAdapter(
         view.setOnClickListener{
             if (it.context is SearchActivity) {
                 val searchActivity = (it.context as SearchActivity)
-                var track = this.getItem(
+                val track = this.getItem(
                     if (searchHistoryHandler == null)
-                        searchActivity.recyclerHistory.getChildAdapterPosition(it)
+                        searchActivity.binding.recyclerTracksHistory.getChildAdapterPosition(it)
                     else
-                        searchActivity.recyclerTracks.getChildAdapterPosition(it)
+                        searchActivity.binding.recyclerTracks.getChildAdapterPosition(it)
                 )
 
                 searchHistoryHandler?.addTrackToHistory(track)
                 searchActivity.showPlayer(track)
             } else {
-                Toast.makeText(it.context,"Передан неподходящий контекст",Toast.LENGTH_SHORT)
+                Toast.makeText(it.context,parent.context.resources.getString(R.string.wrong_context),Toast.LENGTH_SHORT).show()
             }
         }
         return TracksViewHolder(view)

@@ -1,4 +1,4 @@
-package com.zeddikus.playlistmaker
+package com.zeddikus.playlistmaker.utils
 
 import android.content.Context
 import android.util.TypedValue
@@ -15,5 +15,4 @@ object General {
     fun convertURLtoBigSizeCover(artworkUrl100: String): String {
         return artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
     }
-
 }

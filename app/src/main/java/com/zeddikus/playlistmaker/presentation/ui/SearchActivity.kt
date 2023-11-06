@@ -1,4 +1,4 @@
-package com.zeddikus.playlistmaker
+package com.zeddikus.playlistmaker.presentation.ui
 
 
 import android.content.Context
@@ -20,50 +20,47 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.google.gson.Gson
+import com.zeddikus.playlistmaker.Creator
+import com.zeddikus.playlistmaker.utils.General
+import com.zeddikus.playlistmaker.R
 import com.zeddikus.playlistmaker.databinding.ActivitySearchBinding
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.zeddikus.playlistmaker.domain.api.TracksInteractor
+import com.zeddikus.playlistmaker.domain.models.Track
+import com.zeddikus.playlistmaker.data.dto.TrackSearchResult
+import com.zeddikus.playlistmaker.domain.api.SearchHistoryInteractor
+import com.zeddikus.playlistmaker.domain.models.PlayerState
+import com.zeddikus.playlistmaker.domain.models.TrackRepositoryState
+import com.zeddikus.playlistmaker.presentation.track.TracksAdapter
 
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity(), TracksInteractor.TracksConsumer{
 
     private companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val CLICK_DELAY = 1500L
-        private val itunesBaseUrl = "https://itunes.apple.com"
         private val mainHandler = Handler(Looper.getMainLooper())
-
     }
 
     lateinit var binding: ActivitySearchBinding
-    lateinit var adapter: TracksAdapter
-    lateinit var historyAdapter: TracksAdapter
-    lateinit var searchHistoryHandler: SearchHistoryHandler
-    lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
-    lateinit var searchRunnable: Runnable
-    var trackIsStarted = false
-    var lastState = TrackListState.GONE
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(itunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val itunesService = retrofit.create(ItunesAPI::class.java)
-
+    private lateinit var adapter: TracksAdapter
+    private lateinit var historyAdapter: TracksAdapter
+    private lateinit var searchHistoryInteractor: SearchHistoryInteractor
+    private lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
+    private lateinit var searchRunnable: Runnable
+    private var mediaPlayerStarting = false
+    private var currentState = TrackRepositoryState.GONE
+    private val jsonHandler = Creator.provideJsonHandler()
+    private val tracksInteractor = Creator.provideTracksInteractor()
+    private val sharedPrefHandler = Creator.provideSharedPreferencesHandler()
+    private var runnableConsumer: Runnable? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         val viewRoot = binding.root
         setContentView(viewRoot)
 
-        val app = (applicationContext as App)
-        searchHistoryHandler = SearchHistoryHandler(app)
+        searchHistoryInteractor = Creator.provideSearchHistoryInteractor()
 
         searchRunnable = Runnable {
             search()
@@ -78,7 +75,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.clearHistoryButton.setOnClickListener {
-            searchHistoryHandler.clearHistory()
+            searchHistoryInteractor.clearHistory()
             showHistory()
         }
         binding.placeholderTroubleButton.setOnClickListener {
@@ -94,7 +91,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.recyclerTracks.layoutManager = LinearLayoutManager(this)
-        adapter = TracksAdapter(listOf<Track>(),searchHistoryHandler)
+        adapter = TracksAdapter(listOf<Track>(),searchHistoryInteractor)
         binding.recyclerTracks.adapter = adapter
 
         val simpleTextWatcher = object : TextWatcher {
@@ -106,7 +103,6 @@ class SearchActivity : AppCompatActivity() {
                     mainHandler.removeCallbacks(searchRunnable)
                     showHistory()
                 }
-
             }
             override fun afterTextChanged(s: Editable?) {}
         }
@@ -116,102 +112,82 @@ class SearchActivity : AppCompatActivity() {
         binding.recyclerTracksHistory.layoutManager = LinearLayoutManager(this)
         historyAdapter = TracksAdapter(listOf<Track>(),null)
         binding.recyclerTracksHistory.adapter = historyAdapter
-        historyAdapter.setNewList(searchHistoryHandler.getHistory())
+        historyAdapter.setNewList(searchHistoryInteractor.getHistory())
 
         listener = SharedPreferences.OnSharedPreferenceChangeListener() { sharedPreferences, key ->
-                if (key == searchHistoryHandler.SP_SEARCH_HISTORY) {
-                    historyAdapter.setNewList(searchHistoryHandler.getHistory())
+                if (key == searchHistoryInteractor.SP_SEARCH_HISTORY) {
+                    historyAdapter.setNewList(searchHistoryInteractor.getHistory())
                 }
             }
-        searchHistoryHandler.sharedPref.registerOnSharedPreferenceChangeListener(listener)
+        sharedPrefHandler.setSharedPreferencesChangeListener(listener)
 
         showHistory()
         updateViewParameters()
-
     }
 
     private fun showHistory() {
-        historyAdapter.setNewList(searchHistoryHandler.getHistory())
+        historyAdapter.setNewList(searchHistoryInteractor.getHistory())
         if (historyAdapter.itemCount>0){
-            showListState(TrackListState.SHOW_HISTORY)
+            showListState(TrackRepositoryState.SHOW_HISTORY)
         } else {
-            showListState(TrackListState.GONE)
+            showListState(TrackRepositoryState.GONE)
         }
     }
 
     private fun searchDebounce(){
-        showListState(TrackListState.SEARCH_IN_PROGRESS)
+        showListState(TrackRepositoryState.SEARCH_IN_PROGRESS)
         mainHandler.removeCallbacks(searchRunnable)
         mainHandler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
     private fun search(){
-        showListState(TrackListState.SEARCH_IN_PROGRESS)
+        showListState(TrackRepositoryState.SEARCH_IN_PROGRESS)
         val filter = binding.vTextSearch.text.toString()
         val config = Resources.getSystem().configuration
         val locale: String = config.locales.get(0)?.language ?: "en_EN"
         if (filter.isNotEmpty()) {
-            itunesService.findTracks(filter, locale).enqueue(object : Callback<TracksResponse> {
-                override fun onResponse(
-                    call: Call<TracksResponse>,
-                    response: Response<TracksResponse>
-                ) {
-                    if (response.code() == 200) {
-                        if (response.body()?.results?.isNotEmpty() == true) {
-                            showListState(TrackListState.OK)
-                            adapter.setNewList(response.body()?.results ?:mutableListOf<Track>() .toList())
-
-                        } else {showListState(TrackListState.ERROR_EMPTY)}
-                    } else {
-                        showListState(TrackListState.ERROR_NETWORK)
-                    }
-                }
-
-                override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
-                    showListState(TrackListState.ERROR_NETWORK)
-                }
-            })
+            tracksInteractor.searchTracks(filter,locale, this)
         }else{
             showHistory()
         }
     }
 
-    private fun showListState(state: TrackListState) {
+    private fun showListState(state: TrackRepositoryState) {
 
-        lastState = if (state == TrackListState.SHOW_HISTORY || state == TrackListState.SEARCH_IN_PROGRESS ) lastState else state
+        currentState = if (state == TrackRepositoryState.SHOW_HISTORY || state == TrackRepositoryState.SEARCH_IN_PROGRESS ) currentState else state
 
         binding.placeholderTrouble.visibility = when (state) {
-            TrackListState.ERROR_NETWORK -> View.VISIBLE
-            TrackListState.ERROR_EMPTY -> View.VISIBLE
+            TrackRepositoryState.ERROR_NETWORK -> View.VISIBLE
+            TrackRepositoryState.ERROR_EMPTY -> View.VISIBLE
             else -> View.GONE
         }
         binding.recyclerTracks.visibility = when (state) {
-            TrackListState.OK -> View.VISIBLE
+            TrackRepositoryState.OK -> View.VISIBLE
             else -> {View.GONE}
         }
 
         binding.linearTracksHistory.visibility = when (state) {
-            TrackListState.SHOW_HISTORY ->  View.VISIBLE
+            TrackRepositoryState.SHOW_HISTORY ->  View.VISIBLE
             else -> {View.GONE}
         }
 
         binding.progressBarSearchTracks.visibility = when (state) {
-            TrackListState.SEARCH_IN_PROGRESS -> View.VISIBLE
+            TrackRepositoryState.SEARCH_IN_PROGRESS -> View.VISIBLE
             else -> View.GONE
         }
         binding.placeholderTroubleButton.visibility = when (state) {
-            TrackListState.ERROR_NETWORK -> View.VISIBLE
+            TrackRepositoryState.ERROR_NETWORK -> View.VISIBLE
             else -> View.GONE
         }
 
-        if (state == TrackListState.ERROR_NETWORK){
+        if (state == TrackRepositoryState.ERROR_NETWORK){
             Glide.with(this).load(R.drawable.ic_network_trouble).dontTransform().into(binding.placeholderTroubleCenterImage)
             binding.placeholderTroubleText.setText(resources.getText(R.string.error_network_trouble))
-        } else if (state == TrackListState.ERROR_EMPTY){
+        } else if (state == TrackRepositoryState.ERROR_EMPTY){
             Glide.with(this).load(R.drawable.ic_sad_smile).dontTransform().into(binding.placeholderTroubleCenterImage)
             binding.placeholderTroubleText.setText(resources.getText(R.string.error_track_list_is_empty))
         }
 
-        if (binding.recyclerTracks.visibility == View.GONE && !(state == TrackListState.SHOW_HISTORY) ){
+        if (binding.recyclerTracks.visibility == View.GONE && !(state == TrackRepositoryState.SHOW_HISTORY) ){
             adapter.clearList()
         }
     }
@@ -256,24 +232,38 @@ class SearchActivity : AppCompatActivity() {
     }
 
     fun showPlayer(track: Track) {
-        if (trackIsStarted){
+        if (mediaPlayerStarting){
             //Toast.makeText(this,"Немного подождите, трек недавно был запущен",Toast.LENGTH_SHORT).show()
             return
         }
 
-        trackIsStarted = true
+        mediaPlayerStarting = true
         mainHandler.postDelayed(
             object : Runnable {
                 override fun run() {
-                    trackIsStarted = false
+                    mediaPlayerStarting = false
                 }
             }
             , CLICK_DELAY
         )
 
-        val intent = Intent(this,PlayerActivity::class.java)
-        intent.putExtra("Track",Gson().toJson(track))
+        val intent = Intent(this, PlayerActivity::class.java)
+        intent.putExtra("Track",jsonHandler.toJson(track))
         startActivity(intent)
+    }
+    override fun consume(trackSearchResult: TrackSearchResult) {
+        runnableConsumer?.let {
+                prevRunnable -> mainHandler.removeCallbacks(prevRunnable)
+        }
+
+        val newRunnable = Runnable{
+            adapter.setNewList(trackSearchResult.listTracks)
+            showListState(trackSearchResult.state)
+        }
+
+        runnableConsumer = newRunnable
+
+        mainHandler.post(newRunnable)
     }
 }
 

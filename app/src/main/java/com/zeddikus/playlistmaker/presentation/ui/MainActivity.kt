@@ -1,10 +1,11 @@
-package com.zeddikus.playlistmaker
+package com.zeddikus.playlistmaker.presentation.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import com.zeddikus.playlistmaker.R
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,20 +24,20 @@ class MainActivity : AppCompatActivity() {
         val btnMediatec = findViewById<Button>(R.id.btn_mediatec)
         btnMediatec.setOnClickListener {
             //pressedButton(it)
-            val intent = Intent(this,MediatecActivity::class.java)
+            val intent = Intent(this, MediatecActivity::class.java)
             startActivity(intent)
         }
 
         val btnSettings = findViewById<Button>(R.id.btn_settings)
         btnSettings.setOnClickListener {
             //pressedButton(it)
-            val intent = Intent(this,SettingsActivity::class.java)
+            val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
     }
 
     private fun startSearchActivity() {
-        val intent = Intent(this,SearchActivity::class.java)
+        val intent = Intent(this, SearchActivity::class.java)
         startActivity(intent)
     }
 

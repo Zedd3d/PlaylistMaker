@@ -1,13 +1,17 @@
-package com.zeddikus.playlistmaker
+package com.zeddikus.playlistmaker.presentation.track
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.zeddikus.playlistmaker.R
+import com.zeddikus.playlistmaker.domain.api.SearchHistoryInteractor
+import com.zeddikus.playlistmaker.presentation.ui.SearchActivity
+import com.zeddikus.playlistmaker.domain.models.Track
 
 class TracksAdapter(
     private var tracks: List<Track>,
-    private var searchHistoryHandler: SearchHistoryHandler?
+    private var searchHistoryInteractor: SearchHistoryInteractor?
 ) : RecyclerView.Adapter<TracksViewHolder> () {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
@@ -17,13 +21,13 @@ class TracksAdapter(
             if (it.context is SearchActivity) {
                 val searchActivity = (it.context as SearchActivity)
                 val track = this.getItem(
-                    if (searchHistoryHandler == null)
+                    if (searchHistoryInteractor == null)
                         searchActivity.binding.recyclerTracksHistory.getChildAdapterPosition(it)
                     else
                         searchActivity.binding.recyclerTracks.getChildAdapterPosition(it)
                 )
 
-                searchHistoryHandler?.addTrackToHistory(track)
+                searchHistoryInteractor?.addTrackToHistory(track)
                 searchActivity.showPlayer(track)
             } else {
                 Toast.makeText(it.context,parent.context.resources.getString(R.string.wrong_context),Toast.LENGTH_SHORT).show()

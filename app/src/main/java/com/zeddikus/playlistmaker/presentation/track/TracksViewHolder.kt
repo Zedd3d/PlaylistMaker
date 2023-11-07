@@ -1,4 +1,4 @@
-package com.zeddikus.playlistmaker
+package com.zeddikus.playlistmaker.presentation.track
 
 import android.view.View
 import android.widget.ImageView
@@ -7,8 +7,9 @@ import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.zeddikus.playlistmaker.utils.General
+import com.zeddikus.playlistmaker.R
+import com.zeddikus.playlistmaker.domain.models.Track
 
 class TracksViewHolder(parentView: View) : RecyclerView.ViewHolder(parentView) {
     private val artwork: ImageView
@@ -28,10 +29,10 @@ class TracksViewHolder(parentView: View) : RecyclerView.ViewHolder(parentView) {
             .load(track.artworkUrl100)
             .placeholder(R.drawable.placeholder_track_artwork)
             .fitCenter()
-            .transform(RoundedCorners(General.dpToPx(2f,artwork.context)))
+            .transform(RoundedCorners(General.dpToPx(2f, artwork.context)))
             .into(artwork)
         trackName.text = track.trackName.trim()
-        trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTime)
+        //trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTime)
         artistName.text= track.artistName.trim()
         artistName.updateLayoutParams {}
     }

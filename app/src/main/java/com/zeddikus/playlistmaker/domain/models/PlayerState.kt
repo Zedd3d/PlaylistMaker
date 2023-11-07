@@ -1,4 +1,4 @@
-package com.zeddikus.playlistmaker
+package com.zeddikus.playlistmaker.domain.models
 
 enum class PlayerState {
     DEFAULT,
@@ -6,5 +6,7 @@ enum class PlayerState {
     PREPARED,
     PLAYING,
     PAUSED,
-    STOPPED
+    STOPPED,
+    PREPAIRING_ERROR;
+
 }

@@ -1,6 +1,6 @@
-package com.zeddikus.playlistmaker
+package com.zeddikus.playlistmaker.domain.models
 
-enum class TrackListState {
+enum class TrackRepositoryState {
     GONE,
     ERROR_NETWORK,
     ERROR_EMPTY,

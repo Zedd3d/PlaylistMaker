@@ -29,4 +29,5 @@
     <string name="genre">Жанр</string>
     <string name="country">Страна</string>
     <string name="wrong_context">Передан неподходящий контекст</string>
+    <string name="error_prepairing_media_player">Не удалось подготовить проигрыватель</string>
 </resources>

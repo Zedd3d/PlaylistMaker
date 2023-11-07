@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?colorPrimary"
-    tools:context=".PlayerActivity">
+    tools:context=".presentation.ui.PlayerActivity">
 
     <ImageButton
         android:id="@+id/backButton"
@@ -118,7 +118,7 @@
         android:layout_height="@dimen/size_player_progressbar"
         style="?android:attr/progressBarStyleHorizontal"
         android:rotation="-90"
-        tools:progress="3"
+        tools:progress="4"
         tools:max="10"
         android:progressDrawable="@drawable/custom_track_progress_bar"
 

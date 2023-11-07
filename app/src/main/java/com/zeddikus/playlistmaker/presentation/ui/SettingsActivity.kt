@@ -1,4 +1,4 @@
-package com.zeddikus.playlistmaker
+package com.zeddikus.playlistmaker.presentation.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -9,9 +9,12 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Switch
 import android.widget.Toast
+import com.zeddikus.playlistmaker.Creator
+import com.zeddikus.playlistmaker.R
 
 class SettingsActivity : AppCompatActivity(), View.OnClickListener{
 
+    private val themeChanger = Creator.provideThemeChanger()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -21,10 +24,10 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener{
         findViewById<LinearLayout>(R.id.llTerms).setOnClickListener(this)
         val switchTheme = findViewById<Switch>(R.id.swBlackTheme)
 
-        switchTheme.isChecked = (applicationContext as App).darkTheme
+        switchTheme.isChecked = themeChanger.getCurrentTheme()
 
         switchTheme.setOnClickListener{
-            (applicationContext as App).saveSwitchDarkTheme((it as Switch).isChecked)
+            themeChanger.saveSwitchDarkTheme((it as Switch).isChecked)
         }
 
         val btnBack = findViewById<ImageButton>(R.id.imgBtnBack)

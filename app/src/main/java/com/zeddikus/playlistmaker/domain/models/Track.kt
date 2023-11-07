@@ -9,7 +9,7 @@ data class Track(
     val trackId: String,                                    // Идентификатор трека
     val primaryGenreName: String,                           // Название жанра
     val collectionName: String,                             // Название альбома
-    val releaseDate: String?,                               // Дата выхода
+    val releaseDate: String,                               // Дата выхода
     val country: String,                                    // страна
     val previewUrl: String                                  // Адрес предварительного прослушивания трека
 )

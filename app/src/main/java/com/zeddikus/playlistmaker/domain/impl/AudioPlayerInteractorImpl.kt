@@ -4,6 +4,7 @@ import com.zeddikus.playlistmaker.domain.api.MediaPlayer
 import com.zeddikus.playlistmaker.domain.models.PlayerState
 import com.zeddikus.playlistmaker.domain.api.MediaPlayerRepository
 import com.zeddikus.playlistmaker.domain.models.MediaPlayerProgress
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -32,14 +33,18 @@ class AudioPlayerInteractorImpl(mediaPlayerRepository: MediaPlayerRepository): M
         if (mediaPlayer == null) {
             setNewState(PlayerState.PREPAIRING_ERROR)
         } else {
-            setNewState(PlayerState.PREPAIRING)
-            mediaPlayer.setDataSource(urlTrack)
-            mediaPlayer.prepareAsync()
-            mediaPlayer.setOnPreparedListener {
-                setNewState(PlayerState.PREPARED)
-            }
-            mediaPlayer.setOnCompletionListener {
-                setNewState(PlayerState.PREPARED)
+            try {
+                setNewState(PlayerState.PREPAIRING)
+                mediaPlayer.setDataSource(urlTrack)
+                mediaPlayer.prepareAsync()
+                mediaPlayer.setOnPreparedListener {
+                    setNewState(PlayerState.PREPARED)
+                }
+                mediaPlayer.setOnCompletionListener {
+                    setNewState(PlayerState.PREPARED)
+                }
+            }catch (e:Exception){
+                setNewState(PlayerState.PREPAIRING_ERROR)
             }
         }
     }

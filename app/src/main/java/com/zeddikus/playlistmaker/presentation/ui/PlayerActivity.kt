@@ -40,6 +40,9 @@ class PlayerActivity : AppCompatActivity() {
         setContentView(viewRoot)
 
         track = jsonHandler.fromJson<Track>(intent.getStringExtra("Track")?:"", jsonHandler.genericType<Track>())
+
+
+
         binding.titleText.text = track.trackName
         binding.bandText.text = track.artistName
         binding.trackTime.text = track.trackTime

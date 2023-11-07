@@ -30,4 +30,5 @@
     <string name="country">Страна</string>
     <string name="wrong_context">Передан неподходящий контекст</string>
     <string name="error_prepairing_media_player">Не удалось подготовить проигрыватель</string>
+    <string name="error_empty_url">Для этого трека отсутствует предварительное прослушивание</string>
 </resources>

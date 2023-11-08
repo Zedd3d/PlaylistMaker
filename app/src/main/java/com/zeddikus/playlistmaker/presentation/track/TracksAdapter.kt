@@ -28,7 +28,12 @@ class TracksAdapter(
                 )
 
                 searchHistoryInteractor?.addTrackToHistory(track)
-                searchActivity.showPlayer(track)
+
+                if (track.previewUrl.isEmpty()){
+                    Toast.makeText(parent.context,parent.context.resources.getText(R.string.error_empty_url),Toast.LENGTH_SHORT).show()
+                } else {
+                    searchActivity.showPlayer(track)
+                }
             } else {
                 Toast.makeText(it.context,parent.context.resources.getString(R.string.wrong_context),Toast.LENGTH_SHORT).show()
             }

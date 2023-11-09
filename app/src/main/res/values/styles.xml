@@ -39,7 +39,7 @@
         <item name="android:paddingTop">@dimen/padding_19dp</item>
         <item name="android:paddingBottom">@dimen/padding_18dp</item>
         <item name="android:paddingStart">16dp</item>
-        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingEnd">12dp</item>
     </style>
 
     <style name="backButtonTitle" parent="Widget.MaterialComponents.TimePicker.ImageButton">

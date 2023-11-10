@@ -10,12 +10,9 @@
     <ImageButton
         android:id="@+id/backButton"
         style="@style/backButtonTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_margin="4dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_arrow_back" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/coverImage"

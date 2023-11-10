@@ -18,8 +18,8 @@
         <ImageButton
             android:id="@+id/imgBtnBack"
             style="@style/backButtonTitle"
-            android:layout_width = "match_parent"
-            android:layout_height = "wrap_content"/>
+
+            />
 
         <TextView
             style="@style/TitleTextStyle"
@@ -51,6 +51,7 @@
             <EditText
                 android:id="@+id/vTextSearch"
                 style="@style/EditTextMainStyleDayNight"
+                android:textSize="19sp"
                 android:hint="@string/btntxt_search"
                 android:imeOptions="actionDone"
                 android:singleLine="true" />

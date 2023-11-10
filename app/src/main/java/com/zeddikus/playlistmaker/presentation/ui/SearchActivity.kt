@@ -21,16 +21,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.zeddikus.playlistmaker.Creator
-import com.zeddikus.playlistmaker.utils.General
 import com.zeddikus.playlistmaker.R
+import com.zeddikus.playlistmaker.data.dto.TrackSearchResult
 import com.zeddikus.playlistmaker.databinding.ActivitySearchBinding
+import com.zeddikus.playlistmaker.domain.api.SearchHistoryInteractor
 import com.zeddikus.playlistmaker.domain.api.TracksInteractor
 import com.zeddikus.playlistmaker.domain.models.Track
-import com.zeddikus.playlistmaker.data.dto.TrackSearchResult
-import com.zeddikus.playlistmaker.domain.api.SearchHistoryInteractor
-import com.zeddikus.playlistmaker.domain.models.PlayerState
 import com.zeddikus.playlistmaker.domain.models.TrackRepositoryState
 import com.zeddikus.playlistmaker.presentation.track.TracksAdapter
+import com.zeddikus.playlistmaker.utils.General
 
 
 class SearchActivity : AppCompatActivity(), TracksInteractor.TracksConsumer{
@@ -104,24 +103,31 @@ class SearchActivity : AppCompatActivity(), TracksInteractor.TracksConsumer{
                     showHistory()
                 }
             }
+
             override fun afterTextChanged(s: Editable?) {}
+        }
+
+        binding.vTextSearch.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                showHistory()
+            }
         }
 
         binding.vTextSearch.addTextChangedListener(simpleTextWatcher)
 
         binding.recyclerTracksHistory.layoutManager = LinearLayoutManager(this)
-        historyAdapter = TracksAdapter(listOf<Track>(),null)
+        historyAdapter = TracksAdapter(listOf<Track>(), null)
         binding.recyclerTracksHistory.adapter = historyAdapter
         historyAdapter.setNewList(searchHistoryInteractor.getHistory())
 
         listener = SharedPreferences.OnSharedPreferenceChangeListener() { sharedPreferences, key ->
-                if (key == searchHistoryInteractor.SP_SEARCH_HISTORY) {
+            if (key == searchHistoryInteractor.SP_SEARCH_HISTORY) {
                     historyAdapter.setNewList(searchHistoryInteractor.getHistory())
                 }
             }
         sharedPrefHandler.setSharedPreferencesChangeListener(listener)
 
-        showHistory()
+        showListState(TrackRepositoryState.OK)
         updateViewParameters()
     }
 

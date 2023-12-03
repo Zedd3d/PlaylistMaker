@@ -18,8 +18,8 @@
         <ImageButton
             android:id="@+id/imgBtnBack"
             style="@style/backButtonTitle"
-            android:layout_width = "match_parent"
-            android:layout_height = "wrap_content"/>
+
+            />
 
         <TextView
             style="@style/TitleTextStyle"
@@ -38,17 +38,22 @@
 
         <FrameLayout
             android:id="@+id/llShare"
-            style="@style/SettingsListStyleLL"
-            android:paddingStart="@dimen/default_padding_start"
-            android:paddingEnd="@dimen/default_padding_end">
-
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            >
 
             <EditText
                 android:id="@+id/vTextSearch"
                 style="@style/EditTextMainStyleDayNight"
+                android:textSize="19sp"
                 android:hint="@string/btntxt_search"
                 android:imeOptions="actionDone"
-                android:paddingStart="16dp"
                 android:singleLine="true" />
 
             <ImageView

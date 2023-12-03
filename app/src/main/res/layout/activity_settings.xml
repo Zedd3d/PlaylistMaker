@@ -16,9 +16,7 @@
 
         <ImageButton
             android:id="@+id/imgBtnBack"
-            style="@style/backButtonTitle"
-            android:layout_width = "match_parent"
-            android:layout_height = "wrap_content"/>
+            style="@style/backButtonTitle" />
 
         <TextView
             style="@style/TitleTextStyle"
@@ -29,6 +27,7 @@
 
     <LinearLayout
         style="@style/MainContentListStyle"
+        android:paddingTop="24dp"
         >
 
         <LinearLayout
@@ -38,6 +37,7 @@
             <TextView
                 style="@style/SettingsTextStyle"
                 android:text="@string/txt_black_theme"
+
                 />
 
             <Switch
@@ -55,6 +55,7 @@
 
             <TextView
                 style="@style/SettingsTextStyle"
+                android:paddingEnd="8dp"
                 android:text="@string/txt_share_app" />
 
             <ImageView

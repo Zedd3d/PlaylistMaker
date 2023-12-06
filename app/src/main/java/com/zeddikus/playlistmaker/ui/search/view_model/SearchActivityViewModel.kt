@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.zeddikus.playlistmaker.creator.Creator
-import com.zeddikus.playlistmaker.data.search.dto.TrackSearchResult
 import com.zeddikus.playlistmaker.domain.search.api.TracksInteractor
 import com.zeddikus.playlistmaker.domain.search.model.TrackRepositoryState
+import com.zeddikus.playlistmaker.domain.search.model.TrackSearchResult
 import com.zeddikus.playlistmaker.domain.sharing.model.Track
 
 class SearchActivityViewModel : ViewModel() {

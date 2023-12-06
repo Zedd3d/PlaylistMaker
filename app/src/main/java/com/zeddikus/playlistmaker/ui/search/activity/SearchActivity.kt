@@ -16,11 +16,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.google.gson.Gson
 import com.zeddikus.playlistmaker.R
 import com.zeddikus.playlistmaker.databinding.ActivitySearchBinding
 import com.zeddikus.playlistmaker.domain.search.model.TrackRepositoryState
@@ -37,7 +37,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var adapter: TracksAdapter
     private lateinit var historyAdapter: TracksAdapter
     private lateinit var searchRunnable: Runnable
-    private var mediaPlayerStarting = false
+    private var isNowPausingBetweenClicks = false
 
     private val viewModel: SearchActivityViewModel by lazy {
         ViewModelProvider(this)[SearchActivityViewModel::class.java]
@@ -47,6 +47,7 @@ class SearchActivity : AppCompatActivity() {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val CLICK_DELAY = 1500L
         private val mainHandler = Handler(Looper.getMainLooper())
+        private const val TRACK_DATA = "TrackData"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,11 +61,19 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.recyclerTracks.layoutManager = LinearLayoutManager(this)
-        adapter = TracksAdapter(listOf<Track>(), false, viewModel)
+        adapter = TracksAdapter(listOf<Track>()) { track: Track ->
+            clickListener(
+                track
+            )
+        }
         binding.recyclerTracks.adapter = adapter
 
         binding.recyclerTracksHistory.layoutManager = LinearLayoutManager(this)
-        historyAdapter = TracksAdapter(listOf<Track>(), true, viewModel)
+        historyAdapter = TracksAdapter(listOf<Track>()) { track: Track ->
+            clickListener(
+                track
+            )
+        }
         binding.recyclerTracksHistory.adapter = historyAdapter
 
         setListenersWatchersObservers()
@@ -92,7 +101,6 @@ class SearchActivity : AppCompatActivity() {
         binding.vTextSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 searchRunnable.run()
-                true
             }
             false
         }
@@ -202,14 +210,19 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    fun isPortraitOrientation(): Boolean {
+    private fun isPortraitOrientation(): Boolean {
         return resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
     }
 
-    fun updateViewParameters() {
+    private fun updateViewParameters() {
         val params: LinearLayout.LayoutParams =
             binding.placeholderTrouble.layoutParams as LinearLayout.LayoutParams
-        params.setMargins(0, General.dpToPx((if (isPortraitOrientation()) 102f else 0f), this),0,0)
+        params.setMargins(
+            0,
+            General.dpToPx((if (isPortraitOrientation()) 102f else 0f), this),
+            0,
+            0
+        )
         binding.placeholderTrouble.setLayoutParams(params)
     }
 
@@ -222,33 +235,49 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun clearSearchText(btnClose: ImageView,editField: EditText) {
+    private fun clearSearchText(btnClose: ImageView, editField: EditText) {
         editField.text.clear()
-        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        val inputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(editField.windowToken, 0)
         btnClose.visibility = View.GONE
         search()
     }
 
-    fun showPlayer(track: Track) {
-        if (mediaPlayerStarting){
+    private fun showPlayer(track: Track) {
+        if (isNowPausingBetweenClicks) {
             //Toast.makeText(this,"Немного подождите, трек недавно был запущен",Toast.LENGTH_SHORT).show()
             return
         }
 
-        mediaPlayerStarting = true
+        isNowPausingBetweenClicks = true
         mainHandler.postDelayed(
             object : Runnable {
                 override fun run() {
-                    mediaPlayerStarting = false
+                    isNowPausingBetweenClicks = false
                 }
-            }
-            , CLICK_DELAY
+            }, CLICK_DELAY
         )
 
         val intent = Intent(this, PlayerActivity::class.java)
-        intent.putExtra("Track", Gson().toJson(track))
+        intent.putExtra(TRACK_DATA, track)
         startActivity(intent)
+    }
+
+    private fun clickListener(track: Track) {
+
+        viewModel.addTrackToHistory(track)
+
+        if (track.previewUrl.isEmpty()) {
+            Toast.makeText(
+                this,
+                resources.getText(R.string.error_empty_url),
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            showPlayer(track)
+        }
+
     }
 
 }

@@ -1,12 +1,14 @@
 package com.zeddikus.playlistmaker.domain.settings.impl
 
-import com.zeddikus.playlistmaker.data.sharing.db.DefaultSettingsRepository
 import com.zeddikus.playlistmaker.domain.settings.SharingInteractor
 import com.zeddikus.playlistmaker.domain.settings.api.ExternalNavigator
 import com.zeddikus.playlistmaker.domain.settings.model.EmailData
+import com.zeddikus.playlistmaker.domain.sharing.api.DefaultSettingsRepository
 
 class SharingInteractorImpl(
-    private val externalNavigator: ExternalNavigator
+    private val externalNavigator: ExternalNavigator,
+    private val defaultSettingsRepositoryImpl: DefaultSettingsRepository
+
 ) : SharingInteractor {
     override fun shareApp() {
         externalNavigator.shareApp(getShareAppLink())
@@ -21,14 +23,14 @@ class SharingInteractorImpl(
     }
 
     private fun getShareAppLink(): String {
-        return DefaultSettingsRepository.getShareAppLink()
+        return defaultSettingsRepositoryImpl.getShareAppLink()
     }
 
     private fun getSupportEmailData(): EmailData {
-        return DefaultSettingsRepository.getShareSupportEmail()
+        return defaultSettingsRepositoryImpl.getShareSupportEmail()
     }
 
     private fun getTermsLink(): String {
-        return DefaultSettingsRepository.getTermsLink()
+        return defaultSettingsRepositoryImpl.getTermsLink()
     }
 }

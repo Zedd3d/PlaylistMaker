@@ -2,52 +2,26 @@ package com.zeddikus.playlistmaker.ui.search.track
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.zeddikus.playlistmaker.R
 import com.zeddikus.playlistmaker.domain.sharing.model.Track
-import com.zeddikus.playlistmaker.ui.search.activity.SearchActivity
-import com.zeddikus.playlistmaker.ui.search.view_model.SearchActivityViewModel
 
 class TracksAdapter(
     private var tracks: List<Track>,
-    private var itSearchHistoryAdapter: Boolean,
-    private val viewModel: SearchActivityViewModel
+    private val clickListener: (track: Track) -> Unit
 ) : RecyclerView.Adapter<TracksViewHolder> () {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.track_element, parent, false)
-        view.setOnClickListener{
-            if (it.context is SearchActivity) {
-                val searchActivity = (it.context as SearchActivity)
-                val track = this.getItem(
-                    if (itSearchHistoryAdapter)
-                        searchActivity.binding.recyclerTracksHistory.getChildAdapterPosition(it)
-                    else
-                        searchActivity.binding.recyclerTracks.getChildAdapterPosition(it)
-                )
 
-                viewModel.addTrackToHistory(track)
-                //searchHistoryInteractor?.addTrackToHistory(track)
-
-                if (track.previewUrl.isEmpty()) {
-                    Toast.makeText(
-                        parent.context,
-                        parent.context.resources.getText(R.string.error_empty_url),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    searchActivity.showPlayer(track)
-                }
-            } else {
-                Toast.makeText(it.context,parent.context.resources.getString(R.string.wrong_context),Toast.LENGTH_SHORT).show()
-            }
-        }
         return TracksViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
+        holder.itemView.setOnClickListener {
+            clickListener.invoke(tracks[position])
+        }
         holder.bind(tracks[position])
     }
 
@@ -60,13 +34,10 @@ class TracksAdapter(
         notifyDataSetChanged()
     }
 
-    fun getItem(pos: Int): Track {
-        return tracks.get(pos)
-    }
-
     fun clearList(){
         tracks = emptyList<Track>()
         notifyDataSetChanged()
     }
 
 }
+

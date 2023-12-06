@@ -1,9 +1,9 @@
 package com.zeddikus.playlistmaker.data.sharing.db
 
 import com.zeddikus.playlistmaker.domain.settings.model.EmailData
-import com.zeddikus.playlistmaker.domain.sharing.api.DefaultSettings
+import com.zeddikus.playlistmaker.domain.sharing.api.DefaultSettingsRepository
 
-object DefaultSettingsRepository : DefaultSettings {
+object DefaultSettingsRepositoryImpl : DefaultSettingsRepository {
     private lateinit var supportEmail: String
     private lateinit var thanksTemplateSubj: String
     private lateinit var thanksTemplateBody: String
@@ -17,22 +17,22 @@ object DefaultSettingsRepository : DefaultSettings {
         ypLinkAd: String,
         ypLinkTerms: String
     ) {
-        DefaultSettingsRepository.supportEmail = supportEmail
-        DefaultSettingsRepository.thanksTemplateSubj = thanksTemplateSubj
-        DefaultSettingsRepository.thanksTemplateBody = thanksTemplateBody
-        DefaultSettingsRepository.ypLinkAd = ypLinkAd
-        DefaultSettingsRepository.ypLinkTerms = ypLinkTerms
+        DefaultSettingsRepositoryImpl.supportEmail = supportEmail
+        DefaultSettingsRepositoryImpl.thanksTemplateSubj = thanksTemplateSubj
+        DefaultSettingsRepositoryImpl.thanksTemplateBody = thanksTemplateBody
+        DefaultSettingsRepositoryImpl.ypLinkAd = ypLinkAd
+        DefaultSettingsRepositoryImpl.ypLinkTerms = ypLinkTerms
     }
 
-    fun getShareSupportEmail(): EmailData {
+    override fun getShareSupportEmail(): EmailData {
         return EmailData(arrayOf(supportEmail), thanksTemplateSubj, thanksTemplateBody)
     }
 
-    fun getTermsLink(): String {
+    override fun getTermsLink(): String {
         return ypLinkTerms
     }
 
-    fun getShareAppLink(): String {
+    override fun getShareAppLink(): String {
         return ypLinkAd
     }
 

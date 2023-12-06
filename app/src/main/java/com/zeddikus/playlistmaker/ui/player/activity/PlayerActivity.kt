@@ -1,5 +1,6 @@
 package com.zeddikus.playlistmaker.ui.player.activity
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -9,8 +10,6 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.zeddikus.playlistmaker.R
 import com.zeddikus.playlistmaker.databinding.ActivityPlayerBinding
 import com.zeddikus.playlistmaker.domain.player.models.MediaPlayerProgress
@@ -24,8 +23,11 @@ import java.time.ZoneId
 class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
-    private lateinit var track: Track
     private lateinit var viewModel: PlayerViewModel
+
+    companion object {
+        const val TRACK_DATA = "TrackData"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,21 +35,47 @@ class PlayerActivity : AppCompatActivity() {
         val viewRoot = binding.root
         setContentView(viewRoot)
 
-
-
-        track = Gson().fromJson<Track>(
-            intent.getStringExtra("Track") ?: "",
-            object : TypeToken<Track>() {}.type
-        )
-        viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            fun factory(track: Track): ViewModelProvider.Factory {
-                return viewModelFactory {
-                    initializer {
-                        PlayerViewModel(track)
+        viewModel = ViewModelProvider(
+            this, object : ViewModelProvider.Factory {
+                fun factory(trackData: Track): ViewModelProvider.Factory {
+                    return viewModelFactory {
+                        initializer {
+                            PlayerViewModel(trackData)
+                        }
                     }
                 }
-            }
-        }.factory(track))[PlayerViewModel::class.java]
+            }.factory(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    intent.getParcelableExtra(TRACK_DATA, Track::class.java)!!
+                } else {
+                    intent.getParcelableExtra(TRACK_DATA)!!
+                }
+            )
+        )[PlayerViewModel::class.java]
+
+        binding.backButton.setOnClickListener {
+            finish()
+        }
+
+        binding.playButton.setOnClickListener {
+            viewModel.pushPlayButton()
+        }
+
+        viewModel.onLoad().observe(this) {
+            setTrackPropertys(it)
+        }
+
+        viewModel.getState().observe(this) {
+            render(it)
+        }
+
+        viewModel.getProgress().observe(this) {
+            updateTrackTime(it)
+        }
+    }
+
+    private fun setTrackPropertys(track: Track) {
+        binding.progressBar.max = (track.trackTimeMillis / 1000).toInt();
         binding.titleText.text = track.trackName
         binding.bandText.text = track.artistName
         binding.trackTime.text = track.trackTime
@@ -58,45 +86,18 @@ class PlayerActivity : AppCompatActivity() {
         binding.genreValue.text = track.primaryGenreName
         binding.countryValue.text = track.country
 
-        binding.playButton.setOnClickListener {
-            viewModel.pushPlayButton()
-        }
-
         Glide.with(binding.coverImage)
             .load(General.convertURLtoBigSizeCover(track.artworkUrl100))
             .placeholder(R.drawable.placeholder_track_artwork_big)
             .fitCenter()
             .transform(RoundedCorners(General.dpToPx(8f, binding.coverImage.context)))
             .into(binding.coverImage)
-
-        binding.backButton.setOnClickListener { finish() }
-
-
-        setPlayerState(PlayerState.DEFAULT)
-
-        viewModel.getState().observe(this) {
-            setPlayerState(it)
-        }
-
-        viewModel.getProgress().observe(this) {
-            updateTrackTime(it)
-        }
-
-        viewModel.clearProgress()
-
     }
 
-    private fun setPlayerState(state: PlayerState) {
+    private fun render(state: PlayerState) {
         when (state) {
-            PlayerState.PREPARED -> {
-                viewModel.clearProgress()
-                readyToPlay()
-            }
-
-            PlayerState.PLAYING -> viewModel.startPlayer()
-            PlayerState.PAUSED -> viewModel.pausedPlayer()
-            PlayerState.STOPPED -> viewModel.stopPlayer()
             PlayerState.PREPAIRING_ERROR -> showPrepairingError()
+            PlayerState.PREPARED -> binding.progressBarOnPrepare.visibility = View.GONE
             PlayerState.PREPAIRING -> binding.progressBarOnPrepare.visibility = View.VISIBLE
             else -> null
         }
@@ -111,12 +112,6 @@ class PlayerActivity : AppCompatActivity() {
             Toast.LENGTH_LONG
         ).show()
         finish()
-    }
-
-
-    private fun readyToPlay(){
-        binding.progressBarOnPrepare.visibility = View.GONE
-        binding.progressBar.max = (track.trackTimeMillis / 1000).toInt();
     }
 
     private fun updateTrackTime(currentProgress: MediaPlayerProgress) {

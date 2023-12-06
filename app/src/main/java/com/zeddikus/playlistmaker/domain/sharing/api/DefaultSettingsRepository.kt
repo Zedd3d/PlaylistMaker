@@ -1,6 +1,8 @@
 package com.zeddikus.playlistmaker.domain.sharing.api
 
-interface DefaultSettings {
+import com.zeddikus.playlistmaker.domain.settings.model.EmailData
+
+interface DefaultSettingsRepository {
     fun setDefaultValues(
         supportEmail: String,
         thanksTemplateSubj: String,
@@ -8,4 +10,8 @@ interface DefaultSettings {
         ypLinkAd: String,
         ypLinkTerms: String
     )
+
+    fun getShareAppLink(): String
+    fun getShareSupportEmail(): EmailData
+    fun getTermsLink(): String
 }

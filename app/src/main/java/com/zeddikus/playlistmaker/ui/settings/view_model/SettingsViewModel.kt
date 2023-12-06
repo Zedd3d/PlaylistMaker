@@ -18,11 +18,8 @@ class SettingsViewModel(
 
     private val state = MutableLiveData<SettingsState>()
 
-    private var isDarkTheme = false
-
     init {
-        isDarkTheme = themeChanger.getCurrentTheme()
-        state.value = SettingsState.Content(isDarkTheme)
+        state.value = SettingsState.Content(themeChanger.getCurrentTheme())
     }
 
     companion object {
@@ -54,9 +51,9 @@ class SettingsViewModel(
     }
 
     fun toggleThemeSwitch() {
-        isDarkTheme = !isDarkTheme
-        themeChanger.saveSwitchDarkTheme(isDarkTheme)
-        state.value = SettingsState.Content(isDarkTheme)
+        val switchValue = !themeChanger.getCurrentTheme()
+        themeChanger.saveSwitchDarkTheme(switchValue)
+        state.value = SettingsState.Content(switchValue)
     }
 
 

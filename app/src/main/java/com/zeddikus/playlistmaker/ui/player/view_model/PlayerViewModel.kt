@@ -11,6 +11,7 @@ import com.zeddikus.playlistmaker.domain.player.models.PlayerState
 import com.zeddikus.playlistmaker.domain.sharing.model.Track
 
 class PlayerViewModel(track: Track) : ViewModel() {
+
     private val mediaPlayer = Creator.provideAudioPlayerInteractor()
     private val trackTimeUpdater = object : Runnable {
         override fun run() {
@@ -22,18 +23,23 @@ class PlayerViewModel(track: Track) : ViewModel() {
         }
     }
 
+    private var onLoad = MutableLiveData<Track>()
     private val state = MutableLiveData<PlayerState>()
     private val currentProgress = MutableLiveData<MediaPlayerProgress>()
 
     init {
-        mediaPlayer.setConsumer { playerState -> state.postValue(playerState) }
+        onLoad.value = track
+        mediaPlayer.setConsumer { playerState -> setPlayerState(playerState) }
         mediaPlayer.preparePlayer(track.previewUrl)
+        clearProgress()
     }
 
     private companion object {
         private val mainHandler = Handler(Looper.getMainLooper())
         private const val UPDATE_TRACK_TIME_DELAY = 300L
     }
+
+    fun onLoad(): LiveData<Track> = onLoad
 
     fun getState(): LiveData<PlayerState> = state
 
@@ -44,6 +50,7 @@ class PlayerViewModel(track: Track) : ViewModel() {
         mainHandler.postDelayed(
             trackTimeUpdater, UPDATE_TRACK_TIME_DELAY
         )
+        state.postValue(PlayerState.PLAYING)
     }
 
     fun updateTrackTime() {
@@ -61,16 +68,17 @@ class PlayerViewModel(track: Track) : ViewModel() {
     }
 
     fun stopPlayer() {
+        clearProgress()
         mediaPlayer.stop()
         stopTimer()
     }
 
     fun pushPlayButton() {
         when (state.value) {
-            PlayerState.PAUSED -> state.postValue(PlayerState.PLAYING)
-            PlayerState.STOPPED -> state.postValue(PlayerState.PLAYING)
-            PlayerState.PREPARED -> state.postValue(PlayerState.PLAYING)
-            PlayerState.PLAYING -> state.postValue(PlayerState.PAUSED)
+            PlayerState.PAUSED -> startPlayer()
+            PlayerState.STOPPED -> startPlayer()
+            PlayerState.PREPARED -> startPlayer()
+            PlayerState.PLAYING -> pausedPlayer()
             else -> null
         }
     }
@@ -84,4 +92,14 @@ class PlayerViewModel(track: Track) : ViewModel() {
         currentProgress.value = MediaPlayerProgress(0, "00:00")
     }
 
+    fun setPlayerState(consumedState: PlayerState) {
+        when (consumedState) {
+            PlayerState.PREPARED -> clearProgress()
+            PlayerState.PLAYING -> startPlayer()
+            PlayerState.PAUSED -> pausedPlayer()
+            PlayerState.STOPPED -> stopPlayer()
+            else -> null
+        }
+        state.postValue(consumedState)
+    }
 }

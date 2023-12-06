@@ -8,8 +8,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class MediaPlayerInteractorImpl(mediaPlayerRepository: MediaPlayerRepository) : MediaPlayer {
-    //    val mediaPlayerRequest: MediaPlayerRequest,
-//    val onSetNewState: (PlayerState) -> Unit?) : MediaPlayerAPI {
+
     private var urlTrack = ""
     private val mediaPlayer = mediaPlayerRepository.getMediaPlayer()
     private var consumer: ((PlayerState) -> Unit?)? = null
@@ -29,23 +28,21 @@ class MediaPlayerInteractorImpl(mediaPlayerRepository: MediaPlayerRepository) : 
 
     override fun preparePlayer(url: String) {
         urlTrack = url
-        if (mediaPlayer == null) {
-            setNewState(PlayerState.PREPAIRING_ERROR)
-        } else {
-            try {
-                setNewState(PlayerState.PREPAIRING)
-                mediaPlayer.setDataSource(urlTrack)
-                mediaPlayer.prepareAsync()
-                mediaPlayer.setOnPreparedListener {
-                    setNewState(PlayerState.PREPARED)
-                }
-                mediaPlayer.setOnCompletionListener {
-                    setNewState(PlayerState.PREPARED)
-                }
-            }catch (e:Exception){
-                setNewState(PlayerState.PREPAIRING_ERROR)
+
+        try {
+            setNewState(PlayerState.PREPAIRING)
+            mediaPlayer.setDataSource(urlTrack)
+            mediaPlayer.prepareAsync()
+            mediaPlayer.setOnPreparedListener {
+                setNewState(PlayerState.PREPARED)
             }
+            mediaPlayer.setOnCompletionListener {
+                setNewState(PlayerState.PREPARED)
+            }
+        } catch (e: Exception) {
+            setNewState(PlayerState.PREPAIRING_ERROR)
         }
+
     }
 
     override fun setNewState(state: PlayerState){

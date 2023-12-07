@@ -37,7 +37,6 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var adapter: TracksAdapter
     private lateinit var historyAdapter: TracksAdapter
     private lateinit var searchRunnable: Runnable
-    private var isNowPausingBetweenClicks = false
 
     private val viewModel: SearchActivityViewModel by lazy {
         ViewModelProvider(this)[SearchActivityViewModel::class.java]
@@ -45,7 +44,6 @@ class SearchActivity : AppCompatActivity() {
 
     private companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        private const val CLICK_DELAY = 1500L
         private val mainHandler = Handler(Looper.getMainLooper())
         private const val TRACK_DATA = "TrackData"
     }
@@ -139,6 +137,8 @@ class SearchActivity : AppCompatActivity() {
             ) showListState(state)
 
         }
+
+        viewModel.getshowPlayerTrigger().observe(this) { track -> showPlayer(track) }
     }
 
 
@@ -245,19 +245,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showPlayer(track: Track) {
-        if (isNowPausingBetweenClicks) {
-            //Toast.makeText(this,"Немного подождите, трек недавно был запущен",Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        isNowPausingBetweenClicks = true
-        mainHandler.postDelayed(
-            object : Runnable {
-                override fun run() {
-                    isNowPausingBetweenClicks = false
-                }
-            }, CLICK_DELAY
-        )
 
         val intent = Intent(this, PlayerActivity::class.java)
         intent.putExtra(TRACK_DATA, track)
@@ -275,9 +262,8 @@ class SearchActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
         } else {
-            showPlayer(track)
+            viewModel.showPlayer(track)
         }
-
     }
 
 }

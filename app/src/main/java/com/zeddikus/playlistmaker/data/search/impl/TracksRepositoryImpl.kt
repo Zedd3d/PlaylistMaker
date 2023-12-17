@@ -8,13 +8,16 @@ import com.zeddikus.playlistmaker.domain.search.api.TracksRepository
 import com.zeddikus.playlistmaker.domain.search.model.TrackRepositoryState
 import com.zeddikus.playlistmaker.domain.search.model.TrackSearchResult
 
-class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRepository {
+class TracksRepositoryImpl(
+    private val networkClient: NetworkClient,
+    private val trackMapper: TrackMapper
+) : TracksRepository {
 
     override fun searchTracks(expression: String, locale: String): TrackSearchResult {
         lateinit var state: TrackRepositoryState
         val response = networkClient.doRequest(TrackSearchRequest(expression, locale))
         if (response.resultCode == 200 && response is TrackSearchResponse) {
-            val listTracks = TrackMapper.map(response.results)
+            val listTracks = trackMapper.map(response.results)
 
             if (listTracks.isEmpty()) {
                 state = TrackRepositoryState.errorEmpty

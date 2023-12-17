@@ -18,7 +18,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.zeddikus.playlistmaker.R
@@ -29,6 +28,7 @@ import com.zeddikus.playlistmaker.ui.player.activity.PlayerActivity
 import com.zeddikus.playlistmaker.ui.search.track.TracksAdapter
 import com.zeddikus.playlistmaker.ui.search.view_model.SearchActivityViewModel
 import com.zeddikus.playlistmaker.utils.General
+import org.koin.android.ext.android.inject
 
 
 class SearchActivity : AppCompatActivity() {
@@ -38,9 +38,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var historyAdapter: TracksAdapter
     private lateinit var searchRunnable: Runnable
 
-    private val viewModel: SearchActivityViewModel by lazy {
-        ViewModelProvider(this)[SearchActivityViewModel::class.java]
-    }
+    private val viewModel: SearchActivityViewModel by inject()
 
     private companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
@@ -161,14 +159,16 @@ class SearchActivity : AppCompatActivity() {
             is TrackRepositoryState.errorNetwork -> {
                 Glide.with(this).load(R.drawable.ic_network_trouble).dontTransform()
                     .into(binding.placeholderTroubleCenterImage)
-                binding.placeholderTroubleText.setText(resources.getText(R.string.error_network_trouble))
+                binding.placeholderTroubleText.text =
+                    resources.getText(R.string.error_network_trouble)
                 View.VISIBLE
             }
 
             is TrackRepositoryState.errorEmpty -> {
                 Glide.with(this).load(R.drawable.ic_sad_smile).dontTransform()
                     .into(binding.placeholderTroubleCenterImage)
-                binding.placeholderTroubleText.setText(resources.getText(R.string.error_track_list_is_empty))
+                binding.placeholderTroubleText.text =
+                    resources.getText(R.string.error_track_list_is_empty)
                 View.VISIBLE
             }
 
@@ -223,7 +223,7 @@ class SearchActivity : AppCompatActivity() {
             0,
             0
         )
-        binding.placeholderTrouble.setLayoutParams(params)
+        binding.placeholderTrouble.layoutParams = params
     }
 
     private fun checkClearButtonVisibility(s: CharSequence?) {

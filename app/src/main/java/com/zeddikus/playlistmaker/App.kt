@@ -1,25 +1,32 @@
 package com.zeddikus.playlistmaker
 
 import android.app.Application
-import com.zeddikus.playlistmaker.creator.Creator
-import com.zeddikus.playlistmaker.data.sharing.impl.SharedPreferencesImpl
+import com.zeddikus.playlistmaker.di.dataModule
+import com.zeddikus.playlistmaker.di.interractorModule
+import com.zeddikus.playlistmaker.di.repositoryModule
+import com.zeddikus.playlistmaker.di.sharedPreferencesModule
+import com.zeddikus.playlistmaker.di.viewModelModule
+import com.zeddikus.playlistmaker.domain.settings.api.ThemeChanger
+import org.koin.android.ext.android.getKoin
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 class App : Application() {
 
-    companion object {
-        val PLAYLIST_MAKER_SHARED_PREFERENCES = "playlist_maker_shared_preferences"
-    }
-
     override fun onCreate() {
         super.onCreate()
-        val spHandler = SharedPreferencesImpl
-        spHandler.setSharedPreferences(
-            getSharedPreferences(
-                PLAYLIST_MAKER_SHARED_PREFERENCES,
-                MODE_PRIVATE
-            )
-        )
-        Creator.setApplication(this)
-    }
 
+        startKoin {
+            androidContext(this@App)
+
+            modules(
+                dataModule,
+                interractorModule,
+                repositoryModule,
+                sharedPreferencesModule,
+                viewModelModule
+            )
+        }
+        (getKoin().get() as ThemeChanger)
+    }
 }

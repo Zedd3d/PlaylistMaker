@@ -5,14 +5,16 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.zeddikus.playlistmaker.creator.Creator
+import com.zeddikus.playlistmaker.domain.player.api.MediaPlayer
 import com.zeddikus.playlistmaker.domain.player.models.MediaPlayerProgress
 import com.zeddikus.playlistmaker.domain.player.models.PlayerState
 import com.zeddikus.playlistmaker.domain.sharing.model.Track
 
-class PlayerViewModel(track: Track) : ViewModel() {
+class PlayerViewModel(
+    track: Track,
+    private val mediaPlayer: MediaPlayer
+) : ViewModel() {
 
-    private val mediaPlayer = Creator.provideAudioPlayerInteractor()
     private val trackTimeUpdater = object : Runnable {
         override fun run() {
             updateTrackTime()

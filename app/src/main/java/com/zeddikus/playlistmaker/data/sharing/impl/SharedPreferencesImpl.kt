@@ -10,18 +10,21 @@ import com.zeddikus.playlistmaker.domain.settings.api.ThemeChanger
 import com.zeddikus.playlistmaker.domain.sharing.model.Track
 
 
-object SharedPreferencesImpl : SharedPrefHandler, ThemeChanger {
+class SharedPreferencesImpl(
+    private val gson: Gson,
+    private val sharedPref: SharedPreferences
+) : SharedPrefHandler, ThemeChanger {
 
-    val SP_DARK_THEME = "shared_preferences_dark_theme"
-    val SP_SEARCH_HISTORY = "shared_preferences_search_history"
-    private lateinit var sharedPref: SharedPreferences
+    companion object {
+        const val SP_DARK_THEME = "shared_preferences_dark_theme"
+        const val SP_SEARCH_HISTORY = "shared_preferences_search_history"
+    }
 
-    override fun setSharedPreferences(sharedPreferences: SharedPreferences) {
-        sharedPref = sharedPreferences
+    init {
         switchTheme(getCurrentTheme())
     }
 
-    fun switchTheme(darkThemeEnabled: Boolean) {
+    private fun switchTheme(darkThemeEnabled: Boolean) {
         AppCompatDelegate.setDefaultNightMode(
             if (darkThemeEnabled) {
                 AppCompatDelegate.MODE_NIGHT_YES
@@ -30,6 +33,7 @@ object SharedPreferencesImpl : SharedPrefHandler, ThemeChanger {
             }
         )
     }
+
 
     override fun setSharedPreferencesChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
         sharedPref.registerOnSharedPreferenceChangeListener(listener)
@@ -40,7 +44,7 @@ object SharedPreferencesImpl : SharedPrefHandler, ThemeChanger {
     }
 
     override fun getHistory(): List<Track> {
-        return Gson().fromJson<List<Track>>(
+        return gson.fromJson<List<Track>>(
             sharedPref.getString(SP_SEARCH_HISTORY, "[]") ?: "[]",
             object : TypeToken<List<Track>>() {}.type
         )
@@ -48,7 +52,7 @@ object SharedPreferencesImpl : SharedPrefHandler, ThemeChanger {
 
     @Synchronized
     override fun saveHistory(trackList: List<Track>) {
-        val json = Gson().toJson(trackList)
+        val json = gson.toJson(trackList)
         sharedPref.edit().putString(SP_SEARCH_HISTORY, json).apply()
     }
 

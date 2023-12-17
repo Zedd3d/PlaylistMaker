@@ -5,15 +5,17 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.zeddikus.playlistmaker.creator.Creator
+import com.zeddikus.playlistmaker.domain.search.api.SearchHistoryInteractor
 import com.zeddikus.playlistmaker.domain.search.api.TracksInteractor
 import com.zeddikus.playlistmaker.domain.search.model.TrackRepositoryState
 import com.zeddikus.playlistmaker.domain.search.model.TrackSearchResult
 import com.zeddikus.playlistmaker.domain.sharing.model.Track
 
-class SearchActivityViewModel : ViewModel() {
-    private val tracksInteractor = Creator.provideTracksInteractor()
-    private val searchHistoryInteractor = Creator.provideSearchHistoryInteractor()
+class SearchActivityViewModel(
+    private val tracksInteractor: TracksInteractor,
+    private val searchHistoryInteractor: SearchHistoryInteractor
+) : ViewModel() {
+
     private val state = MutableLiveData<TrackRepositoryState>()
     private var isNowPausingBetweenClicks = false
     private val showPlayer = MutableLiveData<Track>()

@@ -15,25 +15,25 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.zeddikus.playlistmaker.R
 import com.zeddikus.playlistmaker.databinding.ActivitySearchBinding
+import com.zeddikus.playlistmaker.databinding.PlaceholderEmptyErrorBinding
 import com.zeddikus.playlistmaker.domain.search.model.TrackRepositoryState
 import com.zeddikus.playlistmaker.domain.sharing.model.Track
 import com.zeddikus.playlistmaker.ui.player.activity.PlayerActivity
 import com.zeddikus.playlistmaker.ui.search.track.TracksAdapter
 import com.zeddikus.playlistmaker.ui.search.view_model.SearchActivityViewModel
-import com.zeddikus.playlistmaker.utils.General
 import org.koin.android.ext.android.inject
 
 
 class SearchActivity : AppCompatActivity() {
 
     lateinit var binding: ActivitySearchBinding
+    lateinit var placeholderBinding: PlaceholderEmptyErrorBinding
     private lateinit var adapter: TracksAdapter
     private lateinit var historyAdapter: TracksAdapter
     private lateinit var searchRunnable: Runnable
@@ -49,9 +49,10 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
+        placeholderBinding = PlaceholderEmptyErrorBinding.inflate(layoutInflater)
         val viewRoot = binding.root
         setContentView(viewRoot)
-
+        inflatePlaceholder()
         searchRunnable = Runnable {
             search()
         }
@@ -71,10 +72,17 @@ class SearchActivity : AppCompatActivity() {
             )
         }
         binding.recyclerTracksHistory.adapter = historyAdapter
-
         setListenersWatchersObservers()
 
-        updateViewParameters()
+
+    }
+
+    private fun inflatePlaceholder() {
+
+        placeholderBinding.placeholderTroubleText.text = getText(R.string.favorites_empty)
+        binding.mainLL.addView(placeholderBinding.root)
+        placeholderBinding.placeholderTroubleButton.visibility = View.VISIBLE
+        placeholderBinding.root.visibility = View.GONE
     }
 
     private fun setListenersWatchersObservers() {
@@ -90,7 +98,7 @@ class SearchActivity : AppCompatActivity() {
             viewModel.clearHistory()
         }
 
-        binding.placeholderTroubleButton.setOnClickListener {
+        placeholderBinding.placeholderTroubleButton.setOnClickListener {
             searchRunnable.run()
         }
 
@@ -155,19 +163,19 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showListState(state: TrackRepositoryState) {
 
-        binding.placeholderTrouble.visibility = when (state) {
+        placeholderBinding.placeholderTrouble.visibility = when (state) {
             is TrackRepositoryState.errorNetwork -> {
                 Glide.with(this).load(R.drawable.ic_network_trouble).dontTransform()
-                    .into(binding.placeholderTroubleCenterImage)
-                binding.placeholderTroubleText.text =
+                    .into(placeholderBinding.placeholderTroubleCenterImage)
+                placeholderBinding.placeholderTroubleText.text =
                     resources.getText(R.string.error_network_trouble)
                 View.VISIBLE
             }
 
             is TrackRepositoryState.errorEmpty -> {
                 Glide.with(this).load(R.drawable.ic_sad_smile).dontTransform()
-                    .into(binding.placeholderTroubleCenterImage)
-                binding.placeholderTroubleText.text =
+                    .into(placeholderBinding.placeholderTroubleCenterImage)
+                placeholderBinding.placeholderTroubleText.text =
                     resources.getText(R.string.error_track_list_is_empty)
                 View.VISIBLE
             }
@@ -200,7 +208,7 @@ class SearchActivity : AppCompatActivity() {
             is TrackRepositoryState.searchInProgress -> View.VISIBLE
             else -> View.GONE
         }
-        binding.placeholderTroubleButton.visibility = when (state) {
+        placeholderBinding.placeholderTroubleButton.visibility = when (state) {
             is TrackRepositoryState.errorNetwork -> View.VISIBLE
             else -> View.GONE
         }
@@ -212,18 +220,6 @@ class SearchActivity : AppCompatActivity() {
 
     private fun isPortraitOrientation(): Boolean {
         return resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-    }
-
-    private fun updateViewParameters() {
-        val params: LinearLayout.LayoutParams =
-            binding.placeholderTrouble.layoutParams as LinearLayout.LayoutParams
-        params.setMargins(
-            0,
-            General.dpToPx((if (isPortraitOrientation()) 102f else 0f), this),
-            0,
-            0
-        )
-        binding.placeholderTrouble.layoutParams = params
     }
 
     private fun checkClearButtonVisibility(s: CharSequence?) {

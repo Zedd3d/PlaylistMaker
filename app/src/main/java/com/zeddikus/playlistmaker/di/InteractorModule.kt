@@ -13,7 +13,7 @@ import com.zeddikus.playlistmaker.domain.settings.impl.SharingInteractorImpl
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 
-val interractorModule = module {
+val interactorModule = module {
     factory<TracksInteractor> {
         TracksInteractorImpl(get())
     }

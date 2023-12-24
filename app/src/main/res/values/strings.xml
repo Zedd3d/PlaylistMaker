@@ -31,4 +31,9 @@
     <string name="wrong_context">Передан неподходящий контекст</string>
     <string name="error_prepairing_media_player">Не удалось подготовить проигрыватель</string>
     <string name="error_empty_url">Для этого трека отсутствует предварительное прослушивание</string>
+    <string name="favorites_empty">Ваша медиатека пуста</string>
+    <string name="playlists_empty">Вы не создали ни одного плейлиста\n</string>
+    <string name="new_playlist">Новый плейлист</string>
+    <string name="favorites_tracks">Избранные треки</string>
+    <string name="playlists">Плейлисты</string>
 </resources>

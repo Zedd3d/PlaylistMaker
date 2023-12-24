@@ -8,6 +8,7 @@
     <dimen name="searchlist_large_text">16sp</dimen>
     <dimen name="edit_text_size">19sp</dimen>
     <dimen name="default_text_size">19sp</dimen>
+    <dimen name="tab_header_text_size">14sp</dimen>
 
     <!-- padding size-->
     <dimen name="padding_small">4dp</dimen>

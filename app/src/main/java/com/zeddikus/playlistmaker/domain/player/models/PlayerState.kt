@@ -1,7 +1,6 @@
 package com.zeddikus.playlistmaker.domain.player.models
 
 enum class PlayerState {
-    DEFAULT,
     PREPAIRING,
     PREPARED,
     PLAYING,

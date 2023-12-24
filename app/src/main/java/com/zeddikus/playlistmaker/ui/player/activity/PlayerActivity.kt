@@ -5,9 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.zeddikus.playlistmaker.R
@@ -17,13 +14,23 @@ import com.zeddikus.playlistmaker.domain.player.models.PlayerState
 import com.zeddikus.playlistmaker.domain.sharing.model.Track
 import com.zeddikus.playlistmaker.ui.player.view_model.PlayerViewModel
 import com.zeddikus.playlistmaker.utils.General
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 import java.time.Instant
 import java.time.ZoneId
 
 class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
-    private lateinit var viewModel: PlayerViewModel
+    private val viewModel: PlayerViewModel by inject {
+        parametersOf(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableExtra(TRACK_DATA, Track::class.java)!!
+            } else {
+                intent.getParcelableExtra(TRACK_DATA)!!
+            }
+        )
+    }
 
     companion object {
         const val TRACK_DATA = "TrackData"
@@ -34,24 +41,6 @@ class PlayerActivity : AppCompatActivity() {
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         val viewRoot = binding.root
         setContentView(viewRoot)
-
-        viewModel = ViewModelProvider(
-            this, object : ViewModelProvider.Factory {
-                fun factory(trackData: Track): ViewModelProvider.Factory {
-                    return viewModelFactory {
-                        initializer {
-                            PlayerViewModel(trackData)
-                        }
-                    }
-                }
-            }.factory(
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    intent.getParcelableExtra(TRACK_DATA, Track::class.java)!!
-                } else {
-                    intent.getParcelableExtra(TRACK_DATA)!!
-                }
-            )
-        )[PlayerViewModel::class.java]
 
         binding.backButton.setOnClickListener {
             finish()
@@ -75,7 +64,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun setTrackPropertys(track: Track) {
-        binding.progressBar.max = (track.trackTimeMillis / 1000).toInt();
+        binding.progressBar.max = (track.trackTimeMillis / 1000).toInt()
         binding.titleText.text = track.trackName
         binding.bandText.text = track.artistName
         binding.trackTime.text = track.trackTime

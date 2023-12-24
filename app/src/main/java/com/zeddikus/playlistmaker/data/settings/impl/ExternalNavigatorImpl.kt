@@ -8,7 +8,6 @@ import com.zeddikus.playlistmaker.R
 import com.zeddikus.playlistmaker.domain.settings.api.ExternalNavigator
 import com.zeddikus.playlistmaker.domain.settings.model.EmailData
 
-
 class ExternalNavigatorImpl(val application: Application) : ExternalNavigator {
     override fun shareApp(shareAppLink: String) {
         val sendIntent: Intent = Intent(Intent.ACTION_SEND)

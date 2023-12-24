@@ -4,8 +4,9 @@ import com.zeddikus.playlistmaker.domain.search.api.SearchHistoryInteractor
 import com.zeddikus.playlistmaker.domain.search.api.SearchHistoryRepository
 import com.zeddikus.playlistmaker.domain.sharing.model.Track
 
-class SearchHistoryInteractorImpl(val searchHistoryRepository: SearchHistoryRepository) :
-    SearchHistoryInteractor {
+class SearchHistoryInteractorImpl(
+    val searchHistoryRepository: SearchHistoryRepository
+) : SearchHistoryInteractor {
 
     override val SP_SEARCH_HISTORY = searchHistoryRepository.getSpSearchHistoryKey()
 

@@ -8,4 +8,9 @@
     android:orientation="vertical"
     app:layout_constraintTop_toTopOf="parent">
 
+
+    <include
+        android:id="@+id/placeholderTrouble"
+        layout="@layout/placeholder_empty_error" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,15 +8,13 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import com.zeddikus.playlistmaker.R
 import com.zeddikus.playlistmaker.databinding.FragmentPlaylistsBinding
-import com.zeddikus.playlistmaker.databinding.PlaceholderEmptyErrorBinding
 import com.zeddikus.playlistmaker.ui.mediatec.view_model.PlaylistsViewModel
 import org.koin.android.ext.android.inject
 
 
 class PlaylistsFragment : Fragment() {
-    private lateinit var binding: FragmentPlaylistsBinding
-    lateinit var placeholderBinding: PlaceholderEmptyErrorBinding
-
+    private var _binding: FragmentPlaylistsBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: PlaylistsViewModel by inject()
 
     companion object {
@@ -28,18 +26,17 @@ class PlaylistsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
+        _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        placeholderBinding = PlaceholderEmptyErrorBinding.inflate(layoutInflater)
+        val placeholderBinding = binding.placeholderTrouble
         if (!(activity == null)) {
 
             placeholderBinding.placeholderTroubleText.text = getText(R.string.playlists_empty)
-            binding.layoutPlaylists.addView(placeholderBinding.root)
             placeholderBinding.placeholderTroubleButton.visibility = View.GONE
 
             val constraintSet = ConstraintSet()

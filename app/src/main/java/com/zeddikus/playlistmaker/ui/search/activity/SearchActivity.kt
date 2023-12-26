@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.zeddikus.playlistmaker.R
 import com.zeddikus.playlistmaker.databinding.ActivitySearchBinding
-import com.zeddikus.playlistmaker.databinding.PlaceholderEmptyErrorBinding
 import com.zeddikus.playlistmaker.domain.search.model.TrackRepositoryState
 import com.zeddikus.playlistmaker.domain.sharing.model.Track
 import com.zeddikus.playlistmaker.ui.player.activity.PlayerActivity
@@ -33,7 +32,6 @@ import org.koin.android.ext.android.inject
 class SearchActivity : AppCompatActivity() {
 
     lateinit var binding: ActivitySearchBinding
-    lateinit var placeholderBinding: PlaceholderEmptyErrorBinding
     private lateinit var adapter: TracksAdapter
     private lateinit var historyAdapter: TracksAdapter
     private lateinit var searchRunnable: Runnable
@@ -49,10 +47,9 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
-        placeholderBinding = PlaceholderEmptyErrorBinding.inflate(layoutInflater)
         val viewRoot = binding.root
         setContentView(viewRoot)
-        inflatePlaceholder()
+        initalizePlaceholder()
         searchRunnable = Runnable {
             search()
         }
@@ -77,12 +74,10 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    private fun inflatePlaceholder() {
-
-        placeholderBinding.placeholderTroubleText.text = getText(R.string.favorites_empty)
-        binding.mainLL.addView(placeholderBinding.root)
-        placeholderBinding.placeholderTroubleButton.visibility = View.VISIBLE
-        placeholderBinding.root.visibility = View.GONE
+    private fun initalizePlaceholder() {
+        binding.placeholderTrouble.placeholderTroubleText.text = getText(R.string.favorites_empty)
+        binding.placeholderTrouble.placeholderTroubleButton.visibility = View.VISIBLE
+        binding.placeholderTrouble.root.visibility = View.GONE
     }
 
     private fun setListenersWatchersObservers() {
@@ -98,7 +93,7 @@ class SearchActivity : AppCompatActivity() {
             viewModel.clearHistory()
         }
 
-        placeholderBinding.placeholderTroubleButton.setOnClickListener {
+        binding.placeholderTrouble.placeholderTroubleButton.setOnClickListener {
             searchRunnable.run()
         }
 
@@ -163,19 +158,19 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showListState(state: TrackRepositoryState) {
 
-        placeholderBinding.placeholderTrouble.visibility = when (state) {
+        binding.placeholderTrouble.placeholderTrouble.visibility = when (state) {
             is TrackRepositoryState.errorNetwork -> {
                 Glide.with(this).load(R.drawable.ic_network_trouble).dontTransform()
-                    .into(placeholderBinding.placeholderTroubleCenterImage)
-                placeholderBinding.placeholderTroubleText.text =
+                    .into(binding.placeholderTrouble.placeholderTroubleCenterImage)
+                binding.placeholderTrouble.placeholderTroubleText.text =
                     resources.getText(R.string.error_network_trouble)
                 View.VISIBLE
             }
 
             is TrackRepositoryState.errorEmpty -> {
                 Glide.with(this).load(R.drawable.ic_sad_smile).dontTransform()
-                    .into(placeholderBinding.placeholderTroubleCenterImage)
-                placeholderBinding.placeholderTroubleText.text =
+                    .into(binding.placeholderTrouble.placeholderTroubleCenterImage)
+                binding.placeholderTrouble.placeholderTroubleText.text =
                     resources.getText(R.string.error_track_list_is_empty)
                 View.VISIBLE
             }
@@ -208,7 +203,7 @@ class SearchActivity : AppCompatActivity() {
             is TrackRepositoryState.searchInProgress -> View.VISIBLE
             else -> View.GONE
         }
-        placeholderBinding.placeholderTroubleButton.visibility = when (state) {
+        binding.placeholderTrouble.placeholderTroubleButton.visibility = when (state) {
             is TrackRepositoryState.errorNetwork -> View.VISIBLE
             else -> View.GONE
         }

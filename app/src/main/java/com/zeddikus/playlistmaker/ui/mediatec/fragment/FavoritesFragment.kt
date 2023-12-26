@@ -8,36 +8,32 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import com.zeddikus.playlistmaker.R
 import com.zeddikus.playlistmaker.databinding.FragmentFavoritesBinding
-import com.zeddikus.playlistmaker.databinding.PlaceholderEmptyErrorBinding
 import com.zeddikus.playlistmaker.ui.mediatec.view_model.FavoritesViewModel
 import org.koin.android.ext.android.inject
 
 class FavoritesFragment : Fragment() {
-    private lateinit var binding: FragmentFavoritesBinding
-    lateinit var placeholderBinding: PlaceholderEmptyErrorBinding
-
+    private var _binding: FragmentFavoritesBinding? = null
     private val viewModel: FavoritesViewModel by inject()
+    private val binding get() = _binding!!
 
     companion object {
-        fun newInstance() = FavoritesFragment().apply {
-        }
+        fun newInstance() = FavoritesFragment()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentFavoritesBinding.inflate(inflater, container, false)
+        _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        placeholderBinding = PlaceholderEmptyErrorBinding.inflate(layoutInflater)
+        var placeholderBinding = binding.placeholderTrouble
         if (!(activity == null)) {
             placeholderBinding.placeholderTroubleText.text = getText(R.string.favorites_empty)
-            binding.layoutFavorites.addView(placeholderBinding.root)
             placeholderBinding.placeholderTroubleButton.visibility = View.GONE
 
             val constraintSet = ConstraintSet()
@@ -68,5 +64,10 @@ class FavoritesFragment : Fragment() {
             constraintSet.applyTo(binding.root)
         }
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

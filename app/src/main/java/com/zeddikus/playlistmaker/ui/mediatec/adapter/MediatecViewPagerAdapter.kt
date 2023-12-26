@@ -10,8 +10,12 @@ import com.zeddikus.playlistmaker.ui.mediatec.fragment.PlaylistsFragment
 class MediatecViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fragmentManager, lifecycle) {
 
+    companion object {
+        const val TAB_COUNT = 2
+    }
+
     override fun getItemCount(): Int {
-        return 2
+        return TAB_COUNT
     }
 
     override fun createFragment(position: Int): Fragment {

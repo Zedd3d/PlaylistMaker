@@ -15,7 +15,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,7 +26,6 @@ import com.zeddikus.playlistmaker.domain.sharing.model.Track
 import com.zeddikus.playlistmaker.ui.player.activity.PlayerActivity
 import com.zeddikus.playlistmaker.ui.search.track.TracksAdapter
 import com.zeddikus.playlistmaker.ui.search.view_model.SearchActivityViewModel
-import com.zeddikus.playlistmaker.utils.General
 import org.koin.android.ext.android.inject
 
 
@@ -51,7 +49,7 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         val viewRoot = binding.root
         setContentView(viewRoot)
-
+        initalizePlaceholder()
         searchRunnable = Runnable {
             search()
         }
@@ -71,10 +69,15 @@ class SearchActivity : AppCompatActivity() {
             )
         }
         binding.recyclerTracksHistory.adapter = historyAdapter
-
         setListenersWatchersObservers()
 
-        updateViewParameters()
+
+    }
+
+    private fun initalizePlaceholder() {
+        binding.placeholderTrouble.placeholderTroubleText.text = getText(R.string.favorites_empty)
+        binding.placeholderTrouble.placeholderTroubleButton.visibility = View.VISIBLE
+        binding.placeholderTrouble.root.visibility = View.GONE
     }
 
     private fun setListenersWatchersObservers() {
@@ -90,7 +93,7 @@ class SearchActivity : AppCompatActivity() {
             viewModel.clearHistory()
         }
 
-        binding.placeholderTroubleButton.setOnClickListener {
+        binding.placeholderTrouble.placeholderTroubleButton.setOnClickListener {
             searchRunnable.run()
         }
 
@@ -155,19 +158,19 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showListState(state: TrackRepositoryState) {
 
-        binding.placeholderTrouble.visibility = when (state) {
+        binding.placeholderTrouble.placeholderTrouble.visibility = when (state) {
             is TrackRepositoryState.errorNetwork -> {
                 Glide.with(this).load(R.drawable.ic_network_trouble).dontTransform()
-                    .into(binding.placeholderTroubleCenterImage)
-                binding.placeholderTroubleText.text =
+                    .into(binding.placeholderTrouble.placeholderTroubleCenterImage)
+                binding.placeholderTrouble.placeholderTroubleText.text =
                     resources.getText(R.string.error_network_trouble)
                 View.VISIBLE
             }
 
             is TrackRepositoryState.errorEmpty -> {
                 Glide.with(this).load(R.drawable.ic_sad_smile).dontTransform()
-                    .into(binding.placeholderTroubleCenterImage)
-                binding.placeholderTroubleText.text =
+                    .into(binding.placeholderTrouble.placeholderTroubleCenterImage)
+                binding.placeholderTrouble.placeholderTroubleText.text =
                     resources.getText(R.string.error_track_list_is_empty)
                 View.VISIBLE
             }
@@ -200,7 +203,7 @@ class SearchActivity : AppCompatActivity() {
             is TrackRepositoryState.searchInProgress -> View.VISIBLE
             else -> View.GONE
         }
-        binding.placeholderTroubleButton.visibility = when (state) {
+        binding.placeholderTrouble.placeholderTroubleButton.visibility = when (state) {
             is TrackRepositoryState.errorNetwork -> View.VISIBLE
             else -> View.GONE
         }
@@ -212,18 +215,6 @@ class SearchActivity : AppCompatActivity() {
 
     private fun isPortraitOrientation(): Boolean {
         return resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-    }
-
-    private fun updateViewParameters() {
-        val params: LinearLayout.LayoutParams =
-            binding.placeholderTrouble.layoutParams as LinearLayout.LayoutParams
-        params.setMargins(
-            0,
-            General.dpToPx((if (isPortraitOrientation()) 102f else 0f), this),
-            0,
-            0
-        )
-        binding.placeholderTrouble.layoutParams = params
     }
 
     private fun checkClearButtonVisibility(s: CharSequence?) {

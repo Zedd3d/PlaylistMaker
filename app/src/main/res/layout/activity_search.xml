@@ -11,9 +11,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:padding="4dp"
-        android:gravity="center">
+        android:padding="4dp">
 
         <ImageButton
             android:id="@+id/imgBtnBack"
@@ -23,38 +23,34 @@
 
         <TextView
             style="@style/TitleTextStyle"
-            android:text="@string/btntxt_search"
-            />
+            android:text="@string/btntxt_search" />
 
     </LinearLayout>
 
 
-
     <LinearLayout
-
-        style="@style/MainContentListStyle"
-        >
+        android:id="@+id/mainLL"
+        style="@style/MainContentListStyle">
 
 
         <FrameLayout
             android:id="@+id/llShare"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:orientation="horizontal"
             android:paddingStart="16dp"
+            android:paddingTop="8dp"
             android:paddingEnd="16dp"
-            >
+            android:paddingBottom="8dp">
 
             <EditText
                 android:id="@+id/vTextSearch"
                 style="@style/EditTextMainStyleDayNight"
-                android:textSize="19sp"
                 android:hint="@string/btntxt_search"
                 android:imeOptions="actionDone"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textSize="19sp" />
 
             <ImageView
                 android:id="@+id/btnSearchClear"
@@ -72,98 +68,37 @@
             android:id="@+id/progressBarSearchTracks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="55dp"
-            android:visibility="gone"
             android:indeterminateTint="@color/blue_pm"
-            />
-
-        <LinearLayout
-            android:id="@+id/placeholderTrouble"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:gravity="center">
-
-            <FrameLayout
-
-                android:layout_width="120dp"
-                android:layout_height="120dp">
-
-                <ImageView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="9dp"
-                    android:paddingTop="3dp"
-                    app:tint="?colorTertiary"
-                    app:srcCompat="@drawable/ic_horizontal_note" />
-
-                <ImageView
-                    android:id="@+id/placeholderTroubleCenterImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="37dp"
-                    android:paddingTop="28dp"
-                    app:srcCompat="@drawable/ic_sad_smile" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="80dp"
-                    android:paddingTop="6dp"
-                    app:tint="?colorTertiary"
-                    app:srcCompat="@drawable/ic_vertical_note" />
-            </FrameLayout>
-            <TextView
-                android:id="@+id/placeholderTroubleText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/default_text_size"
-                android:fontFamily="@font/ys_display_medium"
-                android:gravity="center"
-                android:paddingTop="16dp"
-                android:paddingStart="24dp"
-                android:paddingEnd="24dp"
-                android:textColor="?colorTertiary"
-                tools:text="Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету">
-            </TextView>
-
-            <Button
-                android:id="@+id/placeholderTroubleButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/TrackListButton"
-                android:text="@string/update">
-
-            </Button>
-        </LinearLayout>
-
-
+            android:paddingTop="55dp"
+            android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerTracks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             tools:itemCount="5"
-            tools:listitem="@layout/track_element"
-            android:visibility="gone"></androidx.recyclerview.widget.RecyclerView>
+            tools:listitem="@layout/track_element"></androidx.recyclerview.widget.RecyclerView>
+
+        <include
+            android:id="@+id/placeholderTrouble"
+            layout="@layout/placeholder_empty_error" />
 
         <LinearLayout
             android:id="@+id/linearTracksHistory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="@dimen/default_text_size"
-            android:paddingTop="32dp"
-            android:paddingBottom="12dp"
-            android:text="@string/search_history_title"/>
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="32dp"
+                android:paddingBottom="12dp"
+                android:text="@string/search_history_title"
+                android:textSize="@dimen/default_text_size" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerTracksHistory"
@@ -174,19 +109,18 @@
                 tools:itemCount="20"
                 tools:listitem="@layout/track_element"></androidx.recyclerview.widget.RecyclerView>
 
-            <Button
-            android:id="@+id/clearHistoryButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/TrackListButton"
-            android:layout_weight="0"
-            android:text="@string/clear_button_text">
 
-        </Button>
+            <Button
+                android:id="@+id/clearHistoryButton"
+                style="@style/TrackListButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="@string/clear_button_text">
+
+            </Button>
         </LinearLayout>
     </LinearLayout>
-
-
 
 
 </LinearLayout>

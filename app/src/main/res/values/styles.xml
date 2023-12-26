@@ -64,6 +64,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">vertical</item>
+
     </style>
 
     <style name="EditTextMainStyle" parent="Widget.MaterialComponents.TextView">
@@ -139,6 +140,25 @@
 
     <style name="roundButtonsPlayList">
         <item name="android:background">?colorPrimary</item>
+    </style>
+
+    <style name="CustomTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/tab_header_text_size</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+    </style>
+
+    <style name="placeholderButton">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:background">@drawable/btn_corners</item>
+        <item name="android:drawableTint">@color/black</item>
+        <item name="backgroundTint">?colorTertiary</item>
+        <item name="android:textColor">?colorPrimary</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
 

@@ -1,8 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="?colorPrimary"
+    android:orientation="vertical"
     tools:context=".ui.mediatec.activity.MediatecActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="4dp">
+
+        <ImageButton
+            android:id="@+id/imgBtnBack"
+            style="@style/backButtonTitle"
+
+            />
+
+        <TextView
+            style="@style/TitleTextStyle"
+            android:text="@string/btntxt_mediatec" />
+
+    </LinearLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayoutMediatec"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorPrimary"
+        app:tabIndicator="@drawable/tab_indicator"
+        app:tabIndicatorColor="?colorTertiary"
+        app:tabIndicatorFullWidth="true"
+        app:tabMode="fixed"
+        app:tabRippleColor="@color/blue_pm"
+        app:tabTextAppearance="@style/CustomTextAppearance"
+        app:tabTextColor="?colorTertiary" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerMediatec"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

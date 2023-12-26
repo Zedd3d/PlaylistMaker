@@ -2,7 +2,7 @@ package com.zeddikus.playlistmaker
 
 import android.app.Application
 import com.zeddikus.playlistmaker.di.dataModule
-import com.zeddikus.playlistmaker.di.interractorModule
+import com.zeddikus.playlistmaker.di.interactorModule
 import com.zeddikus.playlistmaker.di.repositoryModule
 import com.zeddikus.playlistmaker.di.sharedPreferencesModule
 import com.zeddikus.playlistmaker.di.viewModelModule
@@ -21,7 +21,7 @@ class App : Application() {
 
             modules(
                 dataModule,
-                interractorModule,
+                interactorModule,
                 repositoryModule,
                 sharedPreferencesModule,
                 viewModelModule

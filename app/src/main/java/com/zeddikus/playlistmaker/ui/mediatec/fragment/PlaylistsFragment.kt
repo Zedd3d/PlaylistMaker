@@ -67,4 +67,9 @@ class PlaylistsFragment : Fragment() {
             constraintSet.applyTo(binding.root)
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

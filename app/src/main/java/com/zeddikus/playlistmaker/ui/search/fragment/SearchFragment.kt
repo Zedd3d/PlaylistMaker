@@ -26,7 +26,7 @@ import com.zeddikus.playlistmaker.domain.sharing.model.Track
 import com.zeddikus.playlistmaker.ui.player.activity.PlayerActivity
 import com.zeddikus.playlistmaker.ui.search.track.TracksAdapter
 import com.zeddikus.playlistmaker.ui.search.view_model.SearchFragmentViewModel
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
 
@@ -35,7 +35,7 @@ class SearchFragment : Fragment() {
     private lateinit var historyAdapter: TracksAdapter
     private lateinit var searchRunnable: Runnable
 
-    private val viewModel: SearchFragmentViewModel by inject()
+    private val viewModel by viewModel<SearchFragmentViewModel>()
 
     private companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
@@ -147,7 +147,6 @@ class SearchFragment : Fragment() {
 
 
     private fun searchDebounce() {
-        showListState(TrackRepositoryState.searchInProgress)
         mainHandler.removeCallbacks(searchRunnable)
         mainHandler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
@@ -236,9 +235,6 @@ class SearchFragment : Fragment() {
 
     private fun showPlayer(track: Track) {
 
-//        val intent = Intent(this, PlayerActivity::class.java)
-//        intent.putExtra(TRACK_DATA, track)
-//        startActivity(intent)
         findNavController().navigate(
             R.id.action_searchFragment_to_playerActivity,
             PlayerActivity.createArgs(track)

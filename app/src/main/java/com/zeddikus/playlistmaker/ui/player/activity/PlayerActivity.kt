@@ -25,6 +25,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
     private val viewModel: PlayerViewModel by inject {
+
         val bundle: Bundle? = intent.extras
         var track: Track?
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -51,7 +52,7 @@ class PlayerActivity : AppCompatActivity() {
         setContentView(viewRoot)
 
         binding.backButton.setOnClickListener {
-            super.onBackPressedDispatcher.onBackPressed()
+            finish()
         }
 
         binding.playButton.setOnClickListener {

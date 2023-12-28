@@ -21,31 +21,5 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
 
         binding.bottomNavigationView.setupWithNavController(navController)
-//        binding = ActivityMainBinding.inflate(layoutInflater)
-//        val viewRoot = binding.root
-//        setContentView(viewRoot)
-//
-//        val buttonClickListener: View.OnClickListener = object : View.OnClickListener {
-//            override fun onClick(v: View?) {
-//                if (v != null) {
-//                    startSearchActivity()
-//                }
-//            }
-//        }
-//        binding.btnSearch.setOnClickListener(buttonClickListener)
-//        binding.btnMediatec.setOnClickListener {
-//            val intent = Intent(this, MediatecActivity::class.java)
-//            startActivity(intent)
-//        }
-//
-//        binding.btnSettings.setOnClickListener {
-//            val intent = Intent(this, SettingsActivity::class.java)
-//            startActivity(intent)
-//        }
     }
-
-//    private fun startSearchActivity() {
-//        val intent = Intent(this, SearchActivity::class.java)
-//        startActivity(intent)
-//    }
 }

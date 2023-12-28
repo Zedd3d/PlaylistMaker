@@ -10,10 +10,10 @@ import com.zeddikus.playlistmaker.R
 import com.zeddikus.playlistmaker.databinding.FragmentMediatecBinding
 import com.zeddikus.playlistmaker.ui.mediatec.adapter.MediatecViewPagerAdapter
 import com.zeddikus.playlistmaker.ui.mediatec.view_model.MediatecViewModel
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MediatecFragment : Fragment() {
-    private val viewModel: MediatecViewModel by inject()
+    private val viewModel by viewModel<MediatecViewModel>()
 
     private var tabMediator: TabLayoutMediator? = null
 

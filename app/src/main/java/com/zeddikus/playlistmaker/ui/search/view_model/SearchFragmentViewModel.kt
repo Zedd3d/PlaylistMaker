@@ -20,6 +20,7 @@ class SearchFragmentViewModel(
     private var isNowPausingBetweenClicks = false
     private val showPlayer = MutableLiveData<Track>()
     private val mainHandler = Handler(Looper.getMainLooper())
+    private var prevFilter = ""
 
     companion object {
         private const val CLICK_DELAY = 1500L
@@ -35,15 +36,19 @@ class SearchFragmentViewModel(
     }
 
     fun search(filter: String, locale: String) {
-        state.value = TrackRepositoryState.searchInProgress
 
         if (filter.isNotEmpty()) {
-            tracksInteractor.searchTracks(filter, locale,
-                object : TracksInteractor.TracksConsumer {
-                    override fun consume(trackSearchResult: TrackSearchResult) {
-                        state.postValue(trackSearchResult.state)
-                    }
-                })
+            if (!(prevFilter == filter)) {
+                state.value = TrackRepositoryState.searchInProgress
+                prevFilter = filter
+                state.postValue(TrackRepositoryState.searchInProgress)
+                tracksInteractor.searchTracks(filter, locale,
+                    object : TracksInteractor.TracksConsumer {
+                        override fun consume(trackSearchResult: TrackSearchResult) {
+                            state.postValue(trackSearchResult.state)
+                        }
+                    })
+            }
         } else {
             showHistory()
         }

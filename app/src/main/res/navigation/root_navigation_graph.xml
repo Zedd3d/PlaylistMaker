@@ -6,12 +6,12 @@
     app:startDestination="@id/mediatecFragment">
 
     <fragment
-        android:id="@+id/mediatecFragment"
+        android:id="@id/mediatecFragment"
         android:name="com.zeddikus.playlistmaker.ui.mediatec.fragment.MediatecFragment"
         android:label="fragment_mediatec"
         tools:layout="@layout/fragment_mediatec" />
     <fragment
-        android:id="@+id/searchFragment"
+        android:id="@id/searchFragment"
         android:name="com.zeddikus.playlistmaker.ui.search.fragment.SearchFragment"
         android:label="SearchFragment"
         tools:layout="@layout/fragment_search">
@@ -20,7 +20,7 @@
             app:destination="@id/playerActivity" />
     </fragment>
     <fragment
-        android:id="@+id/settingsFragment"
+        android:id="@id/settingsFragment"
         android:name="com.zeddikus.playlistmaker.ui.settings.fragment.SettingsFragment"
         android:label="FragmentSettings"
         tools:layout="@layout/fragment_settings" />

@@ -8,11 +8,11 @@ import androidx.fragment.app.Fragment
 import com.zeddikus.playlistmaker.databinding.FragmentSettingsBinding
 import com.zeddikus.playlistmaker.ui.settings.state.SettingsState
 import com.zeddikus.playlistmaker.ui.settings.view_model.SettingsViewModel
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment : Fragment() {
 
-    private val viewModel: SettingsViewModel by inject()
+    private val viewModel by viewModel<SettingsViewModel>()
     lateinit var binding: FragmentSettingsBinding
 
     override fun onCreateView(

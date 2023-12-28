@@ -10,6 +10,7 @@ import com.zeddikus.playlistmaker.domain.search.api.TracksInteractor
 import com.zeddikus.playlistmaker.domain.search.model.TrackRepositoryState
 import com.zeddikus.playlistmaker.domain.search.model.TrackSearchResult
 import com.zeddikus.playlistmaker.domain.sharing.model.Track
+import com.zeddikus.playlistmaker.ui.SingleLiveEvent
 
 class SearchFragmentViewModel(
     private val tracksInteractor: TracksInteractor,
@@ -18,7 +19,8 @@ class SearchFragmentViewModel(
 
     private val state = MutableLiveData<TrackRepositoryState>()
     private var isNowPausingBetweenClicks = false
-    private val showPlayer = MutableLiveData<Track>()
+
+    //private val showPlayer = MutableLiveData<Track>()
     private val mainHandler = Handler(Looper.getMainLooper())
     private var prevFilter = ""
 
@@ -28,7 +30,10 @@ class SearchFragmentViewModel(
 
     fun getState(): LiveData<TrackRepositoryState> = state
 
-    fun getshowPlayerTrigger(): LiveData<Track> = showPlayer
+    //fun getshowPlayerTrigger(): LiveData<Track> = showPlayer
+
+    private val showPlayer = SingleLiveEvent<Track>()
+    fun getshowPlayerTrigger(): SingleLiveEvent<Track> = showPlayer
 
     fun clearHistory() {
         searchHistoryInteractor.clearHistory()

@@ -19,7 +19,7 @@ class PlayerViewModel(
         override fun run() {
             updateTrackTime()
             mainHandler.postDelayed(
-                this,
+                this, TOKEN_TIMER,
                 UPDATE_TRACK_TIME_DELAY
             )
         }
@@ -37,6 +37,7 @@ class PlayerViewModel(
     }
 
     private companion object {
+        private const val TOKEN_TIMER = "Token_timer"
         private val mainHandler = Handler(Looper.getMainLooper())
         private const val UPDATE_TRACK_TIME_DELAY = 300L
     }
@@ -50,13 +51,15 @@ class PlayerViewModel(
     fun startPlayer() {
         mediaPlayer.start()
         mainHandler.postDelayed(
-            trackTimeUpdater, UPDATE_TRACK_TIME_DELAY
+            trackTimeUpdater, TOKEN_TIMER, UPDATE_TRACK_TIME_DELAY
         )
+        //trackTimeUpdater.run()
         state.postValue(PlayerState.PLAYING)
     }
 
     fun updateTrackTime() {
-        currentProgress.postValue(mediaPlayer.getCurrentProgress())
+        val curProgress = mediaPlayer.getCurrentProgress()
+        currentProgress.postValue(curProgress)
     }
 
     fun pausedPlayer() {
@@ -86,7 +89,7 @@ class PlayerViewModel(
     }
 
     fun stopTimer() {
-        mainHandler.removeCallbacks(trackTimeUpdater)
+        mainHandler.removeCallbacks(trackTimeUpdater, TOKEN_TIMER)
     }
 
     fun clearProgress() {
@@ -96,7 +99,10 @@ class PlayerViewModel(
 
     fun setPlayerState(consumedState: PlayerState) {
         when (consumedState) {
-            PlayerState.PREPARED -> clearProgress()
+            PlayerState.PREPARED -> {
+                clearProgress()
+            }
+
             PlayerState.PLAYING -> startPlayer()
             PlayerState.PAUSED -> pausedPlayer()
             PlayerState.STOPPED -> stopPlayer()

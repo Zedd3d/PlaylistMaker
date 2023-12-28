@@ -27,7 +27,7 @@ class PlayerActivity : AppCompatActivity() {
     private val viewModel: PlayerViewModel by inject {
 
         val bundle: Bundle? = intent.extras
-        var track: Track?
+        val track: Track?
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             track = bundle?.getParcelable(TRACK_DATA, Track::class.java)
         } else {
@@ -50,10 +50,6 @@ class PlayerActivity : AppCompatActivity() {
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         val viewRoot = binding.root
         setContentView(viewRoot)
-
-        binding.backButton.setOnClickListener {
-            finish()
-        }
 
         binding.playButton.setOnClickListener {
             viewModel.pushPlayButton()
@@ -83,6 +79,10 @@ class PlayerActivity : AppCompatActivity() {
             Instant.parse(track.releaseDate).atZone(ZoneId.systemDefault()).year.toString()
         binding.genreValue.text = track.primaryGenreName
         binding.countryValue.text = track.country
+
+        binding.toolbar.setNavigationOnClickListener {
+            finish()
+        }
 
         Glide.with(binding.coverImage)
             .load(General.convertURLtoBigSizeCover(track.artworkUrl100))

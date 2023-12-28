@@ -1,28 +1,37 @@
-package com.zeddikus.playlistmaker.ui.mediatec.activity
+package com.zeddikus.playlistmaker.ui.mediatec.fragment
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.zeddikus.playlistmaker.R
-import com.zeddikus.playlistmaker.databinding.ActivityMediatecBinding
+import com.zeddikus.playlistmaker.databinding.FragmentMediatecBinding
 import com.zeddikus.playlistmaker.ui.mediatec.adapter.MediatecViewPagerAdapter
 import com.zeddikus.playlistmaker.ui.mediatec.view_model.MediatecViewModel
 import org.koin.android.ext.android.inject
 
-class MediatecActivity : AppCompatActivity() {
-
+class MediatecFragment : Fragment() {
     private val viewModel: MediatecViewModel by inject()
 
-    private lateinit var tabMediator: TabLayoutMediator
+    private var tabMediator: TabLayoutMediator? = null
 
-    private lateinit var binding: ActivityMediatecBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
+    private lateinit var binding: FragmentMediatecBinding
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         super.onCreate(savedInstanceState)
-        binding = ActivityMediatecBinding.inflate(layoutInflater)
-        val viewRoot = binding.root
-        setContentView(viewRoot)
+        binding = FragmentMediatecBinding.inflate(layoutInflater)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.viewPagerMediatec.adapter = MediatecViewPagerAdapter(
-            supportFragmentManager,
+            childFragmentManager,
             lifecycle
         )
 
@@ -35,15 +44,12 @@ class MediatecActivity : AppCompatActivity() {
                 1 -> tab.text = getString(R.string.playlists)
             }
         }
-        tabMediator.attach()
+        tabMediator?.attach()
 
-        binding.imgBtnBack.setOnClickListener {
-            finish()
-        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        tabMediator.detach()
+        tabMediator?.detach()
     }
 }

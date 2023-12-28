@@ -1,60 +1,68 @@
-package com.zeddikus.playlistmaker.ui.search.activity
-
+package com.zeddikus.playlistmaker.ui.search.fragment
 
 import android.content.Context
-import android.content.Intent
-import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.zeddikus.playlistmaker.R
-import com.zeddikus.playlistmaker.databinding.ActivitySearchBinding
+import com.zeddikus.playlistmaker.databinding.FragmentSearchBinding
 import com.zeddikus.playlistmaker.domain.search.model.TrackRepositoryState
 import com.zeddikus.playlistmaker.domain.sharing.model.Track
 import com.zeddikus.playlistmaker.ui.player.activity.PlayerActivity
 import com.zeddikus.playlistmaker.ui.search.track.TracksAdapter
-import com.zeddikus.playlistmaker.ui.search.view_model.SearchActivityViewModel
+import com.zeddikus.playlistmaker.ui.search.view_model.SearchFragmentViewModel
 import org.koin.android.ext.android.inject
 
+class SearchFragment : Fragment() {
 
-class SearchActivity : AppCompatActivity() {
-
-    lateinit var binding: ActivitySearchBinding
+    lateinit var binding: FragmentSearchBinding
     private lateinit var adapter: TracksAdapter
     private lateinit var historyAdapter: TracksAdapter
     private lateinit var searchRunnable: Runnable
 
-    private val viewModel: SearchActivityViewModel by inject()
+    private val viewModel: SearchFragmentViewModel by inject()
 
     private companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private val mainHandler = Handler(Looper.getMainLooper())
-        private const val TRACK_DATA = "TrackData"
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        val viewRoot = binding.root
-        setContentView(viewRoot)
+
+        binding = FragmentSearchBinding.inflate(layoutInflater)
+        return binding.root
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         initalizePlaceholder()
         searchRunnable = Runnable {
             search()
         }
 
-        binding.recyclerTracks.layoutManager = LinearLayoutManager(this)
+        binding.recyclerTracks.layoutManager = LinearLayoutManager(requireContext())
         adapter = TracksAdapter(listOf<Track>()) { track: Track ->
             clickListener(
                 track
@@ -62,7 +70,7 @@ class SearchActivity : AppCompatActivity() {
         }
         binding.recyclerTracks.adapter = adapter
 
-        binding.recyclerTracksHistory.layoutManager = LinearLayoutManager(this)
+        binding.recyclerTracksHistory.layoutManager = LinearLayoutManager(requireContext())
         historyAdapter = TracksAdapter(listOf<Track>()) { track: Track ->
             clickListener(
                 track
@@ -70,8 +78,6 @@ class SearchActivity : AppCompatActivity() {
         }
         binding.recyclerTracksHistory.adapter = historyAdapter
         setListenersWatchersObservers()
-
-
     }
 
     private fun initalizePlaceholder() {
@@ -81,9 +87,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun setListenersWatchersObservers() {
-        binding.imgBtnBack.setOnClickListener {
-            finish()
-        }
 
         binding.btnSearchClear.setOnClickListener {
             clearSearchText(binding.btnSearchClear, binding.vTextSearch)
@@ -126,7 +129,7 @@ class SearchActivity : AppCompatActivity() {
 
         binding.vTextSearch.addTextChangedListener(simpleTextWatcher)
 
-        viewModel.getState().observe(this) { state ->
+        viewModel.getState().observe(viewLifecycleOwner) { state ->
             if (when (state) {
                     is TrackRepositoryState.showHistory -> {
                         historyAdapter.setNewList(state.trackList)
@@ -139,7 +142,7 @@ class SearchActivity : AppCompatActivity() {
 
         }
 
-        viewModel.getshowPlayerTrigger().observe(this) { track -> showPlayer(track) }
+        viewModel.getshowPlayerTrigger().observe(viewLifecycleOwner) { track -> showPlayer(track) }
     }
 
 
@@ -213,10 +216,6 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun isPortraitOrientation(): Boolean {
-        return resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-    }
-
     private fun checkClearButtonVisibility(s: CharSequence?) {
         if (s.isNullOrEmpty()) {
             binding.btnSearchClear.visibility = View.GONE
@@ -229,7 +228,7 @@ class SearchActivity : AppCompatActivity() {
     private fun clearSearchText(btnClose: ImageView, editField: EditText) {
         editField.text.clear()
         val inputMethodManager =
-            getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(editField.windowToken, 0)
         btnClose.visibility = View.GONE
         search()
@@ -237,9 +236,14 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showPlayer(track: Track) {
 
-        val intent = Intent(this, PlayerActivity::class.java)
-        intent.putExtra(TRACK_DATA, track)
-        startActivity(intent)
+//        val intent = Intent(this, PlayerActivity::class.java)
+//        intent.putExtra(TRACK_DATA, track)
+//        startActivity(intent)
+        findNavController().navigate(
+            R.id.action_searchFragment_to_playerActivity,
+            PlayerActivity.createArgs(track)
+        )
+
     }
 
     private fun clickListener(track: Track) {
@@ -248,7 +252,7 @@ class SearchActivity : AppCompatActivity() {
 
         if (track.previewUrl.isEmpty()) {
             Toast.makeText(
-                this,
+                requireContext(),
                 resources.getText(R.string.error_empty_url),
                 Toast.LENGTH_SHORT
             ).show()
@@ -258,5 +262,3 @@ class SearchActivity : AppCompatActivity() {
     }
 
 }
-
-

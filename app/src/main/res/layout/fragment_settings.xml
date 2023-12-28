@@ -3,8 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="?colorPrimary"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.settings.fragment.SettingsFragment">
 
 
     <LinearLayout
@@ -16,7 +18,8 @@
 
         <ImageButton
             android:id="@+id/imgBtnBack"
-            style="@style/backButtonTitle" />
+            style="@style/backButtonTitle"
+            android:visibility="gone" />
 
         <TextView
             style="@style/TitleTextStyle"

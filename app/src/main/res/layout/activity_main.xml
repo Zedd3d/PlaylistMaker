@@ -1,62 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?colorSecondary"
-    android:orientation="vertical">
+    tools:context=".ui.main.activity.MainActivity">
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/rootFragmentContainerView"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/root_navigation_graph" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        app:itemBackground="@color/bottom_menu_selected_background"
+        app:itemIconTint="@color/bottom_menu_selected_item"
+        app:itemTextColor="@color/bottom_menu_selected_item"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/main_menu">
 
-        android:paddingTop="10dp"
-        android:paddingStart="@dimen/default_padding_title"
-        android:paddingBottom="@dimen/default_padding_title">
-
-        <TextView
-            android:id="@+id/mainTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/program_name"
-            android:textSize="@dimen/program_name_text_size"
-            android:textColor="@color/white_pm"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_gravity="center"
-        android:paddingTop="@dimen/default_padding_title"
-        android:paddingStart="@dimen/bigbtn_default_padding"
-        android:paddingEnd="@dimen/bigbtn_default_padding"
-        android:paddingBottom="28dp">
-
-        <Button
-            android:id="@+id/btn_search"
-            style="@style/MainButtonStyle"
-            android:text="@string/btntxt_search"
-            app:icon="@drawable/ic_search"
-             />
-
-        <Button
-            android:id="@+id/btn_mediatec"
-            style="@style/MainButtonStyle"
-            android:text="@string/btntxt_mediatec"
-            app:icon="@drawable/ic_library"
-            />
-
-        <Button
-            android:id="@+id/btn_settings"
-            style="@style/MainButtonStyle"
-            android:text="@string/btntxt_settings"
-            app:icon="@drawable/ic_settings"
-            />
-
-    </LinearLayout>
-
-</LinearLayout>
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+</androidx.constraintlayout.widget.ConstraintLayout>

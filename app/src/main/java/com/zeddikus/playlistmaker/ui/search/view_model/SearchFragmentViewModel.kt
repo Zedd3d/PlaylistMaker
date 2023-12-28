@@ -11,7 +11,7 @@ import com.zeddikus.playlistmaker.domain.search.model.TrackRepositoryState
 import com.zeddikus.playlistmaker.domain.search.model.TrackSearchResult
 import com.zeddikus.playlistmaker.domain.sharing.model.Track
 
-class SearchActivityViewModel(
+class SearchFragmentViewModel(
     private val tracksInteractor: TracksInteractor,
     private val searchHistoryInteractor: SearchHistoryInteractor
 ) : ViewModel() {

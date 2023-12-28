@@ -7,7 +7,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="?colorPrimary"
     android:orientation="vertical"
-    tools:context=".ui.mediatec.activity.MediatecActivity">
+    tools:context=".ui.mediatec.fragment.MediatecFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,6 +19,7 @@
         <ImageButton
             android:id="@+id/imgBtnBack"
             style="@style/backButtonTitle"
+            android:visibility="gone"
 
             />
 

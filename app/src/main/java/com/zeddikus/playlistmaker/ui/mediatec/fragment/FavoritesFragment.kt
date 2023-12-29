@@ -9,11 +9,12 @@ import androidx.fragment.app.Fragment
 import com.zeddikus.playlistmaker.R
 import com.zeddikus.playlistmaker.databinding.FragmentFavoritesBinding
 import com.zeddikus.playlistmaker.ui.mediatec.view_model.FavoritesViewModel
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoritesFragment : Fragment() {
     private var _binding: FragmentFavoritesBinding? = null
-    private val viewModel: FavoritesViewModel by inject()
+
+    private val viewModel by viewModel<FavoritesViewModel>()
     private val binding get() = _binding!!
 
     companion object {

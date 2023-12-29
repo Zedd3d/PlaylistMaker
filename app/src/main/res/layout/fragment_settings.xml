@@ -3,27 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="?colorPrimary"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.settings.fragment.SettingsFragment">
 
-
-    <LinearLayout
+    <Toolbar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="4dp"
-        android:gravity="center">
-
-        <ImageButton
-            android:id="@+id/imgBtnBack"
-            style="@style/backButtonTitle" />
-
-        <TextView
-            style="@style/TitleTextStyle"
-            android:text="@string/btntxt_settings"
-            />
-
-    </LinearLayout>
+        style="@style/toolbarTitle"
+        android:layout_height="@dimen/default_toolbar_height"
+        android:title="@string/btntxt_settings" />
 
     <LinearLayout
         style="@style/MainContentListStyle"

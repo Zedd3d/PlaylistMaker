@@ -14,11 +14,11 @@ import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 
 val interactorModule = module {
-    factory<TracksInteractor> {
+    single<TracksInteractor> {
         TracksInteractorImpl(get())
     }
 
-    factory<SearchHistoryInteractor> {
+    single<SearchHistoryInteractor> {
         SearchHistoryInteractorImpl(get())
     }
 

@@ -5,28 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?colorPrimary"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.search.fragment.SearchFragment">
 
-
-    <LinearLayout
+    <Toolbar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="4dp">
-
-        <ImageButton
-            android:id="@+id/imgBtnBack"
-            style="@style/backButtonTitle"
-
-            />
-
-        <TextView
-            style="@style/TitleTextStyle"
-            android:text="@string/btntxt_search" />
-
-    </LinearLayout>
-
+        style="@style/toolbarTitle"
+        android:layout_height="@dimen/default_toolbar_height"
+        android:title="@string/btntxt_search" />
 
     <LinearLayout
         android:id="@+id/mainLL"
@@ -50,6 +36,7 @@
                 android:hint="@string/btntxt_search"
                 android:imeOptions="actionDone"
                 android:singleLine="true"
+                android:textCursorDrawable="@drawable/cursor_edit_text"
                 android:textSize="19sp" />
 
             <ImageView

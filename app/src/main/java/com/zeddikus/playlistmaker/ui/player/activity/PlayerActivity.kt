@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.zeddikus.playlistmaker.R
@@ -19,21 +20,29 @@ import org.koin.core.parameter.parametersOf
 import java.time.Instant
 import java.time.ZoneId
 
+
 class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
     private val viewModel: PlayerViewModel by inject {
+
+        val bundle: Bundle? = intent.extras
+        val track: Track?
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            track = bundle?.getParcelable(TRACK_DATA, Track::class.java)
+        } else {
+            track = bundle?.getParcelable<Track>(TRACK_DATA)
+        }
+
         parametersOf(
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                intent.getParcelableExtra(TRACK_DATA, Track::class.java)!!
-            } else {
-                intent.getParcelableExtra(TRACK_DATA)!!
-            }
+            track!!
         )
     }
 
     companion object {
         const val TRACK_DATA = "TrackData"
+        fun createArgs(track: Track): Bundle =
+            bundleOf(TRACK_DATA to track)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,10 +50,6 @@ class PlayerActivity : AppCompatActivity() {
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         val viewRoot = binding.root
         setContentView(viewRoot)
-
-        binding.backButton.setOnClickListener {
-            finish()
-        }
 
         binding.playButton.setOnClickListener {
             viewModel.pushPlayButton()
@@ -74,6 +79,10 @@ class PlayerActivity : AppCompatActivity() {
             Instant.parse(track.releaseDate).atZone(ZoneId.systemDefault()).year.toString()
         binding.genreValue.text = track.primaryGenreName
         binding.countryValue.text = track.country
+
+        binding.toolbar.setNavigationOnClickListener {
+            finish()
+        }
 
         Glide.with(binding.coverImage)
             .load(General.convertURLtoBigSizeCover(track.artworkUrl100))

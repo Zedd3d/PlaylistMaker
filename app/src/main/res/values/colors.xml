@@ -8,4 +8,5 @@
     <color name="gray_pm">#AEAFB4</color>
     <color name="lightgray_pm">#E6E8EB</color>
     <color name="grayDay_whiteNight">#AEAFB4</color>
+    <color name="blackDay_whiteNight">#1A1B22</color>
 </resources>

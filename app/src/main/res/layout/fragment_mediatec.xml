@@ -7,26 +7,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="?colorPrimary"
     android:orientation="vertical"
-    tools:context=".ui.mediatec.activity.MediatecActivity">
+    tools:context=".ui.mediatec.fragment.MediatecFragment">
 
-    <LinearLayout
+    <Toolbar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="4dp">
+        style="@style/toolbarTitle"
+        android:layout_height="@dimen/default_toolbar_height"
+        android:title="@string/btntxt_mediatec" />
 
-        <ImageButton
-            android:id="@+id/imgBtnBack"
-            style="@style/backButtonTitle"
-
-            />
-
-        <TextView
-            style="@style/TitleTextStyle"
-            android:text="@string/btntxt_mediatec" />
-
-    </LinearLayout>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayoutMediatec"

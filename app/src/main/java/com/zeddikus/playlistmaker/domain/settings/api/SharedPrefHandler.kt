@@ -5,6 +5,7 @@ import com.zeddikus.playlistmaker.domain.sharing.model.Track
 
 interface SharedPrefHandler {
 
+
     fun setSharedPreferencesChangeListener(listener: OnSharedPreferenceChangeListener)
 
     fun clearHistory()

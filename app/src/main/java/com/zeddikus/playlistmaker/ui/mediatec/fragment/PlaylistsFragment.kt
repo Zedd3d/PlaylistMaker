@@ -9,13 +9,13 @@ import androidx.fragment.app.Fragment
 import com.zeddikus.playlistmaker.R
 import com.zeddikus.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.zeddikus.playlistmaker.ui.mediatec.view_model.PlaylistsViewModel
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class PlaylistsFragment : Fragment() {
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: PlaylistsViewModel by inject()
+    private val viewModel by viewModel<PlaylistsViewModel>()
 
     companion object {
         fun newInstance() = PlaylistsFragment().apply {

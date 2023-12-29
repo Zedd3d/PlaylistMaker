@@ -1,6 +1,5 @@
 package com.zeddikus.playlistmaker.domain.player.impl
 
-import android.util.Log
 import com.zeddikus.playlistmaker.domain.player.api.MediaPlayer
 import com.zeddikus.playlistmaker.domain.player.api.MediaPlayerRepository
 import com.zeddikus.playlistmaker.domain.player.models.MediaPlayerProgress
@@ -47,7 +46,6 @@ class MediaPlayerInteractorImpl(mediaPlayerRepository: MediaPlayerRepository) : 
         } catch (e: Exception) {
             setNewState(PlayerState.PREPAIRING_ERROR)
         }
-
     }
 
     override fun setNewState(state: PlayerState){
@@ -60,13 +58,12 @@ class MediaPlayerInteractorImpl(mediaPlayerRepository: MediaPlayerRepository) : 
 
     override fun getCurrentProgress(): MediaPlayerProgress {
         //val currentPosition = mediaPlayer.currentPosition
-
         val currentPosition = (System.currentTimeMillis() - startMoment + progressTime)
 
         val p = (currentPosition / 1000).toInt()
         val d = SimpleDateFormat("mm:ss", Locale.getDefault()).format(currentPosition)
 
-        Log.v("timerTick", "cp " + currentPosition)
+        //Log.v("timerTick", "cp " + currentPosition)
         return MediaPlayerProgress(p, d)
     }
 

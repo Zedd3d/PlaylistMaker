@@ -10,16 +10,19 @@ import com.zeddikus.playlistmaker.domain.search.api.TracksInteractor
 import com.zeddikus.playlistmaker.domain.search.model.TrackRepositoryState
 import com.zeddikus.playlistmaker.domain.search.model.TrackSearchResult
 import com.zeddikus.playlistmaker.domain.sharing.model.Track
+import com.zeddikus.playlistmaker.ui.SingleLiveEvent
 
-class SearchActivityViewModel(
+class SearchFragmentViewModel(
     private val tracksInteractor: TracksInteractor,
     private val searchHistoryInteractor: SearchHistoryInteractor
 ) : ViewModel() {
 
     private val state = MutableLiveData<TrackRepositoryState>()
     private var isNowPausingBetweenClicks = false
-    private val showPlayer = MutableLiveData<Track>()
+
+    //private val showPlayer = MutableLiveData<Track>()
     private val mainHandler = Handler(Looper.getMainLooper())
+    private var prevFilter = ""
 
     companion object {
         private const val CLICK_DELAY = 1500L
@@ -27,7 +30,10 @@ class SearchActivityViewModel(
 
     fun getState(): LiveData<TrackRepositoryState> = state
 
-    fun getshowPlayerTrigger(): LiveData<Track> = showPlayer
+    //fun getshowPlayerTrigger(): LiveData<Track> = showPlayer
+
+    private val showPlayer = SingleLiveEvent<Track>()
+    fun getshowPlayerTrigger(): SingleLiveEvent<Track> = showPlayer
 
     fun clearHistory() {
         searchHistoryInteractor.clearHistory()
@@ -35,15 +41,19 @@ class SearchActivityViewModel(
     }
 
     fun search(filter: String, locale: String) {
-        state.value = TrackRepositoryState.searchInProgress
 
         if (filter.isNotEmpty()) {
-            tracksInteractor.searchTracks(filter, locale,
-                object : TracksInteractor.TracksConsumer {
-                    override fun consume(trackSearchResult: TrackSearchResult) {
-                        state.postValue(trackSearchResult.state)
-                    }
-                })
+            if (!(prevFilter == filter)) {
+                state.value = TrackRepositoryState.searchInProgress
+                prevFilter = filter
+                state.postValue(TrackRepositoryState.searchInProgress)
+                tracksInteractor.searchTracks(filter, locale,
+                    object : TracksInteractor.TracksConsumer {
+                        override fun consume(trackSearchResult: TrackSearchResult) {
+                            state.postValue(trackSearchResult.state)
+                        }
+                    })
+            }
         } else {
             showHistory()
         }

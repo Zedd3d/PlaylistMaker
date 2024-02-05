@@ -42,22 +42,14 @@
         <item name="android:paddingEnd">12dp</item>
     </style>
 
-    <style name="backButtonTitle" parent="Widget.MaterialComponents.TimePicker.ImageButton">
-        <item name="android:layout_width">48dp</item>
-        <item name="android:layout_height">48dp</item>
-        <item name="android:contentDescription">@string/btntxt_back</item>
-        <item name="android:background">?colorPrimary</item>
-        <item name="srcCompat">@drawable/ic_arrow_back</item>
-        <item name="tint">?colorTertiary</item>
+    <style name="toolbarTitle">
+        <item name="android:titleTextColor">?colorTertiary</item>
+        <item name="android:titleTextAppearance">@style/TitleTextStyle</item>
     </style>
 
-    <style name="TitleTextStyle" parent="Widget.MaterialComponents.TextView">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_weight">1</item>
+    <style name="TitleTextStyle">
         <item name="android:textSize">@dimen/bigbtn_text_size</item>
-        <item name="android:paddingBottom">1dp</item>
-        <item name="android:paddingStart">12dp</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
     </style>
 
     <style name="MainContentListStyle">
@@ -123,7 +115,7 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:textSize">13sp</item>
-        <item name="android:textColor">@color/grayDay_whiteNight</item>
+        <item name="android:textColor">@color/blackDay_whiteNight</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:text">""</item>
         <item name="android:maxLines">1</item>

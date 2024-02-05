@@ -29,7 +29,8 @@ class SharedPreferencesImpl(
             if (darkThemeEnabled) {
                 AppCompatDelegate.MODE_NIGHT_YES
             } else {
-                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                //AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                AppCompatDelegate.MODE_NIGHT_NO
             }
         )
     }
@@ -61,11 +62,7 @@ class SharedPreferencesImpl(
     }
 
     override fun saveSwitchDarkTheme(darkThemeEnabled: Boolean) {
-        if (darkThemeEnabled) {
-            sharedPref.edit().putBoolean(SP_DARK_THEME, true).apply()
-        } else {
-            sharedPref.edit().remove(SP_DARK_THEME).apply()
-        }
+        sharedPref.edit().putBoolean(SP_DARK_THEME, darkThemeEnabled).apply()
         switchTheme(darkThemeEnabled)
     }
 

@@ -3,8 +3,6 @@ package com.zeddikus.playlistmaker.ui.search.fragment
 import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -33,14 +31,7 @@ class SearchFragment : Fragment() {
     lateinit var binding: FragmentSearchBinding
     private lateinit var adapter: TracksAdapter
     private lateinit var historyAdapter: TracksAdapter
-    private lateinit var searchRunnable: Runnable
-
     private val viewModel by viewModel<SearchFragmentViewModel>()
-
-    private companion object {
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        private val mainHandler = Handler(Looper.getMainLooper())
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,9 +49,6 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initalizePlaceholder()
-        searchRunnable = Runnable {
-            search()
-        }
 
         binding.recyclerTracks.layoutManager = LinearLayoutManager(requireContext())
         adapter = TracksAdapter(listOf<Track>()) { track: Track ->
@@ -97,12 +85,12 @@ class SearchFragment : Fragment() {
         }
 
         binding.placeholderTrouble.placeholderTroubleButton.setOnClickListener {
-            searchRunnable.run()
+            searchDebounce()
         }
 
         binding.vTextSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                searchRunnable.run()
+                searchDebounce()
             }
             false
         }
@@ -113,7 +101,6 @@ class SearchFragment : Fragment() {
                 checkClearButtonVisibility(s)
                 searchDebounce()
                 if (binding.vTextSearch.hasFocus() && s?.isEmpty() == true) {
-                    mainHandler.removeCallbacks(searchRunnable)
                     viewModel.showHistory()
                 }
             }
@@ -147,8 +134,7 @@ class SearchFragment : Fragment() {
 
 
     private fun searchDebounce() {
-        mainHandler.removeCallbacks(searchRunnable)
-        mainHandler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        search()
     }
 
     private fun search() {

@@ -7,29 +7,31 @@ import com.zeddikus.playlistmaker.data.search.mapper.TrackMapper
 import com.zeddikus.playlistmaker.domain.search.api.TracksRepository
 import com.zeddikus.playlistmaker.domain.search.model.TrackRepositoryState
 import com.zeddikus.playlistmaker.domain.search.model.TrackSearchResult
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class TracksRepositoryImpl(
     private val networkClient: NetworkClient,
     private val trackMapper: TrackMapper
 ) : TracksRepository {
 
-    override fun searchTracks(expression: String, locale: String): TrackSearchResult {
+    override fun searchTracks(expression: String, locale: String): Flow<TrackSearchResult> = flow {
         lateinit var state: TrackRepositoryState
         val response = networkClient.doRequest(TrackSearchRequest(expression, locale))
         if (response.resultCode == 200 && response is TrackSearchResponse) {
             val listTracks = trackMapper.map(response.results)
 
-            if (listTracks.isEmpty()) {
-                state = TrackRepositoryState.errorEmpty
+            state = if (listTracks.isEmpty()) {
+                TrackRepositoryState.errorEmpty
             } else {
-                state = TrackRepositoryState.showListResult(listTracks)
+                TrackRepositoryState.showListResult(listTracks)
             }
 
-            return TrackSearchResult(state, listTracks)
+            emit(TrackSearchResult(state))
         } else if (response.resultCode == 400) {
-            return TrackSearchResult(TrackRepositoryState.errorNetwork, emptyList())
+            emit(TrackSearchResult(TrackRepositoryState.errorNetwork))
         } else {
-            return TrackSearchResult(TrackRepositoryState.errorNetwork, emptyList())
+            emit(TrackSearchResult(TrackRepositoryState.errorNetwork))
         }
     }
 }

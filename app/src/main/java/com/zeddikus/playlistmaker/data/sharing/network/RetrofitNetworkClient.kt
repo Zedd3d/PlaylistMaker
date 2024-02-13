@@ -19,10 +19,6 @@ class RetrofitNetworkClient(
 
         return try {
             val resp = itunesAPI.findTracks(dto.expression, dto.locale)
-
-            //val body = resp.body() ?: Response()
-
-            //return body.apply { resultCode = resp.code() }
             resp.apply { resultCode = 200 }
         } catch (e: IOException) {
             Response().apply { resultCode = 500 }

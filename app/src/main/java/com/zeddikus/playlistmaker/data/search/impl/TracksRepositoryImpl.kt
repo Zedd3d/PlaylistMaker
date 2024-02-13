@@ -22,16 +22,16 @@ class TracksRepositoryImpl(
             val listTracks = trackMapper.map(response.results)
 
             state = if (listTracks.isEmpty()) {
-                TrackRepositoryState.errorEmpty
+                TrackRepositoryState.ErrorEmpty
             } else {
-                TrackRepositoryState.showListResult(listTracks)
+                TrackRepositoryState.ShowListResult(listTracks)
             }
 
             emit(TrackSearchResult(state))
         } else if (response.resultCode == 400) {
-            emit(TrackSearchResult(TrackRepositoryState.errorNetwork))
+            emit(TrackSearchResult(TrackRepositoryState.ErrorNetwork))
         } else {
-            emit(TrackSearchResult(TrackRepositoryState.errorNetwork))
+            emit(TrackSearchResult(TrackRepositoryState.ErrorNetwork))
         }
     }
 }

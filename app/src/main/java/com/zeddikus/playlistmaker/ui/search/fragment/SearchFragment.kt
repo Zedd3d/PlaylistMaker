@@ -118,7 +118,7 @@ class SearchFragment : Fragment() {
 
         viewModel.getState().observe(viewLifecycleOwner) { state ->
             if (when (state) {
-                    is TrackRepositoryState.showHistory -> {
+                    is TrackRepositoryState.ShowHistory -> {
                         historyAdapter.setNewList(state.trackList)
                         state.showAdapter
                     }
@@ -129,7 +129,7 @@ class SearchFragment : Fragment() {
 
         }
 
-        viewModel.getshowPlayerTrigger().observe(viewLifecycleOwner) { track -> showPlayer(track) }
+        viewModel.getShowPlayerTrigger().observe(viewLifecycleOwner) { track -> showPlayer(track) }
     }
 
 
@@ -147,7 +147,7 @@ class SearchFragment : Fragment() {
     private fun showListState(state: TrackRepositoryState) {
 
         binding.placeholderTrouble.placeholderTrouble.visibility = when (state) {
-            is TrackRepositoryState.errorNetwork -> {
+            is TrackRepositoryState.ErrorNetwork -> {
                 Glide.with(this).load(R.drawable.ic_network_trouble).dontTransform()
                     .into(binding.placeholderTrouble.placeholderTroubleCenterImage)
                 binding.placeholderTrouble.placeholderTroubleText.text =
@@ -155,7 +155,7 @@ class SearchFragment : Fragment() {
                 View.VISIBLE
             }
 
-            is TrackRepositoryState.errorEmpty -> {
+            is TrackRepositoryState.ErrorEmpty -> {
                 Glide.with(this).load(R.drawable.ic_sad_smile).dontTransform()
                     .into(binding.placeholderTrouble.placeholderTroubleCenterImage)
                 binding.placeholderTrouble.placeholderTroubleText.text =
@@ -166,7 +166,7 @@ class SearchFragment : Fragment() {
             else -> View.GONE
         }
         binding.recyclerTracks.visibility = when (state) {
-            is TrackRepositoryState.showListResult -> {
+            is TrackRepositoryState.ShowListResult -> {
                 adapter.setNewList(state.trackList)
                 View.VISIBLE
             }
@@ -177,7 +177,7 @@ class SearchFragment : Fragment() {
         }
 
         binding.linearTracksHistory.visibility = when (state) {
-            is TrackRepositoryState.showHistory -> {
+            is TrackRepositoryState.ShowHistory -> {
                 historyAdapter.setNewList(state.trackList)
                 if (historyAdapter.itemCount == 0) View.GONE else View.VISIBLE
             }
@@ -188,15 +188,15 @@ class SearchFragment : Fragment() {
         }
 
         binding.progressBarSearchTracks.visibility = when (state) {
-            is TrackRepositoryState.searchInProgress -> View.VISIBLE
+            is TrackRepositoryState.SearchInProgress -> View.VISIBLE
             else -> View.GONE
         }
         binding.placeholderTrouble.placeholderTroubleButton.visibility = when (state) {
-            is TrackRepositoryState.errorNetwork -> View.VISIBLE
+            is TrackRepositoryState.ErrorNetwork -> View.VISIBLE
             else -> View.GONE
         }
 
-        if (binding.recyclerTracks.visibility == View.GONE && !(state is TrackRepositoryState.showHistory)) {
+        if (binding.recyclerTracks.visibility == View.GONE && !(state is TrackRepositoryState.ShowHistory)) {
             adapter.clearList()
         }
     }

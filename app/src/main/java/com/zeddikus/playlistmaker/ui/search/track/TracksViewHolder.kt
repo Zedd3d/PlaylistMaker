@@ -32,8 +32,8 @@ class TracksViewHolder(parentView: View) : RecyclerView.ViewHolder(parentView) {
             .transform(RoundedCorners(General.dpToPx(2f, artwork.context)))
             .into(artwork)
         trackName.text = track.trackName.trim()
-        //trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTime)
-        artistName.text= track.artistName.trim()
+        trackTime.text = track.trackTime
+        artistName.text = track.artistName.trim()
         artistName.updateLayoutParams {}
     }
 

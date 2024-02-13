@@ -37,7 +37,7 @@ class SearchFragmentViewModel(
 
     fun getState(): LiveData<TrackRepositoryState> = state
 
-    fun getshowPlayerTrigger(): SingleLiveEvent<Track> = showPlayer
+    fun getShowPlayerTrigger(): SingleLiveEvent<Track> = showPlayer
 
     fun clearHistory() {
         searchHistoryInteractor.clearHistory()
@@ -53,7 +53,7 @@ class SearchFragmentViewModel(
                 searchJob?.cancel()
                 searchJob = viewModelScope.launch {
                     delay(SEARCH_DEBOUNCE_DELAY)
-                    state.postValue(TrackRepositoryState.searchInProgress)
+                    state.postValue(TrackRepositoryState.SearchInProgress)
                     tracksInteractor
                         .searchTracks(filter, locale)
                         .collect { trackSearchResult ->
@@ -68,7 +68,7 @@ class SearchFragmentViewModel(
     }
 
     fun showHistory() {
-        state.value = TrackRepositoryState.showHistory(searchHistoryInteractor.getHistory())
+        state.value = TrackRepositoryState.ShowHistory(searchHistoryInteractor.getHistory())
     }
 
     fun addTrackToHistory(track: Track) {

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -12,6 +13,7 @@ import com.zeddikus.playlistmaker.R
 import com.zeddikus.playlistmaker.databinding.ActivityPlayerBinding
 import com.zeddikus.playlistmaker.domain.player.models.MediaPlayerProgress
 import com.zeddikus.playlistmaker.domain.player.models.PlayerState
+import com.zeddikus.playlistmaker.domain.player.models.TrackState
 import com.zeddikus.playlistmaker.domain.sharing.model.Track
 import com.zeddikus.playlistmaker.ui.player.view_model.PlayerViewModel
 import com.zeddikus.playlistmaker.utils.General
@@ -55,6 +57,10 @@ class PlayerActivity : AppCompatActivity() {
             viewModel.pushPlayButton()
         }
 
+        binding.addToFavorites.setOnClickListener {
+            viewModel.addingToFavorites()
+        }
+
         viewModel.onLoad().observe(this) {
             setTrackPropertys(it)
         }
@@ -66,9 +72,11 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.getProgress().observe(this) {
             updateTrackTime(it)
         }
+
     }
 
-    private fun setTrackPropertys(track: Track) {
+    private fun setTrackPropertys(trackState: TrackState) {
+        val track = trackState.track
         binding.progressBar.max = (track.trackTimeMillis / 1000).toInt()
         binding.titleText.text = track.trackName
         binding.bandText.text = track.artistName
@@ -90,6 +98,11 @@ class PlayerActivity : AppCompatActivity() {
             .fitCenter()
             .transform(RoundedCorners(General.dpToPx(8f, binding.coverImage.context)))
             .into(binding.coverImage)
+
+        //Стоит на курсе написать, что библиотека весьма и весьма плохо работает с ночной темой
+        Glide.with(this)
+            .load(ContextCompat.getDrawable(this, getFavoriteImageOnState(trackState)))
+            .into(binding.addToFavorites)
     }
 
     private fun render(state: PlayerState) {
@@ -100,7 +113,10 @@ class PlayerActivity : AppCompatActivity() {
             else -> null
         }
 
-        Glide.with(this).load(getImageOnState(state)).dontTransform().into(binding.playButton)
+        Glide.with(this)
+            .load(getImageOnState(state))
+            .dontTransform()
+            .into(binding.playButton)
     }
 
     private fun showPrepairingError() {
@@ -118,10 +134,14 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun getImageOnState(state: PlayerState): Int {
-        return when (state){
+        return when (state) {
             PlayerState.PLAYING -> R.drawable.ic_pause
-            else  -> R.drawable.ic_play
+            else -> R.drawable.ic_play
         }
+    }
+
+    private fun getFavoriteImageOnState(state: TrackState): Int {
+        return if (state.isFavorite) R.drawable.ic_favorites_on else R.drawable.ic_favorites_off
     }
 
     override fun onDestroy() {

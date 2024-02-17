@@ -1,9 +1,9 @@
 package com.zeddikus.playlistmaker.data.search.impl
 
+import com.zeddikus.playlistmaker.data.converters.TrackConvertor
 import com.zeddikus.playlistmaker.data.search.api.NetworkClient
 import com.zeddikus.playlistmaker.data.search.dto.TrackSearchRequest
 import com.zeddikus.playlistmaker.data.search.dto.TrackSearchResponse
-import com.zeddikus.playlistmaker.data.search.mapper.TrackMapper
 import com.zeddikus.playlistmaker.domain.search.api.TracksRepository
 import com.zeddikus.playlistmaker.domain.search.model.TrackRepositoryState
 import com.zeddikus.playlistmaker.domain.search.model.TrackSearchResult
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.flow
 
 class TracksRepositoryImpl(
     private val networkClient: NetworkClient,
-    private val trackMapper: TrackMapper
+    private val trackMapper: TrackConvertor
 ) : TracksRepository {
 
     override fun searchTracks(expression: String, locale: String): Flow<TrackSearchResult> = flow {

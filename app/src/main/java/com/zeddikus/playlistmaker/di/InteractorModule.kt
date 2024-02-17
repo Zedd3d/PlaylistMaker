@@ -1,6 +1,8 @@
 package com.zeddikus.playlistmaker.di
 
 import com.zeddikus.playlistmaker.data.settings.impl.ExternalNavigatorImpl
+import com.zeddikus.playlistmaker.domain.db.FavoritesInteractor
+import com.zeddikus.playlistmaker.domain.mediatec.favorites.impl.FavoritesInteractorImpl
 import com.zeddikus.playlistmaker.domain.player.api.MediaPlayer
 import com.zeddikus.playlistmaker.domain.player.impl.MediaPlayerInteractorImpl
 import com.zeddikus.playlistmaker.domain.search.api.SearchHistoryInteractor
@@ -34,5 +36,7 @@ val interactorModule = module {
         ExternalNavigatorImpl(androidApplication())
     }
 
-
+    single<FavoritesInteractor> {
+        FavoritesInteractorImpl(get())
+    }
 }

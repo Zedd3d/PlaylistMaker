@@ -1,5 +1,7 @@
 package com.zeddikus.playlistmaker.di
 
+import androidx.room.Room
+import com.zeddikus.playlistmaker.data.db.AppDatabase
 import com.zeddikus.playlistmaker.data.search.api.ItunesAPI
 import com.zeddikus.playlistmaker.data.search.api.NetworkClient
 import com.zeddikus.playlistmaker.data.sharing.network.RetrofitNetworkClient
@@ -20,6 +22,11 @@ val dataModule = module {
 
     single<NetworkClient> {
         RetrofitNetworkClient(androidContext(), get())
+    }
+
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .build()
     }
 
 }

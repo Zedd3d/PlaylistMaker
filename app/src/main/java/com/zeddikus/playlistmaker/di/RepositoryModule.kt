@@ -1,11 +1,13 @@
 package com.zeddikus.playlistmaker.di
 
 import com.zeddikus.playlistmaker.R
+import com.zeddikus.playlistmaker.data.converters.TrackConvertor
+import com.zeddikus.playlistmaker.data.player.impl.FavoritesRepositoryImpl
 import com.zeddikus.playlistmaker.data.player.impl.MediaPlayerRepositoryImpl
 import com.zeddikus.playlistmaker.data.search.impl.SearchHistoryRepositoryImpl
 import com.zeddikus.playlistmaker.data.search.impl.TracksRepositoryImpl
-import com.zeddikus.playlistmaker.data.search.mapper.TrackMapper
 import com.zeddikus.playlistmaker.data.sharing.db.DefaultSettingsRepositoryImpl
+import com.zeddikus.playlistmaker.domain.db.FavoritesRepository
 import com.zeddikus.playlistmaker.domain.player.api.MediaPlayerRepository
 import com.zeddikus.playlistmaker.domain.search.api.SearchHistoryRepository
 import com.zeddikus.playlistmaker.domain.search.api.TracksRepository
@@ -16,7 +18,7 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
     factory<TracksRepository> {
-        TracksRepositoryImpl(get(), TrackMapper)
+        TracksRepositoryImpl(get(), TrackConvertor)
     }
 
     factory<SearchHistoryRepository> {
@@ -35,6 +37,10 @@ val repositoryModule = module {
             androidApplication().resources.getString(R.string.YP_LINK_AD),
             androidApplication().resources.getString(R.string.YP_LINK_OFFER),
         )
+    }
+
+    single<FavoritesRepository> {
+        FavoritesRepositoryImpl(get())
     }
 
 }

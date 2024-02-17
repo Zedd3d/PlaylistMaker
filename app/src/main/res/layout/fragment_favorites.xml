@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutFavorites"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,9 +9,33 @@
     android:orientation="vertical"
     app:layout_constraintTop_toTopOf="parent">
 
+    <LinearLayout
+        android:id="@+id/mainLL"
+        style="@style/MainContentListStyle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <include
-        android:id="@+id/placeholderTrouble"
-        layout="@layout/placeholder_empty_error" />
+        <ProgressBar
+            android:id="@+id/progressBarFavoritesTracks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/blue_pm"
+            android:paddingTop="55dp"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerTracks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:itemCount="5"
+            tools:listitem="@layout/track_element"></androidx.recyclerview.widget.RecyclerView>
+
+        <include
+            android:id="@+id/placeholderTrouble"
+            layout="@layout/placeholder_empty_error" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

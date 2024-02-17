@@ -4,9 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zeddikus.playlistmaker.domain.db.FavoritesInteractor
 import com.zeddikus.playlistmaker.domain.player.api.MediaPlayer
 import com.zeddikus.playlistmaker.domain.player.models.MediaPlayerProgress
 import com.zeddikus.playlistmaker.domain.player.models.PlayerState
+import com.zeddikus.playlistmaker.domain.player.models.TrackState
 import com.zeddikus.playlistmaker.domain.sharing.model.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -14,16 +16,25 @@ import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     track: Track,
-    private val mediaPlayer: MediaPlayer
+    private val mediaPlayer: MediaPlayer,
+    private val favoritesInteractor: FavoritesInteractor
 ) : ViewModel() {
 
-    private var onLoad = MutableLiveData<Track>()
+    private var onLoad = MutableLiveData<TrackState>()
     private val state = MutableLiveData<PlayerState>()
     private val currentProgress = MutableLiveData<MediaPlayerProgress>()
     private var timerJob: Job? = null
 
     init {
-        onLoad.value = track
+        var isFavorite = false
+        val job = viewModelScope.launch {
+            isFavorite = favoritesInteractor.isFavorite(track.trackId)
+
+            onLoad.postValue(TrackState(track, isFavorite))
+        }
+
+        if (job.isCompleted) onLoad.postValue(TrackState(track, isFavorite))
+
         mediaPlayer.setConsumer { playerState -> setPlayerState(playerState) }
         mediaPlayer.preparePlayer(track.previewUrl)
         clearProgress()
@@ -33,7 +44,7 @@ class PlayerViewModel(
         private const val UPDATE_TRACK_TIME_DELAY = 300L
     }
 
-    fun onLoad(): LiveData<Track> = onLoad
+    fun onLoad(): LiveData<TrackState> = onLoad
 
     fun getState(): LiveData<PlayerState> = state
 
@@ -102,5 +113,16 @@ class PlayerViewModel(
             else -> null
         }
         state.postValue(consumedState)
+    }
+
+    fun addingToFavorites() {
+        if (onLoad.value == null) return
+
+        val track = onLoad.value!!.track
+
+        viewModelScope.launch {
+            favoritesInteractor.switchFavoriteProperty(track)
+            onLoad.postValue(TrackState(track, favoritesInteractor.isFavorite(track.trackId)))
+        }
     }
 }

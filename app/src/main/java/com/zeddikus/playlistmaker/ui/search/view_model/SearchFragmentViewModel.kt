@@ -1,16 +1,18 @@
 package com.zeddikus.playlistmaker.ui.search.view_model
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.zeddikus.playlistmaker.domain.search.api.SearchHistoryInteractor
 import com.zeddikus.playlistmaker.domain.search.api.TracksInteractor
 import com.zeddikus.playlistmaker.domain.search.model.TrackRepositoryState
-import com.zeddikus.playlistmaker.domain.search.model.TrackSearchResult
 import com.zeddikus.playlistmaker.domain.sharing.model.Track
 import com.zeddikus.playlistmaker.ui.SingleLiveEvent
+import com.zeddikus.playlistmaker.utils.debounce
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SearchFragmentViewModel(
     private val tracksInteractor: TracksInteractor,
@@ -18,22 +20,24 @@ class SearchFragmentViewModel(
 ) : ViewModel() {
 
     private val state = MutableLiveData<TrackRepositoryState>()
-    private var isNowPausingBetweenClicks = false
-
-    //private val showPlayer = MutableLiveData<Track>()
-    private val mainHandler = Handler(Looper.getMainLooper())
     private var prevFilter = ""
+    private var searchJob: Job? = null
+
+    private val onTrackClickDebounce =
+        debounce<Track>(CLICK_DELAY, viewModelScope, false) { track ->
+            showPlayer.postValue(track)
+        }
+
+    private val showPlayer = SingleLiveEvent<Track>()
 
     companion object {
-        private const val CLICK_DELAY = 1500L
+        private const val CLICK_DELAY = 300L
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
     fun getState(): LiveData<TrackRepositoryState> = state
 
-    //fun getshowPlayerTrigger(): LiveData<Track> = showPlayer
-
-    private val showPlayer = SingleLiveEvent<Track>()
-    fun getshowPlayerTrigger(): SingleLiveEvent<Track> = showPlayer
+    fun getShowPlayerTrigger(): SingleLiveEvent<Track> = showPlayer
 
     fun clearHistory() {
         searchHistoryInteractor.clearHistory()
@@ -44,23 +48,27 @@ class SearchFragmentViewModel(
 
         if (filter.isNotEmpty()) {
             if (!(prevFilter == filter)) {
-                state.value = TrackRepositoryState.searchInProgress
                 prevFilter = filter
-                state.postValue(TrackRepositoryState.searchInProgress)
-                tracksInteractor.searchTracks(filter, locale,
-                    object : TracksInteractor.TracksConsumer {
-                        override fun consume(trackSearchResult: TrackSearchResult) {
+
+                searchJob?.cancel()
+                searchJob = viewModelScope.launch {
+                    delay(SEARCH_DEBOUNCE_DELAY)
+                    state.postValue(TrackRepositoryState.SearchInProgress)
+                    tracksInteractor
+                        .searchTracks(filter, locale)
+                        .collect { trackSearchResult ->
                             state.postValue(trackSearchResult.state)
                         }
-                    })
+                }
             }
         } else {
             showHistory()
         }
+
     }
 
     fun showHistory() {
-        state.value = TrackRepositoryState.showHistory(searchHistoryInteractor.getHistory())
+        state.value = TrackRepositoryState.ShowHistory(searchHistoryInteractor.getHistory())
     }
 
     fun addTrackToHistory(track: Track) {
@@ -68,20 +76,6 @@ class SearchFragmentViewModel(
     }
 
     fun showPlayer(track: Track) {
-
-        if (isNowPausingBetweenClicks) {
-            return
-        }
-
-        isNowPausingBetweenClicks = true
-        mainHandler.postDelayed(
-            object : Runnable {
-                override fun run() {
-                    isNowPausingBetweenClicks = false
-                }
-            }, CLICK_DELAY
-        )
-
-        showPlayer.postValue(track)
+        onTrackClickDebounce(track)
     }
 }

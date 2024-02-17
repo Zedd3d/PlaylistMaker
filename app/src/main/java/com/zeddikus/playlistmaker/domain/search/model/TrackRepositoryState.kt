@@ -3,16 +3,16 @@ package com.zeddikus.playlistmaker.domain.search.model
 import com.zeddikus.playlistmaker.domain.sharing.model.Track
 
 sealed interface TrackRepositoryState {
-    object errorNetwork : TrackRepositoryState
-    object errorEmpty : TrackRepositoryState
-    data class showListResult(val trackList: List<Track> = emptyList<Track>()) :
+    object ErrorNetwork : TrackRepositoryState
+    object ErrorEmpty : TrackRepositoryState
+    data class ShowListResult(val trackList: List<Track> = emptyList<Track>()) :
         TrackRepositoryState
 
-    data class showHistory(
+    data class ShowHistory(
         val trackList: List<Track> = emptyList<Track>(),
         val showAdapter: Boolean = true
     ) :
         TrackRepositoryState
 
-    object searchInProgress : TrackRepositoryState
+    object SearchInProgress : TrackRepositoryState
 }

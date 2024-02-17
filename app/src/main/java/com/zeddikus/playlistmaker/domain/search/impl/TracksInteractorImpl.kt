@@ -2,17 +2,14 @@ package com.zeddikus.playlistmaker.domain.search.impl
 
 import com.zeddikus.playlistmaker.domain.search.api.TracksInteractor
 import com.zeddikus.playlistmaker.domain.search.api.TracksRepository
-import java.util.concurrent.Executors
+import com.zeddikus.playlistmaker.domain.search.model.TrackSearchResult
+import kotlinx.coroutines.flow.Flow
 
 
 class TracksInteractorImpl(private val repository: TracksRepository) : TracksInteractor {
 
-    private val executor = Executors.newCachedThreadPool()
-
-    override fun searchTracks(expression: String, locale: String, consumer: TracksInteractor.TracksConsumer) {
-        executor.execute {
-            consumer.consume(repository.searchTracks(expression,locale))
-        }
+    override fun searchTracks(expression: String, locale: String): Flow<TrackSearchResult> {
+        return repository.searchTracks(expression, locale)
     }
 
 }

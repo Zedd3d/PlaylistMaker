@@ -3,8 +3,6 @@ package com.zeddikus.playlistmaker.ui.search.fragment
 import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -33,14 +31,7 @@ class SearchFragment : Fragment() {
     lateinit var binding: FragmentSearchBinding
     private lateinit var adapter: TracksAdapter
     private lateinit var historyAdapter: TracksAdapter
-    private lateinit var searchRunnable: Runnable
-
     private val viewModel by viewModel<SearchFragmentViewModel>()
-
-    private companion object {
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        private val mainHandler = Handler(Looper.getMainLooper())
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,9 +49,6 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initalizePlaceholder()
-        searchRunnable = Runnable {
-            search()
-        }
 
         binding.recyclerTracks.layoutManager = LinearLayoutManager(requireContext())
         adapter = TracksAdapter(listOf<Track>()) { track: Track ->
@@ -97,12 +85,12 @@ class SearchFragment : Fragment() {
         }
 
         binding.placeholderTrouble.placeholderTroubleButton.setOnClickListener {
-            searchRunnable.run()
+            searchDebounce()
         }
 
         binding.vTextSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                searchRunnable.run()
+                searchDebounce()
             }
             false
         }
@@ -113,7 +101,6 @@ class SearchFragment : Fragment() {
                 checkClearButtonVisibility(s)
                 searchDebounce()
                 if (binding.vTextSearch.hasFocus() && s?.isEmpty() == true) {
-                    mainHandler.removeCallbacks(searchRunnable)
                     viewModel.showHistory()
                 }
             }
@@ -131,7 +118,7 @@ class SearchFragment : Fragment() {
 
         viewModel.getState().observe(viewLifecycleOwner) { state ->
             if (when (state) {
-                    is TrackRepositoryState.showHistory -> {
+                    is TrackRepositoryState.ShowHistory -> {
                         historyAdapter.setNewList(state.trackList)
                         state.showAdapter
                     }
@@ -142,13 +129,12 @@ class SearchFragment : Fragment() {
 
         }
 
-        viewModel.getshowPlayerTrigger().observe(viewLifecycleOwner) { track -> showPlayer(track) }
+        viewModel.getShowPlayerTrigger().observe(viewLifecycleOwner) { track -> showPlayer(track) }
     }
 
 
     private fun searchDebounce() {
-        mainHandler.removeCallbacks(searchRunnable)
-        mainHandler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        search()
     }
 
     private fun search() {
@@ -161,7 +147,7 @@ class SearchFragment : Fragment() {
     private fun showListState(state: TrackRepositoryState) {
 
         binding.placeholderTrouble.placeholderTrouble.visibility = when (state) {
-            is TrackRepositoryState.errorNetwork -> {
+            is TrackRepositoryState.ErrorNetwork -> {
                 Glide.with(this).load(R.drawable.ic_network_trouble).dontTransform()
                     .into(binding.placeholderTrouble.placeholderTroubleCenterImage)
                 binding.placeholderTrouble.placeholderTroubleText.text =
@@ -169,7 +155,7 @@ class SearchFragment : Fragment() {
                 View.VISIBLE
             }
 
-            is TrackRepositoryState.errorEmpty -> {
+            is TrackRepositoryState.ErrorEmpty -> {
                 Glide.with(this).load(R.drawable.ic_sad_smile).dontTransform()
                     .into(binding.placeholderTrouble.placeholderTroubleCenterImage)
                 binding.placeholderTrouble.placeholderTroubleText.text =
@@ -180,7 +166,7 @@ class SearchFragment : Fragment() {
             else -> View.GONE
         }
         binding.recyclerTracks.visibility = when (state) {
-            is TrackRepositoryState.showListResult -> {
+            is TrackRepositoryState.ShowListResult -> {
                 adapter.setNewList(state.trackList)
                 View.VISIBLE
             }
@@ -191,7 +177,7 @@ class SearchFragment : Fragment() {
         }
 
         binding.linearTracksHistory.visibility = when (state) {
-            is TrackRepositoryState.showHistory -> {
+            is TrackRepositoryState.ShowHistory -> {
                 historyAdapter.setNewList(state.trackList)
                 if (historyAdapter.itemCount == 0) View.GONE else View.VISIBLE
             }
@@ -202,15 +188,15 @@ class SearchFragment : Fragment() {
         }
 
         binding.progressBarSearchTracks.visibility = when (state) {
-            is TrackRepositoryState.searchInProgress -> View.VISIBLE
+            is TrackRepositoryState.SearchInProgress -> View.VISIBLE
             else -> View.GONE
         }
         binding.placeholderTrouble.placeholderTroubleButton.visibility = when (state) {
-            is TrackRepositoryState.errorNetwork -> View.VISIBLE
+            is TrackRepositoryState.ErrorNetwork -> View.VISIBLE
             else -> View.GONE
         }
 
-        if (binding.recyclerTracks.visibility == View.GONE && !(state is TrackRepositoryState.showHistory)) {
+        if (binding.recyclerTracks.visibility == View.GONE && !(state is TrackRepositoryState.ShowHistory)) {
             adapter.clearList()
         }
     }

@@ -1,33 +1,26 @@
 package com.zeddikus.playlistmaker.ui.player.view_model
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.zeddikus.playlistmaker.domain.player.api.MediaPlayer
 import com.zeddikus.playlistmaker.domain.player.models.MediaPlayerProgress
 import com.zeddikus.playlistmaker.domain.player.models.PlayerState
 import com.zeddikus.playlistmaker.domain.sharing.model.Track
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     track: Track,
     private val mediaPlayer: MediaPlayer
 ) : ViewModel() {
 
-    private val trackTimeUpdater = object : Runnable {
-        override fun run() {
-            updateTrackTime()
-            mainHandler.postDelayed(
-                this, TOKEN_TIMER,
-                UPDATE_TRACK_TIME_DELAY
-            )
-        }
-    }
-
     private var onLoad = MutableLiveData<Track>()
     private val state = MutableLiveData<PlayerState>()
     private val currentProgress = MutableLiveData<MediaPlayerProgress>()
+    private var timerJob: Job? = null
 
     init {
         onLoad.value = track
@@ -37,8 +30,6 @@ class PlayerViewModel(
     }
 
     private companion object {
-        private const val TOKEN_TIMER = "Token_timer"
-        private val mainHandler = Handler(Looper.getMainLooper())
         private const val UPDATE_TRACK_TIME_DELAY = 300L
     }
 
@@ -50,11 +41,13 @@ class PlayerViewModel(
 
     fun startPlayer() {
         mediaPlayer.start()
-        mainHandler.postDelayed(
-            trackTimeUpdater, TOKEN_TIMER, UPDATE_TRACK_TIME_DELAY
-        )
-        //trackTimeUpdater.run()
-        state.postValue(PlayerState.PLAYING)
+        state.value = PlayerState.PLAYING
+        timerJob = viewModelScope.launch {
+            while (state.value == PlayerState.PLAYING) {
+                delay(UPDATE_TRACK_TIME_DELAY)
+                updateTrackTime()
+            }
+        }
     }
 
     fun updateTrackTime() {
@@ -89,7 +82,7 @@ class PlayerViewModel(
     }
 
     fun stopTimer() {
-        mainHandler.removeCallbacks(trackTimeUpdater, TOKEN_TIMER)
+        timerJob?.cancel()
     }
 
     fun clearProgress() {

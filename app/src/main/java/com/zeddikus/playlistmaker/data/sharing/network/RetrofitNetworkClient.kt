@@ -14,17 +14,14 @@ class RetrofitNetworkClient(
     private val itunesAPI: ItunesAPI
 ) : NetworkClient {
 
-    override fun doRequest(dto: TrackSearchRequest): Response {
+    override suspend fun doRequest(dto: TrackSearchRequest): Response {
         if (isConnected() == false) return Response().apply { resultCode = -1 }
 
-        try {
-            val resp = itunesAPI.findTracks(dto.expression, dto.locale).execute()
-
-            val body = resp.body() ?: Response()
-
-            return body.apply { resultCode = resp.code() }
+        return try {
+            val resp = itunesAPI.findTracks(dto.expression, dto.locale)
+            resp.apply { resultCode = 200 }
         } catch (e: IOException) {
-            return Response().apply { resultCode = 500 }
+            Response().apply { resultCode = 500 }
         }
     }
 

@@ -33,7 +33,8 @@ object TrackDbConvertor {
             collectionName = trackDto.collectionName,                             // Название альбома
             releaseDate = trackDto.releaseDate,                                // Дата выхода
             country = trackDto.country,                                    // страна
-            previewUrl = trackDto.previewUrl                                  // URL предпросмотра
+            previewUrl = trackDto.previewUrl,
+            System.currentTimeMillis()// URL предпросмотра
         )
     }
 }

@@ -30,7 +30,6 @@ class FavoritesRepositoryImpl(
     override suspend fun switchFavoriteProperty(track: Track) {
         val trackEntity = convertToTrackEntity(track)
         if (!isFavorite(track.trackId)) {
-            trackEntity.addTime = System.currentTimeMillis()
             appDatabase.trackDao().insertTrack(trackEntity)
         } else {
             appDatabase.trackDao().deleteTrack(trackEntity)

@@ -16,5 +16,5 @@ data class TrackEntity(
     val releaseDate: String?,                                // Дата выхода
     val country: String?,                                    // страна
     val previewUrl: String?,                                 // URL предпросмотра
-    var addTime: Long = 0                                    // Время добавления
+    val addTime: Long = 0                                    // Время добавления
 )

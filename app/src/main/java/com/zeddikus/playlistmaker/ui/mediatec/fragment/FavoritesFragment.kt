@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.zeddikus.playlistmaker.R
 import com.zeddikus.playlistmaker.databinding.FragmentFavoritesBinding
 import com.zeddikus.playlistmaker.domain.mediatec.favorites.models.FavoritesState
-import com.zeddikus.playlistmaker.domain.sharing.model.Track
+import com.zeddikus.playlistmaker.domain.search.model.Track
 import com.zeddikus.playlistmaker.ui.mediatec.view_model.FavoritesViewModel
 import com.zeddikus.playlistmaker.ui.player.activity.PlayerActivity
 import com.zeddikus.playlistmaker.ui.search.track.TracksAdapter
@@ -33,7 +33,6 @@ class FavoritesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
-        viewModel.fillData()
         return binding.root
     }
 

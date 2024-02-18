@@ -1,6 +1,6 @@
 package com.zeddikus.playlistmaker.domain.mediatec.favorites.models
 
-import com.zeddikus.playlistmaker.domain.sharing.model.Track
+import com.zeddikus.playlistmaker.domain.search.model.Track
 
 sealed interface FavoritesState {
 

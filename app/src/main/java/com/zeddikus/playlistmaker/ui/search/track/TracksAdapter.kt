@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.zeddikus.playlistmaker.R
-import com.zeddikus.playlistmaker.domain.sharing.model.Track
+import com.zeddikus.playlistmaker.domain.search.model.Track
 
 class TracksAdapter(
     private var tracks: List<Track>,

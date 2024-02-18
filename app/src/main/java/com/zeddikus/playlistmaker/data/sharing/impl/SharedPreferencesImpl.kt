@@ -4,10 +4,9 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.zeddikus.playlistmaker.domain.search.model.Track
 import com.zeddikus.playlistmaker.domain.settings.api.SharedPrefHandler
 import com.zeddikus.playlistmaker.domain.settings.api.ThemeChanger
-
-import com.zeddikus.playlistmaker.domain.sharing.model.Track
 
 
 class SharedPreferencesImpl(

@@ -1,7 +1,7 @@
 package com.zeddikus.playlistmaker.data.converters
 
 import com.zeddikus.playlistmaker.data.search.dto.TrackDto
-import com.zeddikus.playlistmaker.domain.sharing.model.Track
+import com.zeddikus.playlistmaker.domain.search.model.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 

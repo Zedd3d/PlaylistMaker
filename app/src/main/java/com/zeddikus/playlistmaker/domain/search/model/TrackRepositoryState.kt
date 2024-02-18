@@ -1,7 +1,5 @@
 package com.zeddikus.playlistmaker.domain.search.model
 
-import com.zeddikus.playlistmaker.domain.sharing.model.Track
-
 sealed interface TrackRepositoryState {
     object ErrorNetwork : TrackRepositoryState
     object ErrorEmpty : TrackRepositoryState

@@ -14,7 +14,7 @@ import com.zeddikus.playlistmaker.databinding.ActivityPlayerBinding
 import com.zeddikus.playlistmaker.domain.player.models.MediaPlayerProgress
 import com.zeddikus.playlistmaker.domain.player.models.PlayerState
 import com.zeddikus.playlistmaker.domain.player.models.TrackState
-import com.zeddikus.playlistmaker.domain.sharing.model.Track
+import com.zeddikus.playlistmaker.domain.search.model.Track
 import com.zeddikus.playlistmaker.ui.player.view_model.PlayerViewModel
 import com.zeddikus.playlistmaker.utils.General
 import org.koin.android.ext.android.inject
@@ -101,7 +101,7 @@ class PlayerActivity : AppCompatActivity() {
 
         //Стоит на курсе написать, что библиотека весьма и весьма плохо работает с ночной темой
         Glide.with(this)
-            .load(ContextCompat.getDrawable(this, getFavoriteImageOnState(trackState)))
+            .load(ContextCompat.getDrawable(this, getFavoriteImageOnState(trackState.isFavorite)))
             .into(binding.addToFavorites)
     }
 
@@ -140,8 +140,8 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun getFavoriteImageOnState(state: TrackState): Int {
-        return if (state.isFavorite) R.drawable.ic_favorites_on else R.drawable.ic_favorites_off
+    private fun getFavoriteImageOnState(isFavorite: Boolean): Int {
+        return if (isFavorite) R.drawable.ic_favorites_on else R.drawable.ic_favorites_off
     }
 
     override fun onDestroy() {

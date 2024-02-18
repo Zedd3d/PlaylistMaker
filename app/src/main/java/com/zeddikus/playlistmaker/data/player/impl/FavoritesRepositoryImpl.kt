@@ -6,7 +6,7 @@ import com.zeddikus.playlistmaker.data.converters.TrackDbConvertor
 import com.zeddikus.playlistmaker.data.db.AppDatabase
 import com.zeddikus.playlistmaker.data.db.TrackEntity
 import com.zeddikus.playlistmaker.domain.db.FavoritesRepository
-import com.zeddikus.playlistmaker.domain.sharing.model.Track
+import com.zeddikus.playlistmaker.domain.search.model.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -17,6 +17,10 @@ class FavoritesRepositoryImpl(
     override suspend fun getFavorites(): Flow<List<Track>> = flow {
         val tracks = appDatabase.trackDao().getFavoriteTracks()
         emit(convertFromTrackEntity(tracks))
+    }
+
+    override suspend fun getFavoritesId(): List<String> {
+        return appDatabase.trackDao().getFavoritesTrackIDs()
     }
 
     private fun convertFromTrackEntity(tracks: List<TrackEntity>): List<Track> {

@@ -1,6 +1,6 @@
 package com.zeddikus.playlistmaker.domain.db
 
-import com.zeddikus.playlistmaker.domain.sharing.model.Track
+import com.zeddikus.playlistmaker.domain.search.model.Track
 import kotlinx.coroutines.flow.Flow
 
 interface FavoritesInteractor {

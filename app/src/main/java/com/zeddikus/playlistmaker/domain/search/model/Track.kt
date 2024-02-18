@@ -1,4 +1,4 @@
-package com.zeddikus.playlistmaker.domain.sharing.model
+package com.zeddikus.playlistmaker.domain.search.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -15,5 +15,6 @@ data class Track(
     val collectionName: String,                             // Название альбома
     val releaseDate: String,                                // Дата выхода
     val country: String,                                    // страна
-    val previewUrl: String                                  // Адрес предварительного прослушивания трека
+    val previewUrl: String,                                 // Адрес предварительного прослушивания трека
+    var isFavorite: Boolean = false                         // Трек из числа избранного
 ) : Parcelable

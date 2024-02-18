@@ -20,6 +20,9 @@ interface TrackDao {
     @Query("SELECT * FROM track_table ORDER BY addTime DESC")
     suspend fun getFavoriteTracks(): List<TrackEntity>
 
+    @Query("SELECT trackId FROM track_table")
+    suspend fun getFavoritesTrackIDs(): List<String>
+
     @Query("SELECT * FROM track_table WHERE trackId = :trackId")
     suspend fun getTrackById(trackId: String): List<TrackEntity>
 

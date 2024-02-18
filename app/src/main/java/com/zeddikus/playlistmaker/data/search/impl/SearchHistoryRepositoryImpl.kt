@@ -2,8 +2,8 @@ package com.zeddikus.playlistmaker.data.search.impl
 
 import com.zeddikus.playlistmaker.data.sharing.impl.SharedPreferencesImpl
 import com.zeddikus.playlistmaker.domain.search.api.SearchHistoryRepository
+import com.zeddikus.playlistmaker.domain.search.model.Track
 import com.zeddikus.playlistmaker.domain.settings.api.SharedPrefHandler
-import com.zeddikus.playlistmaker.domain.sharing.model.Track
 
 class SearchHistoryRepositoryImpl(
     private val sharedPreferencesHandler: SharedPrefHandler

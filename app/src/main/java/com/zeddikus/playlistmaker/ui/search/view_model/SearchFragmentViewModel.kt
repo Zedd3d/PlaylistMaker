@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zeddikus.playlistmaker.domain.search.api.SearchHistoryInteractor
 import com.zeddikus.playlistmaker.domain.search.api.TracksInteractor
+import com.zeddikus.playlistmaker.domain.search.model.Track
 import com.zeddikus.playlistmaker.domain.search.model.TrackRepositoryState
-import com.zeddikus.playlistmaker.domain.sharing.model.Track
 import com.zeddikus.playlistmaker.ui.SingleLiveEvent
 import com.zeddikus.playlistmaker.utils.debounce
 import kotlinx.coroutines.Job

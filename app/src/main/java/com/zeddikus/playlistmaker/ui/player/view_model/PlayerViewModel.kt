@@ -9,7 +9,7 @@ import com.zeddikus.playlistmaker.domain.player.api.MediaPlayer
 import com.zeddikus.playlistmaker.domain.player.models.MediaPlayerProgress
 import com.zeddikus.playlistmaker.domain.player.models.PlayerState
 import com.zeddikus.playlistmaker.domain.player.models.TrackState
-import com.zeddikus.playlistmaker.domain.sharing.model.Track
+import com.zeddikus.playlistmaker.domain.search.model.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -26,14 +26,11 @@ class PlayerViewModel(
     private var timerJob: Job? = null
 
     init {
-        var isFavorite = false
-        val job = viewModelScope.launch {
-            isFavorite = favoritesInteractor.isFavorite(track.trackId)
+        viewModelScope.launch {
+            val isFavorite = favoritesInteractor.isFavorite(track.trackId)
 
             onLoad.postValue(TrackState(track, isFavorite))
         }
-
-        if (job.isCompleted) onLoad.postValue(TrackState(track, isFavorite))
 
         mediaPlayer.setConsumer { playerState -> setPlayerState(playerState) }
         mediaPlayer.preparePlayer(track.previewUrl)

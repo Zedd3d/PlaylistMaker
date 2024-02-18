@@ -2,7 +2,7 @@ package com.zeddikus.playlistmaker.domain.mediatec.favorites.impl
 
 import com.zeddikus.playlistmaker.domain.db.FavoritesInteractor
 import com.zeddikus.playlistmaker.domain.db.FavoritesRepository
-import com.zeddikus.playlistmaker.domain.sharing.model.Track
+import com.zeddikus.playlistmaker.domain.search.model.Track
 import kotlinx.coroutines.flow.Flow
 
 class FavoritesInteractorImpl(private val favoritesRepository: FavoritesRepository) :

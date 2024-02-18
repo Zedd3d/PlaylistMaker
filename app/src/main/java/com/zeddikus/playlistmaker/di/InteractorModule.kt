@@ -36,7 +36,7 @@ val interactorModule = module {
         ExternalNavigatorImpl(androidApplication())
     }
 
-    single<FavoritesInteractor> {
+    factory<FavoritesInteractor> {
         FavoritesInteractorImpl(get())
     }
 }

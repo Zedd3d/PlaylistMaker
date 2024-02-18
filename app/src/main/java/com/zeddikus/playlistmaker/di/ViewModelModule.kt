@@ -1,6 +1,6 @@
 package com.zeddikus.playlistmaker.di
 
-import com.zeddikus.playlistmaker.domain.sharing.model.Track
+import com.zeddikus.playlistmaker.domain.search.model.Track
 import com.zeddikus.playlistmaker.ui.mediatec.view_model.FavoritesViewModel
 import com.zeddikus.playlistmaker.ui.mediatec.view_model.MediatecViewModel
 import com.zeddikus.playlistmaker.ui.mediatec.view_model.PlaylistsViewModel

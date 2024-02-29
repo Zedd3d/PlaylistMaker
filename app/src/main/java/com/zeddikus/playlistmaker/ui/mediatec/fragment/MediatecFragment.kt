@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.zeddikus.playlistmaker.R
 import com.zeddikus.playlistmaker.databinding.FragmentMediatecBinding
+import com.zeddikus.playlistmaker.ui.main.activity.MainActivity
 import com.zeddikus.playlistmaker.ui.mediatec.adapter.MediatecViewPagerAdapter
 import com.zeddikus.playlistmaker.ui.mediatec.view_model.MediatecViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -51,5 +52,10 @@ class MediatecFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         tabMediator?.detach()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).animateBottomNavigationView(View.VISIBLE)
     }
 }

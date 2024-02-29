@@ -87,7 +87,7 @@
         <item name="tint">@color/gray_pm</item>
     </style>
 
-    <style name="SearchList_SmallTextStyle" parent="Widget.MaterialComponents.TextView">
+    <style name="List_SmallTextStyle" parent="Widget.MaterialComponents.TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
@@ -107,6 +107,17 @@
         <item name="android:drawableTint">@color/black</item>
         <item name="backgroundTint">?colorTertiary</item>
         <item name="android:textColor">?colorPrimary</item>
+        <item name="android:textAllCaps">false</item>
+
+    </style>
+
+    <style name="Standart_PM_Button">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@drawable/btn_small_corners</item>
+        <item name="backgroundTint">@color/standart_button_selector</item>
+        <item name="android:textColor">@color/white_pm</item>
         <item name="android:textAllCaps">false</item>
 
     </style>
@@ -141,7 +152,8 @@
         <item name="android:fontFamily">@font/ys_display_medium</item>
     </style>
 
-    <style name="placeholderButton">
+    <style name="standartActionButton">
+        <item name="android:layout_height">38dp</item>
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:layout_gravity">center</item>
@@ -153,5 +165,30 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <style name="inputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
 
+        <item name="boxStrokeColor">@color/text_input_layout_outline</item>
+        <item name="boxStrokeErrorColor">@color/text_input_layout_outline_error</item>
+        <item name="hintTextColor">@color/gray_pm</item>
+        <item name="errorTextColor">@color/red_pm</item>
+        <!--<item name="android:textColorHint">@color/gray_pm</item>-->
+    </style>
+
+    <style name="textInputLayoutStyle" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="dialogWindow" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:colorAccent">@color/blackDay_whiteNight</item>
+    </style>
+
+    <style name="roundedCornersImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="roundedCornersImageViewSmall" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
+    </style>
 </resources>

@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -16,10 +17,6 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.PlaylistMaker"
         tools:targetApi="33">
-        <activity
-            android:name=".ui.player.activity.PlayerActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.MainActivity"
             android:windowSoftInputMode="adjustNothing"

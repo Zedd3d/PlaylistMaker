@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.zeddikus.playlistmaker.databinding.FragmentSettingsBinding
+import com.zeddikus.playlistmaker.ui.main.activity.MainActivity
 import com.zeddikus.playlistmaker.ui.settings.state.SettingsState
 import com.zeddikus.playlistmaker.ui.settings.view_model.SettingsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -40,5 +41,10 @@ class SettingsFragment : Fragment() {
                 is SettingsState.Content -> binding.swBlackTheme.isChecked = state.isDarkTheme
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).animateBottomNavigationView(View.VISIBLE)
     }
 }

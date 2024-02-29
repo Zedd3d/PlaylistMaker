@@ -15,12 +15,12 @@ class FavoritesRepositoryImpl(
 ) : FavoritesRepository {
 
     override suspend fun getFavorites(): Flow<List<Track>> = flow {
-        val tracks = appDatabase.trackDao().getFavoriteTracks()
+        val tracks = appDatabase.tracksDao().getFavoriteTracks()
         emit(convertFromTrackEntity(tracks))
     }
 
     override suspend fun getFavoritesId(): List<String> {
-        return appDatabase.trackDao().getFavoritesTrackIDs()
+        return appDatabase.tracksDao().getFavoritesTrackIDs()
     }
 
     private fun convertFromTrackEntity(tracks: List<TrackEntity>): List<Track> {
@@ -34,19 +34,19 @@ class FavoritesRepositoryImpl(
     override suspend fun switchFavoriteProperty(track: Track) {
         val trackEntity = convertToTrackEntity(track)
         if (!isFavorite(track.trackId)) {
-            appDatabase.trackDao().insertTrack(trackEntity)
+            appDatabase.tracksDao().insertTrack(trackEntity)
         } else {
-            appDatabase.trackDao().deleteTrack(trackEntity)
+            appDatabase.tracksDao().deleteTrack(trackEntity)
         }
     }
 
     override suspend fun isFavorite(trackId: String): Boolean {
-        return appDatabase.trackDao().getTrackById(trackId).isNotEmpty()
+        return appDatabase.tracksDao().getTrackById(trackId).isNotEmpty()
     }
 
     override suspend fun trackInTable(trackId: String): Boolean {
         //Тут просто поупражнялся с произвольным запросом. Оставлю для себя в качестве примера
-        return appDatabase.trackDao().trackInTable(
+        return appDatabase.tracksDao().trackInTable(
             SimpleSQLiteQuery(
                 "SELECT * FROM track_table WHERE trackId = ?",
                 arrayOf<Any>(trackId)

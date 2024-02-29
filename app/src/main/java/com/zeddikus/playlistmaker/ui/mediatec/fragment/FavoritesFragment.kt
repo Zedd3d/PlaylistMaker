@@ -13,7 +13,7 @@ import com.zeddikus.playlistmaker.databinding.FragmentFavoritesBinding
 import com.zeddikus.playlistmaker.domain.mediatec.favorites.models.FavoritesState
 import com.zeddikus.playlistmaker.domain.search.model.Track
 import com.zeddikus.playlistmaker.ui.mediatec.view_model.FavoritesViewModel
-import com.zeddikus.playlistmaker.ui.player.activity.PlayerActivity
+import com.zeddikus.playlistmaker.ui.player.fragment.PlayerFragment
 import com.zeddikus.playlistmaker.ui.search.track.TracksAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -100,8 +100,8 @@ class FavoritesFragment : Fragment() {
     private fun showPlayer(track: Track) {
 
         findNavController().navigate(
-            R.id.action_mediatecFragment_to_playerActivity,
-            PlayerActivity.createArgs(track)
+            R.id.action_mediatecFragment_to_playerFragment,
+            PlayerFragment.createArgs(track)
         )
     }
 

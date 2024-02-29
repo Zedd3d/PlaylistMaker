@@ -19,4 +19,5 @@ interface MediaPlayer {
     fun setConsumer(consumer: (PlayerState) -> Unit?)
 
     fun setNewState(state: PlayerState)
+    fun clearProgress()
 }

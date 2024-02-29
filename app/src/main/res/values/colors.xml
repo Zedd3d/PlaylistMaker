@@ -9,7 +9,8 @@
     <color name="red_pm">#F56B6C</color>
     <color name="lightgray_pm">#E6E8EB</color>
     <color name="grayDay_whiteNight">#AEAFB4</color>
-    <color name="lightGrayDay_whiteNight">#AEAFB4</color>
+    <color name="lightGrayDay_whiteNight">#E6E8EB</color>
     <color name="blackDay_whiteNight">#1A1B22</color>
+    <color name="whiteDay_blackNight">#FFFFFFFF</color>
     <color name="redDay_greenNight">#F56B6C</color>
 </resources>

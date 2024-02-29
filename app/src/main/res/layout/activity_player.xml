@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?colorPrimary"
     android:orientation="vertical"
     tools:context=".ui.player.activity.PlayerActivity">
 
@@ -55,6 +54,21 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="24dp" />
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="74dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="76dp" />
+
+
             <TextView
                 android:id="@+id/titleText"
                 android:layout_width="wrap_content"
@@ -89,9 +103,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="54dp"
-                app:layout_constraintEnd_toStartOf="@id/playButton"
+                app:layout_constraintEnd_toStartOf="@+id/guideline4"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintStart_toStartOf="@id/guideline1"
+                app:layout_constraintStart_toStartOf="@+id/guideline1"
                 app:layout_constraintTop_toBottomOf="@id/bandText"
                 app:srcCompat="@drawable/ic_add_to_playlist" />
 
@@ -99,23 +113,24 @@
                 android:id="@+id/playButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="?colorPrimary"
+                android:background="@null"
                 app:layout_constraintBottom_toBottomOf="@+id/addToPlaylistButton"
-                app:layout_constraintEnd_toStartOf="@id/addToFavorites"
-                app:layout_constraintStart_toEndOf="@id/addToPlaylistButton"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintStart_toStartOf="@+id/guideline1"
                 app:layout_constraintTop_toTopOf="@+id/addToPlaylistButton"
                 app:srcCompat="@drawable/ic_play"
                 app:tint="?colorTertiary" />
 
             <ProgressBar
+                android:id="@+id/progressBar2"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="@dimen/size_player_progressbar"
                 android:layout_height="@dimen/size_player_progressbar"
                 android:max="1"
                 android:progress="1"
                 android:progressDrawable="@drawable/custom_track_progress_bar_background"
-                android:rotation="-90"
 
+                android:rotation="-90"
                 app:layout_constraintBottom_toBottomOf="@+id/playButton"
                 app:layout_constraintEnd_toEndOf="@+id/playButton"
                 app:layout_constraintStart_toStartOf="@+id/playButton"
@@ -154,11 +169,11 @@
                 style="@style/roundButtonsPlayList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:src="@drawable/ic_favorites_on"
                 app:layout_constraintBottom_toBottomOf="@id/playButton"
-                app:layout_constraintEnd_toStartOf="@id/guideline2"
-                app:layout_constraintStart_toEndOf="@id/playButton"
-                app:layout_constraintTop_toTopOf="@id/playButton"
-                app:srcCompat="@drawable/ic_add_to_favorites" />
+                app:layout_constraintEnd_toEndOf="@+id/guideline2"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toTopOf="@id/playButton" />
 
             <TextView
                 android:id="@+id/titleTrackTime"

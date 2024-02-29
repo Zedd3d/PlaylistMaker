@@ -2,4 +2,5 @@
 <resources>
     <color name="grayDay_whiteNight">#FFFFFF</color>
     <color name="blackDay_whiteNight">#FFFFFF</color>
+    <color name="redDay_greenNight">#009688</color>
 </resources>

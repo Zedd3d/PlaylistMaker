@@ -1,7 +1,7 @@
 package com.zeddikus.playlistmaker.domain.settings.api
 
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
-import com.zeddikus.playlistmaker.domain.sharing.model.Track
+import com.zeddikus.playlistmaker.domain.search.model.Track
 
 interface SharedPrefHandler {
 

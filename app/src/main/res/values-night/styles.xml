@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
+
     <style name="MainButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -24,7 +25,6 @@
     </style>
 
     <style name="roundButtonsPlayList">
-        <item name="android:background">?colorPrimary</item>
-        <item name="tint">?colorTertiary</item>
+        <item name="android:background">@null</item>
     </style>
 </resources>

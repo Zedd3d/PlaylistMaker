@@ -1,6 +1,6 @@
 package com.zeddikus.playlistmaker.domain.search.api
 
-import com.zeddikus.playlistmaker.domain.sharing.model.Track
+import com.zeddikus.playlistmaker.domain.search.model.Track
 
 interface SearchHistoryRepository {
     fun clearHistory()

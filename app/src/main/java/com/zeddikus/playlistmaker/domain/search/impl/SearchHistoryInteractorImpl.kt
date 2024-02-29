@@ -2,7 +2,7 @@ package com.zeddikus.playlistmaker.domain.search.impl
 
 import com.zeddikus.playlistmaker.domain.search.api.SearchHistoryInteractor
 import com.zeddikus.playlistmaker.domain.search.api.SearchHistoryRepository
-import com.zeddikus.playlistmaker.domain.sharing.model.Track
+import com.zeddikus.playlistmaker.domain.search.model.Track
 
 class SearchHistoryInteractorImpl(
     val searchHistoryRepository: SearchHistoryRepository

@@ -19,8 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.zeddikus.playlistmaker.R
 import com.zeddikus.playlistmaker.databinding.FragmentSearchBinding
+import com.zeddikus.playlistmaker.domain.search.model.Track
 import com.zeddikus.playlistmaker.domain.search.model.TrackRepositoryState
-import com.zeddikus.playlistmaker.domain.sharing.model.Track
 import com.zeddikus.playlistmaker.ui.player.activity.PlayerActivity
 import com.zeddikus.playlistmaker.ui.search.track.TracksAdapter
 import com.zeddikus.playlistmaker.ui.search.view_model.SearchFragmentViewModel

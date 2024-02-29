@@ -9,7 +9,12 @@
         android:id="@id/mediatecFragment"
         android:name="com.zeddikus.playlistmaker.ui.mediatec.fragment.MediatecFragment"
         android:label="fragment_mediatec"
-        tools:layout="@layout/fragment_mediatec" />
+        tools:layout="@layout/fragment_mediatec">
+
+        <action
+            android:id="@+id/action_mediatecFragment_to_playerActivity"
+            app:destination="@id/playerActivity" />
+    </fragment>
     <fragment
         android:id="@id/searchFragment"
         android:name="com.zeddikus.playlistmaker.ui.search.fragment.SearchFragment"

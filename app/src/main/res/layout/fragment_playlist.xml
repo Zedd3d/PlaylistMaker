@@ -25,7 +25,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/playlistImage"
+                android:id="@+id/ivPlaylist"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="26dp"
@@ -54,7 +54,7 @@
                 app:layout_constraintGuide_end="@dimen/playlist_creator_padding" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/playlistname_text_input"
+                android:id="@+id/tilPlaylistnameTextInput"
                 style="@style/inputLayoutStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -66,10 +66,10 @@
                 app:hintTextAppearance="@style/textInputLayoutStyle"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@+id/guideline1"
-                app:layout_constraintTop_toBottomOf="@id/playlistImage">
+                app:layout_constraintTop_toBottomOf="@id/ivPlaylist">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/playlistname_edit_text"
+                    android:id="@+id/tiePlaylistnameEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_playlistname"
@@ -80,7 +80,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/playlistdesc_text_input"
+                android:id="@+id/tilPlaylistdescTextInput"
                 style="@style/inputLayoutStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -88,10 +88,10 @@
                 app:hintTextAppearance="@style/textInputLayoutStyle"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@+id/guideline1"
-                app:layout_constraintTop_toBottomOf="@id/playlistname_text_input">
+                app:layout_constraintTop_toBottomOf="@id/tilPlaylistnameTextInput">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/playlistdesc_edit_text"
+                    android:id="@+id/tiePlaylistdescEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_playlistdesc"

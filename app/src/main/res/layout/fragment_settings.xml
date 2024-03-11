@@ -15,7 +15,7 @@
         android:title="@string/btntxt_settings" />
 
     <LinearLayout
-        style="@style/MainContentListStyle"
+        style="@style/llMainContentListStyle"
         android:paddingTop="24dp"
         >
 
@@ -24,14 +24,14 @@
             style="@style/SettingsListStyleLL">
 
             <TextView
-                style="@style/SettingsTextStyle"
+                style="@style/tvSettingsTextStyle"
                 android:text="@string/txt_black_theme"
 
                 />
 
             <Switch
                 android:id="@+id/swBlackTheme"
-                style="@style/SettingsImgButtonStyle"
+                style="@style/ivSettingsImgButtonStyle"
                 android:checked="true"
                 android:rotation="0" />
 
@@ -43,12 +43,12 @@
             android:clickable="true">
 
             <TextView
-                style="@style/SettingsTextStyle"
+                style="@style/tvSettingsTextStyle"
                 android:paddingEnd="8dp"
                 android:text="@string/txt_share_app" />
 
             <ImageView
-                style="@style/SettingsImgButtonStyle"
+                style="@style/ivSettingsImgButtonStyle"
                 app:srcCompat="@drawable/ic_share" />
 
         </LinearLayout>
@@ -59,12 +59,12 @@
             style="@style/SettingsListStyleLL">
 
             <TextView
-                style="@style/SettingsTextStyle"
+                style="@style/tvSettingsTextStyle"
                 android:text="@string/txt_write_support"/>
 
             <ImageView
 
-                style="@style/SettingsImgButtonStyle"
+                style="@style/ivSettingsImgButtonStyle"
 
                 android:layout_height="23dp"
                 app:srcCompat="@drawable/ic_support" />
@@ -76,13 +76,13 @@
             style="@style/SettingsListStyleLL">
 
             <TextView
-                style="@style/SettingsTextStyle"
+                style="@style/tvSettingsTextStyle"
                 android:text="@string/txt_user_agreement"
                 />
 
             <ImageView
 
-                style="@style/SettingsImgButtonStyle"
+                style="@style/ivSettingsImgButtonStyle"
                 app:srcCompat="@drawable/ic_arrow_forward" />
         </LinearLayout>
     </LinearLayout>

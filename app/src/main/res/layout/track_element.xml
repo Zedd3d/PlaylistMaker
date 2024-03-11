@@ -8,7 +8,7 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/imgArtworkInSearch"
+        android:id="@+id/ivArtworkInSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="13dp"
@@ -25,7 +25,7 @@
         android:orientation="vertical"
         android:layout_gravity="center">
         <TextView
-            android:id="@+id/trackNameInSearch"
+            android:id="@+id/tvTrackNameInSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/searchlist_large_text"
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
-                android:id="@+id/artistNameInSearch"
+                android:id="@+id/tvArtistNameInSearch"
                 style="@style/List_SmallTextStyle"
                 tools:text="Michael Ray"
                 android:layout_width="0dp"
@@ -60,9 +60,9 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/imgBtnGo"
-        style="@style/SettingsImgButtonStyle"
-        android:layout_weight = "0"
+        android:id="@+id/ivBtnGo"
+        style="@style/ivSettingsImgButtonStyle"
+        android:layout_weight="0"
         android:layout_marginTop="@dimen/default_padding_Top"
         android:layout_marginBottom="@dimen/default_padding_Bottom"
         android:layout_marginStart="@dimen/icon_padding"

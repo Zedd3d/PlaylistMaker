@@ -10,12 +10,12 @@
 
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imgCover"
+        android:id="@+id/sivCover"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/icon_padding"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@id/playlistName"
+        app:layout_constraintBottom_toTopOf="@id/tvPlaylistName"
         app:layout_constraintDimensionRatio="h,1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,7 @@
         app:srcCompat="@drawable/placeholder_track_artwork" />
 
     <TextView
-        android:id="@+id/playlistName"
+        android:id="@+id/tvPlaylistName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
@@ -33,12 +33,12 @@
         android:maxLines="1"
         android:textColor="?colorTertiary"
         android:textSize="@dimen/playlist_icon_text"
-        app:layout_constraintBottom_toTopOf="@id/countTracks"
-        app:layout_constraintTop_toBottomOf="@id/imgCover"
+        app:layout_constraintBottom_toTopOf="@id/tvCountTracks"
+        app:layout_constraintTop_toBottomOf="@id/sivCover"
         tools:text="Think a Little Less" />
 
     <TextView
-        android:id="@+id/countTracks"
+        android:id="@+id/tvCountTracks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
@@ -47,7 +47,7 @@
         android:textColor="?colorTertiary"
         android:textSize="@dimen/playlist_icon_text"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/playlistName"
+        app:layout_constraintTop_toBottomOf="@id/tvPlaylistName"
         tools:text="158 треков" />
 
 

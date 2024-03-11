@@ -93,7 +93,7 @@ class PlayerFragment : Fragment() {
 
         (activity as MainActivity).animateBottomNavigationView(View.GONE)
 
-        bottomSheetBehavior = BottomSheetBehavior.from(binding.playlistsBottomSheet).apply {
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.llPlaylistsBottomSheet).apply {
             state = BottomSheetBehavior.STATE_HIDDEN
         }
 
@@ -123,15 +123,15 @@ class PlayerFragment : Fragment() {
     }
 
     private fun setListenersObservers() {
-        binding.playButton.setOnClickListener {
+        binding.ibPlayButton.setOnClickListener {
             viewModel.pushPlayButton()
         }
 
-        binding.addToFavorites.setOnClickListener {
+        binding.ibAddToFavorites.setOnClickListener {
             viewModel.addingToFavorites()
         }
 
-        binding.addToPlaylistButton.setOnClickListener {
+        binding.ibAddToPlaylistButton.setOnClickListener {
             viewModel.addingToPlaylist()
         }
 
@@ -140,7 +140,7 @@ class PlayerFragment : Fragment() {
             blackout(false)
         }
 
-        binding.createNewPlaylistButton.setOnClickListener {
+        binding.btnCreateNewPlaylist.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             findNavController().navigate(
                 R.id.action_playerFragment_to_playlistFragment
@@ -197,26 +197,26 @@ class PlayerFragment : Fragment() {
     private fun setTrackPropertys(trackState: TrackState) {
         val track = trackState.track
         binding.progressBar.max = (track.trackTimeMillis / 1000).toInt()
-        binding.titleText.text = track.trackName
-        binding.bandText.text = track.artistName
-        binding.trackTime.text = track.trackTime
-        binding.albumName.text = track.collectionName.trim()
-        binding.albumName.isSelected = true
-        binding.yearValue.text =
+        binding.tvTitleText.text = track.trackName
+        binding.tvBandText.text = track.artistName
+        binding.tvTrackTime.text = track.trackTime
+        binding.tvAlbumName.text = track.collectionName.trim()
+        binding.tvAlbumName.isSelected = true
+        binding.tvYearValue.text =
             Instant.parse(track.releaseDate).atZone(ZoneId.systemDefault()).year.toString()
-        binding.genreValue.text = track.primaryGenreName
-        binding.countryValue.text = track.country
+        binding.tvGenreValue.text = track.primaryGenreName
+        binding.tvCountryValue.text = track.country
 
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
-        Glide.with(binding.coverImage)
+        Glide.with(binding.ivCoverImage)
             .load(General.convertURLtoBigSizeCover(track.artworkUrl100))
             .placeholder(R.drawable.placeholder_track_artwork_big)
             .fitCenter()
-            .transform(RoundedCorners(General.dpToPx(8f, binding.coverImage.context)))
-            .into(binding.coverImage)
+            .transform(RoundedCorners(General.dpToPx(8f, binding.ivCoverImage.context)))
+            .into(binding.ivCoverImage)
 
         //Стоит на курсе написать, что библиотека весьма и весьма плохо работает с ночной темой
         Glide.with(this)
@@ -226,7 +226,7 @@ class PlayerFragment : Fragment() {
                     getFavoriteImageOnState(trackState.isFavorite)
                 )
             )
-            .into(binding.addToFavorites)
+            .into(binding.ibAddToFavorites)
     }
 
     private fun render(state: PlayerState) {
@@ -240,7 +240,7 @@ class PlayerFragment : Fragment() {
         Glide.with(this)
             .load(getImageOnState(state))
             .dontTransform()
-            .into(binding.playButton)
+            .into(binding.ibPlayButton)
     }
 
     private fun showPrepairingError() {
@@ -254,7 +254,7 @@ class PlayerFragment : Fragment() {
 
     private fun updateTrackTime(currentProgress: MediaPlayerProgress) {
         binding.progressBar.progress = currentProgress.progress
-        binding.currentTrackTime.text = currentProgress.currentTime
+        binding.tvCurrentTrackTime.text = currentProgress.currentTime
     }
 
     private fun getImageOnState(state: PlayerState): Int {
@@ -307,7 +307,7 @@ class PlayerFragment : Fragment() {
             })
         }
 
-        var coverImage = binding.coverImage
+        var coverImage = binding.ivCoverImage
         if (fillBlackout) {
             val anim = ObjectAnimator.ofFloat(coverImage, "alpha", 0.5f)
             anim.setDuration(300) // duration 300 ms

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutPlaylists"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,19 +10,42 @@
     android:orientation="vertical"
     app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/createNewPlaylistButton"
-        style="@style/placeholderButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/new_playlist"
-        android:visibility="visible"
+    <LinearLayout
+        android:id="@+id/mainLL"
+        style="@style/MainContentListStyle"
+        android:paddingTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></Button>
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/createNewPlaylistButton"
+            style="@style/standartActionButton"
+            android:layout_width="wrap_content"
+            android:text="@string/new_playlist"
+            android:visibility="visible" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerPlaylists"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+
+            android:paddingEnd="8dp"
+            android:visibility="visible"
+            tools:itemCount="5"
+            tools:listitem="@layout/playlist_element_big"></androidx.recyclerview.widget.RecyclerView>
+
+
+    </LinearLayout>
 
     <include
         android:id="@+id/placeholderTrouble"
-        layout="@layout/placeholder_empty_error" />
-
+        layout="@layout/placeholder_empty_error"
+        app:layout_anchor="@+id/layoutPlaylists"
+        app:layout_anchorGravity="center" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+

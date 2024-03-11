@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -21,7 +22,8 @@ import com.zeddikus.playlistmaker.R
 import com.zeddikus.playlistmaker.databinding.FragmentSearchBinding
 import com.zeddikus.playlistmaker.domain.search.model.Track
 import com.zeddikus.playlistmaker.domain.search.model.TrackRepositoryState
-import com.zeddikus.playlistmaker.ui.player.activity.PlayerActivity
+import com.zeddikus.playlistmaker.ui.main.activity.MainActivity
+import com.zeddikus.playlistmaker.ui.player.fragment.PlayerFragment
 import com.zeddikus.playlistmaker.ui.search.track.TracksAdapter
 import com.zeddikus.playlistmaker.ui.search.view_model.SearchFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -39,7 +41,9 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         super.onCreate(savedInstanceState)
-
+        activity?.window?.setSoftInputMode(
+            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING
+        )
         binding = FragmentSearchBinding.inflate(layoutInflater)
         return binding.root
 
@@ -222,8 +226,8 @@ class SearchFragment : Fragment() {
     private fun showPlayer(track: Track) {
 
         findNavController().navigate(
-            R.id.action_searchFragment_to_playerActivity,
-            PlayerActivity.createArgs(track)
+            R.id.action_searchFragment_to_playerFragment,
+            PlayerFragment.createArgs(track)
         )
 
     }
@@ -241,6 +245,11 @@ class SearchFragment : Fragment() {
         } else {
             viewModel.showPlayer(track)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).animateBottomNavigationView(View.VISIBLE)
     }
 
 }

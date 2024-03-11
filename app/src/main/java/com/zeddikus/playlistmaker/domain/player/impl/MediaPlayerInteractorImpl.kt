@@ -48,8 +48,12 @@ class MediaPlayerInteractorImpl(mediaPlayerRepository: MediaPlayerRepository) : 
         }
     }
 
-    override fun setNewState(state: PlayerState){
+    override fun setNewState(state: PlayerState) {
         consumer?.invoke(state)
+    }
+
+    override fun clearProgress() {
+        progressTime = 0L
     }
 
     override fun release() {

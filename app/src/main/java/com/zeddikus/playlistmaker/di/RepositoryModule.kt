@@ -2,12 +2,14 @@ package com.zeddikus.playlistmaker.di
 
 import com.zeddikus.playlistmaker.R
 import com.zeddikus.playlistmaker.data.converters.TrackConvertor
+import com.zeddikus.playlistmaker.data.mediatec.playlists.impl.PlaylistsRepositoryImpl
 import com.zeddikus.playlistmaker.data.player.impl.FavoritesRepositoryImpl
 import com.zeddikus.playlistmaker.data.player.impl.MediaPlayerRepositoryImpl
 import com.zeddikus.playlistmaker.data.search.impl.SearchHistoryRepositoryImpl
 import com.zeddikus.playlistmaker.data.search.impl.TracksRepositoryImpl
 import com.zeddikus.playlistmaker.data.sharing.db.DefaultSettingsRepositoryImpl
 import com.zeddikus.playlistmaker.domain.db.FavoritesRepository
+import com.zeddikus.playlistmaker.domain.db.PlaylistsRepository
 import com.zeddikus.playlistmaker.domain.player.api.MediaPlayerRepository
 import com.zeddikus.playlistmaker.domain.search.api.SearchHistoryRepository
 import com.zeddikus.playlistmaker.domain.search.api.TracksRepository
@@ -39,8 +41,12 @@ val repositoryModule = module {
         )
     }
 
-    single<FavoritesRepository> {
+    factory<FavoritesRepository> {
         FavoritesRepositoryImpl(get())
+    }
+
+    factory<PlaylistsRepository> {
+        PlaylistsRepositoryImpl(get())
     }
 
 }

@@ -12,8 +12,11 @@
         tools:layout="@layout/fragment_mediatec">
 
         <action
-            android:id="@+id/action_mediatecFragment_to_playerActivity"
-            app:destination="@id/playerActivity" />
+            android:id="@+id/action_mediatecFragment_to_playlistFragment"
+            app:destination="@id/playlistFragment" />
+        <action
+            android:id="@+id/action_mediatecFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
     </fragment>
     <fragment
         android:id="@id/searchFragment"
@@ -21,17 +24,26 @@
         android:label="SearchFragment"
         tools:layout="@layout/fragment_search">
         <action
-            android:id="@+id/action_searchFragment_to_playerActivity"
-            app:destination="@id/playerActivity" />
+            android:id="@+id/action_searchFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
     </fragment>
     <fragment
         android:id="@id/settingsFragment"
         android:name="com.zeddikus.playlistmaker.ui.settings.fragment.SettingsFragment"
         android:label="FragmentSettings"
         tools:layout="@layout/fragment_settings" />
-    <activity
-        android:id="@+id/playerActivity"
-        android:name="com.zeddikus.playlistmaker.ui.player.activity.PlayerActivity"
-        android:label="activity_player"
-        tools:layout="@layout/activity_player" />
+    <fragment
+        android:id="@+id/playlistFragment"
+        android:name="com.zeddikus.playlistmaker.ui.mediatec.fragment.PlaylistFragment"
+        android:label="fragment_playlist"
+        tools:layout="@layout/fragment_playlist" />
+    <fragment
+        android:id="@+id/playerFragment"
+        android:name="com.zeddikus.playlistmaker.ui.player.fragment.PlayerFragment"
+        android:label="PlayerFragment"
+        tools:layout="@layout/fragment_player">
+        <action
+            android:id="@+id/action_playerFragment_to_playlistFragment"
+            app:destination="@id/playlistFragment" />
+    </fragment>
 </navigation>

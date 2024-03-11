@@ -40,7 +40,7 @@
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/artistNameInSearch"
-                style="@style/SearchList_SmallTextStyle"
+                style="@style/List_SmallTextStyle"
                 tools:text="Michael Ray"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -54,7 +54,7 @@
 
             <TextView
                 android:id="@+id/trackTimeInSearch"
-                style="@style/SearchList_SmallTextStyle"
+                style="@style/List_SmallTextStyle"
                 tools:text="0:23" />
         </LinearLayout>
     </LinearLayout>

@@ -22,4 +22,9 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigationView.setupWithNavController(navController)
     }
+
+    fun animateBottomNavigationView(visibility: Int) {
+        if (!(binding.bottomNavigationView.visibility == visibility))
+            binding.bottomNavigationView.visibility = visibility
+    }
 }

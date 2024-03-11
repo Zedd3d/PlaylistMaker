@@ -2,7 +2,9 @@ package com.zeddikus.playlistmaker.di
 
 import com.zeddikus.playlistmaker.data.settings.impl.ExternalNavigatorImpl
 import com.zeddikus.playlistmaker.domain.db.FavoritesInteractor
+import com.zeddikus.playlistmaker.domain.db.PlaylistsInteractor
 import com.zeddikus.playlistmaker.domain.mediatec.favorites.impl.FavoritesInteractorImpl
+import com.zeddikus.playlistmaker.domain.mediatec.playlists.models.PlaylistsInteractorImpl
 import com.zeddikus.playlistmaker.domain.player.api.MediaPlayer
 import com.zeddikus.playlistmaker.domain.player.impl.MediaPlayerInteractorImpl
 import com.zeddikus.playlistmaker.domain.search.api.SearchHistoryInteractor
@@ -38,5 +40,9 @@ val interactorModule = module {
 
     factory<FavoritesInteractor> {
         FavoritesInteractorImpl(get())
+    }
+
+    factory<PlaylistsInteractor> {
+        PlaylistsInteractorImpl(get())
     }
 }

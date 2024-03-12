@@ -3,6 +3,7 @@ package com.zeddikus.playlistmaker.di
 import com.zeddikus.playlistmaker.domain.search.model.Track
 import com.zeddikus.playlistmaker.ui.mediatec.view_model.FavoritesViewModel
 import com.zeddikus.playlistmaker.ui.mediatec.view_model.MediatecViewModel
+import com.zeddikus.playlistmaker.ui.mediatec.view_model.PlaylistSettingsViewModel
 import com.zeddikus.playlistmaker.ui.mediatec.view_model.PlaylistViewModel
 import com.zeddikus.playlistmaker.ui.mediatec.view_model.PlaylistsViewModel
 import com.zeddikus.playlistmaker.ui.player.view_model.PlayerViewModel
@@ -36,8 +37,12 @@ val viewModelModule = module {
         PlaylistsViewModel(get())
     }
 
-    viewModel {
-        PlaylistViewModel(get())
+    viewModel { (playlistId: Int?) ->
+        PlaylistSettingsViewModel(playlistId, get())
+    }
+
+    viewModel { (playlistId: Int) ->
+        PlaylistViewModel(playlistId, get(), get())
     }
 
 }

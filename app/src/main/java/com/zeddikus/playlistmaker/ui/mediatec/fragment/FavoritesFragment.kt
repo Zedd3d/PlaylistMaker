@@ -40,11 +40,11 @@ class FavoritesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initalizePlaceholder()
         binding.rvTracks.layoutManager = LinearLayoutManager(requireContext())
-        adapter = TracksAdapter(listOf<Track>()) { track: Track ->
-            clickListener(
-                track
-            )
-        }
+        adapter = TracksAdapter(
+            listOf<Track>(),
+            { track -> clickListener(track) },
+            null
+        )
         binding.rvTracks.adapter = adapter
         setListenersWatchersObservers()
     }
@@ -117,6 +117,7 @@ class FavoritesFragment : Fragment() {
             viewModel.showPlayer(track)
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

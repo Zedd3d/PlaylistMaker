@@ -55,19 +55,19 @@ class SearchFragment : Fragment() {
         initalizePlaceholder()
 
         binding.rvTracks.layoutManager = LinearLayoutManager(requireContext())
-        adapter = TracksAdapter(listOf<Track>()) { track: Track ->
+        adapter = TracksAdapter(listOf<Track>(), { track: Track ->
             clickListener(
                 track
             )
-        }
+        }, null)
         binding.rvTracks.adapter = adapter
 
         binding.recyclerTracksHistory.layoutManager = LinearLayoutManager(requireContext())
-        historyAdapter = TracksAdapter(listOf<Track>()) { track: Track ->
+        historyAdapter = TracksAdapter(listOf<Track>(), { track: Track ->
             clickListener(
                 track
             )
-        }
+        }, null)
         binding.recyclerTracksHistory.adapter = historyAdapter
         setListenersWatchersObservers()
     }

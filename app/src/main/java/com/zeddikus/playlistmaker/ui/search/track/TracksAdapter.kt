@@ -8,7 +8,8 @@ import com.zeddikus.playlistmaker.domain.search.model.Track
 
 class TracksAdapter(
     private var tracks: List<Track>,
-    private val clickListener: (track: Track) -> Unit
+    private val clickListener: (track: Track) -> Unit,
+    private val longClickListener: ((track: Track) -> Unit)?
 ) : RecyclerView.Adapter<TracksViewHolder> () {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
@@ -21,6 +22,10 @@ class TracksAdapter(
     override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
         holder.itemView.setOnClickListener {
             clickListener.invoke(tracks[position])
+        }
+        holder.itemView.setOnLongClickListener {
+            longClickListener?.invoke(tracks[position])
+            true
         }
         holder.bind(tracks[position])
     }

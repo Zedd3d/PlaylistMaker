@@ -18,9 +18,9 @@ class TracksViewHolder(parentView: View) : RecyclerView.ViewHolder(parentView) {
     private val trackTime: TextView
 
     init {
-        artwork = parentView.findViewById(R.id.imgArtworkInSearch)
-        trackName = parentView.findViewById(R.id.trackNameInSearch)
-        artistName = parentView.findViewById(R.id.artistNameInSearch)
+        artwork = parentView.findViewById(R.id.ivArtworkInSearch)
+        trackName = parentView.findViewById(R.id.tvTrackNameInSearch)
+        artistName = parentView.findViewById(R.id.tvArtistNameInSearch)
         trackTime = parentView.findViewById(R.id.trackTimeInSearch)
     }
 

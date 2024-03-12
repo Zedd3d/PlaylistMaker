@@ -54,13 +54,13 @@ class SearchFragment : Fragment() {
 
         initalizePlaceholder()
 
-        binding.recyclerTracks.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvTracks.layoutManager = LinearLayoutManager(requireContext())
         adapter = TracksAdapter(listOf<Track>()) { track: Track ->
             clickListener(
                 track
             )
         }
-        binding.recyclerTracks.adapter = adapter
+        binding.rvTracks.adapter = adapter
 
         binding.recyclerTracksHistory.layoutManager = LinearLayoutManager(requireContext())
         historyAdapter = TracksAdapter(listOf<Track>()) { track: Track ->
@@ -80,8 +80,8 @@ class SearchFragment : Fragment() {
 
     private fun setListenersWatchersObservers() {
 
-        binding.btnSearchClear.setOnClickListener {
-            clearSearchText(binding.btnSearchClear, binding.vTextSearch)
+        binding.ivSearchClear.setOnClickListener {
+            clearSearchText(binding.ivSearchClear, binding.etTextSearch)
         }
 
         binding.clearHistoryButton.setOnClickListener {
@@ -92,7 +92,7 @@ class SearchFragment : Fragment() {
             searchDebounce()
         }
 
-        binding.vTextSearch.setOnEditorActionListener { _, actionId, _ ->
+        binding.etTextSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 searchDebounce()
             }
@@ -104,7 +104,7 @@ class SearchFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 checkClearButtonVisibility(s)
                 searchDebounce()
-                if (binding.vTextSearch.hasFocus() && s?.isEmpty() == true) {
+                if (binding.etTextSearch.hasFocus() && s?.isEmpty() == true) {
                     viewModel.showHistory()
                 }
             }
@@ -112,13 +112,13 @@ class SearchFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
         }
 
-        binding.vTextSearch.setOnFocusChangeListener { _, hasFocus ->
+        binding.etTextSearch.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 viewModel.showHistory()
             }
         }
 
-        binding.vTextSearch.addTextChangedListener(simpleTextWatcher)
+        binding.etTextSearch.addTextChangedListener(simpleTextWatcher)
 
         viewModel.getState().observe(viewLifecycleOwner) { state ->
             if (when (state) {
@@ -142,7 +142,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun search() {
-        val filter = binding.vTextSearch.text.toString()
+        val filter = binding.etTextSearch.text.toString()
         val config = Resources.getSystem().configuration
         val locale: String = config.locales.get(0)?.language ?: "en_EN"
         viewModel.search(filter, locale)
@@ -169,7 +169,7 @@ class SearchFragment : Fragment() {
 
             else -> View.GONE
         }
-        binding.recyclerTracks.visibility = when (state) {
+        binding.rvTracks.visibility = when (state) {
             is TrackRepositoryState.ShowListResult -> {
                 adapter.setNewList(state.trackList)
                 View.VISIBLE
@@ -180,7 +180,7 @@ class SearchFragment : Fragment() {
             }
         }
 
-        binding.linearTracksHistory.visibility = when (state) {
+        binding.llTracksHistory.visibility = when (state) {
             is TrackRepositoryState.ShowHistory -> {
                 historyAdapter.setNewList(state.trackList)
                 if (historyAdapter.itemCount == 0) View.GONE else View.VISIBLE
@@ -200,17 +200,17 @@ class SearchFragment : Fragment() {
             else -> View.GONE
         }
 
-        if (binding.recyclerTracks.visibility == View.GONE && !(state is TrackRepositoryState.ShowHistory)) {
+        if (binding.rvTracks.visibility == View.GONE && !(state is TrackRepositoryState.ShowHistory)) {
             adapter.clearList()
         }
     }
 
     private fun checkClearButtonVisibility(s: CharSequence?) {
         if (s.isNullOrEmpty()) {
-            binding.btnSearchClear.visibility = View.GONE
+            binding.ivSearchClear.visibility = View.GONE
             viewModel.showHistory()
         }else {
-            binding.btnSearchClear.visibility =  View.VISIBLE
+            binding.ivSearchClear.visibility = View.VISIBLE
         }
     }
 

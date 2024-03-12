@@ -39,13 +39,13 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initalizePlaceholder()
-        binding.recyclerTracks.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvTracks.layoutManager = LinearLayoutManager(requireContext())
         adapter = TracksAdapter(listOf<Track>()) { track: Track ->
             clickListener(
                 track
             )
         }
-        binding.recyclerTracks.adapter = adapter
+        binding.rvTracks.adapter = adapter
         setListenersWatchersObservers()
     }
 
@@ -75,7 +75,7 @@ class FavoritesFragment : Fragment() {
             is FavoritesState.Empty -> View.VISIBLE
             else -> View.GONE
         }
-        binding.recyclerTracks.visibility = when (state) {
+        binding.rvTracks.visibility = when (state) {
             is FavoritesState.Content -> {
                 adapter.setNewList(state.tracks)
                 View.VISIBLE
@@ -91,7 +91,7 @@ class FavoritesFragment : Fragment() {
             else -> View.GONE
         }
 
-        if (binding.recyclerTracks.visibility == View.GONE && !(state is FavoritesState.Content)) {
+        if (binding.rvTracks.visibility == View.GONE && !(state is FavoritesState.Content)) {
             adapter.clearList()
         }
     }

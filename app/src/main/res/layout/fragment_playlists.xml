@@ -12,7 +12,7 @@
 
     <LinearLayout
         android:id="@+id/mainLL"
-        style="@style/MainContentListStyle"
+        style="@style/llMainContentListStyle"
         android:paddingTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/createNewPlaylistButton"
+            android:id="@+id/btnCreateNewPlaylist"
             style="@style/standartActionButton"
             android:layout_width="wrap_content"
             android:text="@string/new_playlist"

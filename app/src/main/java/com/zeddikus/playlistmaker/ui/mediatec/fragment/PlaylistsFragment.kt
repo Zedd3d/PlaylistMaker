@@ -73,7 +73,7 @@ class PlaylistsFragment : Fragment() {
             constraintSet.applyTo(binding.layoutPlaylists)
         }
 
-        binding.createNewPlaylistButton.setOnClickListener {
+        binding.btnCreateNewPlaylist.setOnClickListener {
             findNavController().navigate(
                 R.id.action_mediatecFragment_to_playlistFragment
             )

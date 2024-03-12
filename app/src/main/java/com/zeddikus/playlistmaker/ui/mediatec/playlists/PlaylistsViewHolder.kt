@@ -20,9 +20,9 @@ class PlaylistsViewHolder(parentView: View) : RecyclerView.ViewHolder(parentView
 //    private val trackTime: TextView
 
     init {
-        cover = parentView.findViewById(R.id.imgCover)
-        playlistName = parentView.findViewById(R.id.playlistName)
-        countTracks = parentView.findViewById(R.id.countTracks)
+        cover = parentView.findViewById(R.id.sivCover)
+        playlistName = parentView.findViewById(R.id.tvPlaylistName)
+        countTracks = parentView.findViewById(R.id.tvCountTracks)
         externalFilesDir = parentView.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         drawableByDefault = parentView.context.getDrawable(R.drawable.placeholder_track_artwork)!!
     }

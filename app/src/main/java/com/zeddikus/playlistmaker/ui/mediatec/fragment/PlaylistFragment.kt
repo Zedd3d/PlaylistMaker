@@ -61,14 +61,14 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun fillingErrors(): Boolean {
-        return binding.playlistnameEditText.text.toString().isEmpty()
+        return binding.tiePlaylistnameEditText.text.toString().isEmpty()
     }
 
     private fun closeFragment(playlistSaved: Boolean) {
         if (playlistSaved) {
             Toast.makeText(
                 requireContext(),
-                "${getText(R1.string.playlist)} ${binding.playlistnameEditText.text.toString()} ${
+                "${getText(R1.string.playlist)} ${binding.tiePlaylistnameEditText.text.toString()} ${
                     getText(R1.string.created)
                 }",
                 Toast.LENGTH_SHORT
@@ -79,8 +79,8 @@ class PlaylistFragment : Fragment() {
 
     private fun savePlaylist() {
         viewModel.insertPlaylist(
-            binding.playlistnameEditText.text.toString(),
-            binding.playlistdescEditText.text.toString()
+            binding.tiePlaylistnameEditText.text.toString(),
+            binding.tiePlaylistdescEditText.text.toString()
         )
     }
 
@@ -98,9 +98,9 @@ class PlaylistFragment : Fragment() {
             }.setBackground(requireContext().getDrawable(R1.drawable.btn_corners))
             .create()
         val dialogView = layoutInflater.inflate(R1.layout.alert_dialog, null)
-        dialogView.findViewById<TextView>(R1.id.textTitle).text =
+        dialogView.findViewById<TextView>(R1.id.tvTextTitle).text =
             getString(R1.string.q_ending_create_playlist_title)
-        dialogView.findViewById<TextView>(R1.id.textMessage).text = messageText
+        dialogView.findViewById<TextView>(R1.id.tvTextMessage).text = messageText
         dialogWindow.setView(dialogView)
         dialogWindow.setOnShowListener {
             setValuesDialogWindow(dialogWindow)
@@ -130,8 +130,8 @@ class PlaylistFragment : Fragment() {
 
         binding.createPlaylistButton.setOnClickListener {
             if (fillingErrors()) {
-                binding.playlistnameTextInput.isErrorEnabled = true
-                binding.playlistnameTextInput.error = getString(R1.string.need_fill)
+                binding.tilPlaylistdescTextInput.isErrorEnabled = true
+                binding.tilPlaylistnameTextInput.error = getString(R1.string.need_fill)
             } else {
                 savePlaylist()
             }
@@ -147,7 +147,7 @@ class PlaylistFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
         }
 
-        binding.playlistnameEditText.addTextChangedListener(simpleTextWatcherName)
+        binding.tiePlaylistnameEditText.addTextChangedListener(simpleTextWatcherName)
 
         val simpleTextWatcherDesc = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -158,7 +158,7 @@ class PlaylistFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
         }
 
-        binding.playlistdescEditText.addTextChangedListener(simpleTextWatcherDesc)
+        binding.tiePlaylistdescEditText.addTextChangedListener(simpleTextWatcherDesc)
 
         viewModel.getState().observe(viewLifecycleOwner) { updateRender ->
             render()
@@ -167,14 +167,14 @@ class PlaylistFragment : Fragment() {
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
-                    binding.playlistImage.setImageURI(uri)
+                    binding.ivPlaylist.setImageURI(uri)
                     val filename = saveImageToPrivateStorage(uri)
                     viewModel.saveFilenameCover(filename)
                 } else {
                     Log.d("PhotoPicker", "No media selected")
                 }
             }
-        binding.playlistImage.setOnClickListener {
+        binding.ivPlaylist.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
@@ -200,8 +200,8 @@ class PlaylistFragment : Fragment() {
 
     private fun onBackPressed() {
         viewModel.checkCanGoBack(
-            binding.playlistnameEditText.text.toString().isNotEmpty(),
-            binding.playlistdescEditText.text.toString().isNotEmpty()
+            binding.tiePlaylistnameEditText.text.toString().isNotEmpty(),
+            binding.tiePlaylistdescEditText.text.toString().isNotEmpty()
         )
     }
 
@@ -262,11 +262,11 @@ class PlaylistFragment : Fragment() {
         // 1 с использованием заранее заготовленного selector
         // 2 с изменением самого selector
         val nameFilled =
-            updateEditTextView(binding.playlistnameEditText, binding.playlistnameTextInput)
-        updateEditTextView(binding.playlistdescEditText, binding.playlistdescTextInput)
+            updateEditTextView(binding.tiePlaylistnameEditText, binding.tilPlaylistnameTextInput)
+        updateEditTextView(binding.tiePlaylistdescEditText, binding.tilPlaylistdescTextInput)
 
         binding.createPlaylistButton.isSelected = nameFilled
-        binding.playlistnameTextInput.isErrorEnabled = false
+        binding.tilPlaylistnameTextInput.isErrorEnabled = false
     }
 
     fun updateEditTextView(

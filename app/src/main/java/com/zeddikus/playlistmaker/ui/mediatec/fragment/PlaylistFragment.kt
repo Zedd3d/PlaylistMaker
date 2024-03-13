@@ -83,7 +83,8 @@ class PlaylistFragment : Fragment() {
 
         (activity as MainActivity).animateBottomNavigationView(View.GONE)
 
-
+        val guidelineEnd = defaultPeekHeight
+        binding.guidelineH.setGuidelineEnd(guidelineEnd)
 
         adapter = TracksAdapter(listOf<Track>(),
             { track -> clickListener(track) },

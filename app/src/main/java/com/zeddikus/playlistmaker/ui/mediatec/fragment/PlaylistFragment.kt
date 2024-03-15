@@ -183,6 +183,7 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun sharePlaylist() {
+        bottomSheetPlaylistActions.state = BottomSheetBehavior.STATE_HIDDEN
         if (adapter.itemCount == 0) {
             Toast.makeText(
                 requireContext(),

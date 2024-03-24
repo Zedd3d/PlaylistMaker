@@ -75,7 +75,7 @@ class PlaylistsFragment : Fragment() {
 
         binding.btnCreateNewPlaylist.setOnClickListener {
             findNavController().navigate(
-                R.id.action_mediatecFragment_to_playlistFragment
+                R.id.action_mediatecFragment_to_playlistSettingsFragment
             )
         }
 
@@ -110,6 +110,10 @@ class PlaylistsFragment : Fragment() {
     }
 
     private fun clickListener(playlist: Playlist) {
+        findNavController().navigate(
+            R.id.action_mediatecFragment_to_playlistFragment,
+            PlaylistFragment.createArgs(playlist.playlistId)
+        )
     }
 
     override fun onResume() {

@@ -10,5 +10,6 @@ data class Playlist(
     val playlistDescription: String,
     val playlistCover: String,
     val tracksCount: Int,
+    val playlistTimeMillis: Long,
     val addTime: Long = 0
 ) : Parcelable

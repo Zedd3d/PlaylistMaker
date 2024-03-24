@@ -15,6 +15,7 @@ object PlaylistDbConvertor {
             playlistDescription = playlistDto.playlistDescription ?: "",
             playlistCover = playlistDto.playlistCover ?: "",
             tracksCount = playlistDto.tracksCount,
+            playlistTimeMillis = playlistDto.playlistTimeMillis,
             System.currentTimeMillis()
         )
     }
@@ -30,6 +31,7 @@ object PlaylistDbConvertor {
             playlistEntity.playlistDescription,
             playlistEntity.playlistCover,
             playlistEntity.tracksCount,
+            playlistEntity.playlistTimeMillis,
             playlistEntity.addTime
 
         )
@@ -42,6 +44,7 @@ object PlaylistDbConvertor {
             playlistDescription = playlistDto.playlistDescription,
             playlistCover = playlistDto.playlistCover,
             tracksCount = playlistDto.tracksCount,
+            playlistTimeMillis = playlistDto.playlistTimeMillis,
             System.currentTimeMillis()
         )
     }

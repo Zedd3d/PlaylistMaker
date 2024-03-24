@@ -1,5 +1,6 @@
 package com.zeddikus.playlistmaker.data.converters
 
+import com.zeddikus.playlistmaker.data.db.TrackInPlaylistEntity
 import com.zeddikus.playlistmaker.data.search.dto.TrackDto
 import com.zeddikus.playlistmaker.domain.search.model.Track
 import java.text.SimpleDateFormat
@@ -10,6 +11,26 @@ object TrackConvertor {
         return searchResult.map {
             map(it)
         }
+    }
+
+    fun map(trackInPlaylistEntity: TrackInPlaylistEntity): Track {
+        return Track(
+            trackInPlaylistEntity.trackName ?: "",
+            trackInPlaylistEntity.artistName ?: "",
+            trackInPlaylistEntity.trackTimeMillis ?: 0L,
+            SimpleDateFormat(
+                "mm:ss",
+                Locale.getDefault()
+            ).format(trackInPlaylistEntity.trackTimeMillis)
+                ?: "00:00",
+            trackInPlaylistEntity.artworkUrl100 ?: "",
+            trackInPlaylistEntity.trackId,
+            trackInPlaylistEntity.primaryGenreName ?: "",
+            trackInPlaylistEntity.collectionName ?: "",
+            trackInPlaylistEntity.releaseDate ?: "0001-01-01T00:00:00Z",
+            trackInPlaylistEntity.country ?: "",
+            trackInPlaylistEntity.previewUrl ?: ""
+        )
     }
 
     fun map(trackDto: TrackDto): Track {

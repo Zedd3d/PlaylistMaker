@@ -9,6 +9,7 @@ import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.zeddikus.playlistmaker.R
 import com.zeddikus.playlistmaker.domain.mediatec.playlists.models.Playlist
+import com.zeddikus.playlistmaker.utils.General
 import java.io.File
 
 class PlaylistsViewHolder(parentView: View) : RecyclerView.ViewHolder(parentView) {
@@ -37,21 +38,13 @@ class PlaylistsViewHolder(parentView: View) : RecyclerView.ViewHolder(parentView
             cover.setImageDrawable(drawableByDefault)
         }
         playlistName.text = playlist.playlistName
-        countTracks.text = "${playlist.tracksCount} ${declination(playlist.tracksCount)}"
+        val ct = "${playlist.tracksCount} ${declination(playlist.tracksCount)}"
+        countTracks.text = ct
 
     }
 
     private fun declination(tracksCount: Int): String {
-        var partOfPrice = tracksCount % 100
-        if (partOfPrice.compareTo(14) > 0) {
-            partOfPrice = partOfPrice % 10
-        }
-        return when (partOfPrice) {
-            1 -> "Трек"
-            2, 3, 4 -> "Трека"
-            else -> "Треков"
-        }
-
+        return General.declinationTracksCount(tracksCount)
     }
 
 }

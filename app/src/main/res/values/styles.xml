@@ -53,6 +53,11 @@
         <item name="android:fontFamily">@font/ys_display_medium</item>
     </style>
 
+    <style name="PlaylistTitleTextStyle">
+        <item name="android:textSize">@dimen/title_text_size</item>
+        <item name="android:fontFamily">@font/ys_display_bold</item>
+    </style>
+
     <style name="llMainContentListStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -191,5 +196,11 @@
     <style name="roundedCornersImageViewSmall" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">4dp</item>
+    </style>
+
+    <style name="PlaylistActionText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:paddingVertical">21dp</item>
     </style>
 </resources>

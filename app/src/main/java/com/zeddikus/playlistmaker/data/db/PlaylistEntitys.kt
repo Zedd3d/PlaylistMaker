@@ -11,6 +11,7 @@ data class PlaylistEntity(
     val playlistDescription: String?,                        // описание плейлиста
     val playlistCover: String?,                              // имя файла в системе
     val tracksCount: Int,                                     // количество треков в плейлисте
+    val playlistTimeMillis: Long,                             // количество времени в плейлисте
     val addTime: Long = 0                                    // Время добавления
 )
 

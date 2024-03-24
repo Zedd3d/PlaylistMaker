@@ -3,6 +3,7 @@
     <!-- text size-->
     <dimen name="program_name_text_size">22sp</dimen>
     <dimen name="settings_item_text_size">16sp</dimen>
+    <dimen name="title_text_size">26sp</dimen>
     <dimen name="bigbtn_text_size">26sp</dimen>
     <dimen name="searchlist_small_text">11sp</dimen>
     <dimen name="playlist_icon_text">12sp</dimen>
@@ -29,5 +30,6 @@
     <dimen name="size_player_progressbar">115dp</dimen>
     <dimen name="default_toolbar_height">56dp</dimen>
     <dimen name="playlist_creator_padding">24dp</dimen>
+    <dimen name="track_min_height">61dp</dimen>
 
 </resources>

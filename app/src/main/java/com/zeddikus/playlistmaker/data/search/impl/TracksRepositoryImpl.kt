@@ -32,7 +32,7 @@ class TracksRepositoryImpl(
             state = if (listTracks.isEmpty()) {
                 TrackRepositoryState.ErrorEmpty
             } else {
-                TrackRepositoryState.ShowListResult(listTracks)
+                TrackRepositoryState.Content(listVacancies)
             }
 
             emit(TrackSearchResult(state))

@@ -28,7 +28,6 @@ class TracksRepositoryImpl(
             listTracks.forEach { track: Track ->
                 track.isFavorite = listFavoritesID.contains(track.trackId)
             }
-
             state = if (listTracks.isEmpty()) {
                 TrackRepositoryState.ErrorEmpty
             } else {

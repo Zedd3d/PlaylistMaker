@@ -47,7 +47,7 @@
                 android:layout_gravity="end"
                 android:clickable="true"
                 android:paddingEnd="10dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:srcCompat="@drawable/ic_close" />
         </FrameLayout>
 

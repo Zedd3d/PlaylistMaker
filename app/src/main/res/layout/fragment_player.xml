@@ -371,7 +371,7 @@
             android:id="@+id/recyclerPlaylists"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:visibility="gone"
             tools:itemCount="5"
             tools:listitem="@layout/playlist_element"></androidx.recyclerview.widget.RecyclerView>
 

@@ -70,6 +70,7 @@ class PlaylistsFragment : Fragment() {
                 ConstraintSet.END,
                 0
             )
+            val a = 2
             constraintSet.applyTo(binding.layoutPlaylists)
         }
 

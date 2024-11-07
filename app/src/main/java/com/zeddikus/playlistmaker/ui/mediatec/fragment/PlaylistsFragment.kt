@@ -34,6 +34,7 @@ class PlaylistsFragment : Fragment() {
     ): View {
         _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
         val b = "Кусок кода в другом месте"
+        val с = "Кусок кода в другом месте2"
         return binding.root
     }
 

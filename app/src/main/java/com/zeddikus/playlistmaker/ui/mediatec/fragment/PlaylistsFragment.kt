@@ -70,6 +70,8 @@ class PlaylistsFragment : Fragment() {
                 ConstraintSet.END,
                 0
             )
+
+            val a = "Дополнительный кода из Тест 1"
             constraintSet.applyTo(binding.layoutPlaylists)
         }
 

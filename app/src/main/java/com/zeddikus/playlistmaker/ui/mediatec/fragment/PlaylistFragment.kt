@@ -54,7 +54,7 @@ class PlaylistFragment : Fragment() {
             } else {
                 bundle?.getInt(PLAYLIST_DATA) ?: 0
             }
-        val a = 1
+        val a = "Кусок кода из Тест 1"
         parametersOf(
             playlistId
         )

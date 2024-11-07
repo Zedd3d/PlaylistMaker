@@ -70,8 +70,9 @@ class PlaylistsFragment : Fragment() {
                 ConstraintSet.END,
                 0
             )
+            val a = "2 Кусок кода из Тест 2"
+            val b = "Кусок кода для конфликта"
 
-            val a = "Дополнительный кода из Тест 1"
             constraintSet.applyTo(binding.layoutPlaylists)
         }
 

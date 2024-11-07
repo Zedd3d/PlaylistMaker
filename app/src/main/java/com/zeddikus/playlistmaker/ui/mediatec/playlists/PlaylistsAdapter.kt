@@ -20,8 +20,6 @@ class PlaylistsAdapter(
             LayoutInflater.from(parent.context).inflate(R.layout.playlist_element, parent, false)
         }
 
-
-
         return PlaylistsViewHolder(view)
     }
 

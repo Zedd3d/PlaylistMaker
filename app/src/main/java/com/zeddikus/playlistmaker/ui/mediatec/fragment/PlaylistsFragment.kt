@@ -33,7 +33,7 @@ class PlaylistsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
-
+        val b = "Кусок кода в другом месте"
         return binding.root
     }
 
@@ -72,6 +72,7 @@ class PlaylistsFragment : Fragment() {
             )
             val a = "2 Кусок кода из Тест 2"
             val b = "Кусок кода для конфликта"
+
             constraintSet.applyTo(binding.layoutPlaylists)
         }
 
